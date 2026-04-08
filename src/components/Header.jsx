@@ -14,7 +14,7 @@ function Header({ totalSpent = 0, budget = 12000 }) {
       <div className="absolute inset-y-0 left-0 hidden w-28 md:block">
         <div
           className="h-full w-full bg-cover bg-center"
-          style={{ backgroundImage: "url('/hot-meal-bg.svg')" }}
+          style={{ backgroundImage: "url('/homemade.webp')" }}
         />
         <div className="absolute inset-0 bg-brand-green/30 backdrop-blur-md" />
       </div>

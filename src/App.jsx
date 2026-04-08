@@ -101,6 +101,7 @@ function App() {
   }, [budget, weeklyPlanner])
 
   const weekRows = Object.entries(weeklyPlanner)
+
   const updateMealField = (day, mealType, field, value) => {
     setWeeklyPlanner((current) => {
       const next = {
@@ -122,14 +123,14 @@ function App() {
     return (
       <main
         className="min-h-screen bg-brand-cream bg-cover bg-center px-4 py-8 text-zinc-900 md:px-8"
-        style={{ backgroundImage: "linear-gradient(rgba(247,245,239,0.78), rgba(247,245,239,0.86)), url('/hot-meal-bg.svg')" }}
+        style={{ backgroundImage: "linear-gradient(rgba(247,245,239,0.78), rgba(247,245,239,0.86)), url('/homemade.webp')" }}
       >
         <div className="mx-auto flex max-w-6xl flex-col gap-6">
           <Header budget={budget} totalSpent={weeklyTotal} />
           <section className="relative overflow-hidden rounded-3xl border border-brand-green/20 bg-white p-8 shadow-card md:p-12">
             <div
               className="absolute inset-0 bg-cover bg-right opacity-20"
-              style={{ backgroundImage: "url('/hot-meal-bg.svg')" }}
+                style={{ backgroundImage: "url('/homemade.webp')" }}
             />
             <div className="relative z-10 max-w-2xl space-y-5">
               <p className="inline-flex rounded-full bg-brand-orange/20 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-brand-green-dark">
@@ -235,7 +236,7 @@ function App() {
   return (
     <main
       className="min-h-screen bg-brand-cream bg-cover bg-fixed bg-center px-4 py-8 text-zinc-900 md:px-8"
-      style={{ backgroundImage: "linear-gradient(rgba(247,245,239,0.86), rgba(247,245,239,0.9)), url('/hot-meal-bg.svg')" }}
+      style={{ backgroundImage: "linear-gradient(rgba(247,245,239,0.86), rgba(247,245,239,0.9)), url('/homemade.webp')" }}
     >
       <div className="mx-auto max-w-6xl space-y-6">
         <Header budget={budget} totalSpent={weeklyTotal} />
