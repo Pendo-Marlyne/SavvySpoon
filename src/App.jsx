@@ -120,9 +120,12 @@ function App() {
 
   if (page === 'home') {
     return (
-      <main className="min-h-screen bg-brand-cream px-4 py-8 text-zinc-900 md:px-8">
+      <main
+        className="min-h-screen bg-brand-cream bg-cover bg-center px-4 py-8 text-zinc-900 md:px-8"
+        style={{ backgroundImage: "linear-gradient(rgba(247,245,239,0.78), rgba(247,245,239,0.86)), url('/hot-meal-bg.svg')" }}
+      >
         <div className="mx-auto flex max-w-6xl flex-col gap-6">
-          <Header />
+          <Header budget={budget} totalSpent={weeklyTotal} />
           <section className="relative overflow-hidden rounded-3xl border border-brand-green/20 bg-white p-8 shadow-card md:p-12">
             <div
               className="absolute inset-0 bg-cover bg-right opacity-20"
@@ -167,7 +170,7 @@ function App() {
     return (
       <main className="min-h-screen bg-brand-cream px-4 py-8 text-zinc-900 md:px-8">
         <div className="mx-auto max-w-6xl space-y-6">
-          <Header />
+          <Header budget={budget} totalSpent={weeklyTotal} />
           <section className="rounded-3xl border border-brand-green/15 bg-white p-6 shadow-card">
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
               <div>
@@ -235,7 +238,7 @@ function App() {
       style={{ backgroundImage: "linear-gradient(rgba(247,245,239,0.86), rgba(247,245,239,0.9)), url('/hot-meal-bg.svg')" }}
     >
       <div className="mx-auto max-w-6xl space-y-6">
-        <Header />
+        <Header budget={budget} totalSpent={weeklyTotal} />
         <div className="flex justify-end">
           <button
             className="rounded-full border border-brand-green/35 bg-white px-4 py-2 text-sm font-semibold text-brand-green-dark"
