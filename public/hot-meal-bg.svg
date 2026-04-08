@@ -1,0 +1,25 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2D7A5C"/>
+      <stop offset="100%" stop-color="#154A37"/>
+    </linearGradient>
+    <radialGradient id="plate" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(980 520) rotate(90) scale(260 360)">
+      <stop stop-color="#FFF7E8"/>
+      <stop offset="1" stop-color="#F0E0C7"/>
+    </radialGradient>
+    <radialGradient id="meal" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1020 520) rotate(90) scale(160 220)">
+      <stop stop-color="#F28C28"/>
+      <stop offset="1" stop-color="#A54E1A"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <circle cx="1180" cy="220" r="100" fill="#F2B574" fill-opacity="0.25"/>
+  <circle cx="230" cy="860" r="180" fill="#F28C28" fill-opacity="0.18"/>
+  <circle cx="1240" cy="580" r="300" fill="url(#plate)"/>
+  <circle cx="1240" cy="580" r="210" fill="url(#meal)"/>
+  <ellipse cx="1130" cy="505" rx="45" ry="22" fill="#88B975"/>
+  <ellipse cx="1310" cy="615" rx="52" ry="24" fill="#9CCC65"/>
+  <ellipse cx="1260" cy="490" rx="40" ry="20" fill="#D7E96A"/>
+</svg>
