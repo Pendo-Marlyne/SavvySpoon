@@ -19,23 +19,25 @@ function Header({ totalSpent = 0, budget = 12000 }) {
         <div className="absolute inset-0 bg-brand-green/30 backdrop-blur-md" />
       </div>
 
-      <div className="relative flex flex-col gap-4 p-4 md:flex-row md:items-center md:justify-between md:gap-6 md:pl-36">
-        <div className="flex items-center gap-3">
+      <div className="relative flex flex-nowrap items-center justify-between gap-3 p-3 md:gap-6 md:p-4 md:pl-36">
+        <div className="flex min-w-0 items-center gap-2 md:gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-orange text-white shadow-md">
             <div className="flex items-center gap-0.5">
               <UtensilsCrossed size={17} />
               <Banknote size={15} />
             </div>
           </div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">
+          <h1 className="truncate text-xl font-extrabold tracking-tight text-slate-900 md:text-2xl">
             <span className="text-brand-green">Savvy</span>
             <span className="text-brand-orange">spoon</span>
           </h1>
         </div>
 
-        <div className="w-full max-w-sm rounded-2xl border border-white/40 bg-white/60 p-3 backdrop-blur md:w-[360px]">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-600">Weekly Spend Display</p>
-          <p className="mt-1 text-sm text-slate-700">
+        <div className="w-[58%] max-w-[420px] min-w-[185px] rounded-2xl border border-white/40 bg-white/60 p-2.5 backdrop-blur md:p-3">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-600 md:text-xs">
+            Weekly Spend Display
+          </p>
+          <p className="mt-1 text-xs text-slate-700 md:text-sm">
             <span className={`font-bold ${overBudget ? 'text-red-600' : 'text-emerald-600'}`}>
               {formatKes(totalSpent)}
             </span>{' '}
@@ -47,7 +49,7 @@ function Header({ totalSpent = 0, budget = 12000 }) {
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className={`mt-1 text-xs font-semibold ${overBudget ? 'text-red-600' : 'text-emerald-600'}`}>
+          <p className={`mt-1 text-[10px] font-semibold md:text-xs ${overBudget ? 'text-red-600' : 'text-emerald-600'}`}>
             {overBudget ? 'Over budget this week' : 'Under budget this week'}
           </p>
         </div>
