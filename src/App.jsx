@@ -10,6 +10,7 @@ import Header from './components/Header'
 import DashboardCard from './components/DashboardCard'
 import Auth from './components/Auth'
 import Homepage from './components/Homepage'
+import Toast from './components/Toast'
 
 const defaultPlanner = {
   monday: {
@@ -85,6 +86,8 @@ const getMealName = (meal) => (typeof meal === 'number' ? '' : meal?.name || '')
 function App() {
   const [page, setPage] = useState('home')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [role, setRole] = useState('guest')
+  const [toast, setToast] = useState({ open: false, title: '', message: '', tone: 'warning' })
   const [weeklyPlanner, setWeeklyPlanner] = useState(() =>
     normalizePlanner(readStoredValue('savvyspoon.weeklyPlan', defaultPlanner)),
   )
@@ -103,14 +106,35 @@ function App() {
   }, [budget, weeklyPlanner])
 
   const weekRows = Object.entries(weeklyPlanner)
-  const allowAccess = () => {
+  const allowAccess = ({ role: nextRole } = {}) => {
     setIsAuthenticated(true)
     localStorage.setItem('savvyspoon.isAuthenticated', JSON.stringify(true))
+    setRole(nextRole || 'guest')
+    localStorage.setItem('savvyspoon.role', JSON.stringify(nextRole || 'guest'))
     setPage('home')
   }
 
   if (!isAuthenticated) {
     return <Auth onAuthSuccess={allowAccess} />
+  }
+
+  const showToast = (next) => {
+    setToast({ open: true, tone: 'warning', ...next })
+    window.clearTimeout(showToast._t)
+    showToast._t = window.setTimeout(() => setToast((current) => ({ ...current, open: false })), 3500)
+  }
+
+  const navigate = (nextPage, meta = {}) => {
+    const restricted = meta.restricted === true
+    if (restricted && role === 'guest') {
+      showToast({
+        title: 'Account required',
+        message: 'Please sign in or create an account to access this page.',
+        tone: 'warning',
+      })
+      return
+    }
+    setPage(nextPage)
   }
 
   const updateMealField = (day, mealType, field, value) => {
@@ -132,20 +156,31 @@ function App() {
 
   if (page === 'home') {
     return (
-      <Homepage
-        budget={budget}
-        totalSpent={weeklyTotal}
-        onGoDashboard={() => setPage('dashboard')}
-        onGoPlanner={() => setPage('planner')}
-      />
+      <>
+        <Toast
+          message={toast.message}
+          onClose={() => setToast((current) => ({ ...current, open: false }))}
+          open={toast.open}
+          title={toast.title}
+          tone={toast.tone}
+        />
+        <Homepage budget={budget} onGoDashboard={() => navigate('dashboard', { restricted: true })} onGoPlanner={() => navigate('planner')} totalSpent={weeklyTotal} />
+      </>
     )
   }
 
   if (page === 'planner') {
     return (
-      <main className="min-h-screen bg-brand-cream px-4 py-8 text-zinc-900 md:px-8">
+      <main className="min-h-screen bg-brand-cream bg-cover bg-center px-4 py-8 text-zinc-900 md:px-8" style={{ backgroundImage: "linear-gradient(rgba(247,245,239,0.86), rgba(247,245,239,0.9)), url('/homemade.webp')" }}>
         <div className="mx-auto max-w-6xl space-y-6">
-          <Header budget={budget} totalSpent={weeklyTotal} />
+          <Toast
+            message={toast.message}
+            onClose={() => setToast((current) => ({ ...current, open: false }))}
+            open={toast.open}
+            title={toast.title}
+            tone={toast.tone}
+          />
+          <Header budget={budget} currentPage="planner" onNavigate={navigate} role={role} totalSpent={weeklyTotal} />
           <section className="rounded-3xl border border-brand-green/15 bg-white p-6 shadow-card">
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
               <div>
@@ -157,14 +192,14 @@ function App() {
               <div className="flex gap-2">
                 <button
                   className="rounded-full border border-brand-green/40 px-4 py-2 text-sm font-semibold text-brand-green-dark"
-                  onClick={() => setPage('home')}
+                  onClick={() => navigate('home')}
                   type="button"
                 >
                   Home
                 </button>
                 <button
                   className="rounded-full bg-brand-green px-4 py-2 text-sm font-semibold text-white"
-                  onClick={() => setPage('dashboard')}
+                  onClick={() => navigate('dashboard', { restricted: true })}
                   type="button"
                 >
                   Dashboard
@@ -213,11 +248,18 @@ function App() {
       style={{ backgroundImage: "linear-gradient(rgba(247,245,239,0.86), rgba(247,245,239,0.9)), url('/homemade.webp')" }}
     >
       <div className="mx-auto max-w-6xl space-y-6">
-        <Header budget={budget} totalSpent={weeklyTotal} />
+        <Toast
+          message={toast.message}
+          onClose={() => setToast((current) => ({ ...current, open: false }))}
+          open={toast.open}
+          title={toast.title}
+          tone={toast.tone}
+        />
+        <Header budget={budget} currentPage="dashboard" onNavigate={navigate} role={role} totalSpent={weeklyTotal} />
         <div className="flex justify-end">
           <button
             className="rounded-full border border-brand-green/35 bg-white px-4 py-2 text-sm font-semibold text-brand-green-dark"
-            onClick={() => setPage('home')}
+            onClick={() => navigate('home')}
             type="button"
           >
             Back to Home
@@ -264,7 +306,7 @@ function App() {
             <nav className="flex gap-2 text-sm font-medium">
               <button
                 className="rounded-full bg-brand-green px-4 py-2 text-white"
-                onClick={() => setPage('planner')}
+                onClick={() => navigate('planner')}
                 type="button"
               >
                 Planner
