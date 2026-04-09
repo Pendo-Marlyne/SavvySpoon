@@ -19,6 +19,7 @@ function Header({
   currentPage,
   onNavigate,
   sticky = true,
+  showSpend = true,
 }) {
   const progress = budget > 0 ? Math.min((totalSpent / budget) * 100, 100) : 0
   const overBudget = totalSpent > budget
@@ -83,28 +84,30 @@ function Header({
           })}
         </nav>
 
-        <div className="w-[58%] max-w-[420px] min-w-[185px] rounded-2xl border border-white/50 bg-white/70 p-2.5 backdrop-blur md:p-3">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6B6058] md:text-xs">
-            Weekly Spend
-          </p>
-          <p className="mt-1 text-xs text-[#3D2A22] md:text-sm">
-            <span className={`font-bold ${overBudget ? 'text-red-600' : 'text-brand-green'}`}>
-              {formatKes(totalSpent)}
-            </span>{' '}
-            / {formatKes(budget)}
-          </p>
-          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[#F5E3D1]">
-            <div
-              className={`h-full rounded-full transition-all ${overBudget ? 'bg-red-500' : 'bg-brand-green'}`}
-              style={{ width: `${progress}%` }}
-            />
+        {showSpend ? (
+          <div className="w-[58%] max-w-[420px] min-w-[185px] rounded-2xl border border-white/50 bg-white/70 p-2.5 backdrop-blur md:p-3">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6B6058] md:text-xs">
+              Weekly Spend
+            </p>
+            <p className="mt-1 text-xs text-[#3D2A22] md:text-sm">
+              <span className={`font-bold ${overBudget ? 'text-red-600' : 'text-brand-green'}`}>
+                {formatKes(totalSpent)}
+              </span>{' '}
+              / {formatKes(budget)}
+            </p>
+            <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[#F5E3D1]">
+              <div
+                className={`h-full rounded-full transition-all ${overBudget ? 'bg-red-500' : 'bg-brand-green'}`}
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <p
+              className={`mt-1 text-[10px] font-semibold md:text-xs ${overBudget ? 'text-red-600' : 'text-brand-green'}`}
+            >
+              {overBudget ? 'Over budget' : 'Under budget'}
+            </p>
           </div>
-          <p
-            className={`mt-1 text-[10px] font-semibold md:text-xs ${overBudget ? 'text-red-600' : 'text-brand-green'}`}
-          >
-            {overBudget ? 'Over budget' : 'Under budget'}
-          </p>
-        </div>
+        ) : null}
       </div>
     </header>
   )

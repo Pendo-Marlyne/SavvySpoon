@@ -1,29 +1,30 @@
 import { ArrowRight, Flame, Library, ListChecks, Sparkles, WalletCards } from 'lucide-react'
 import Header from './Header'
 
-function Homepage({ budget, totalSpent, role, onNavigate, onGoDashboard, onGoPlanner }) {
-  const previewSpent = Number.isFinite(Number(totalSpent)) && Number(totalSpent) > 0 ? Number(totalSpent) : 1380
+function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
+  const exampleSpend = 1380
 
   return (
     <main
       className="min-h-screen bg-brand-cream px-4 py-8 text-[#3D2A22] md:px-8"
       style={{
         backgroundImage:
-          "radial-gradient(1000px 600px at 15% 20%, rgba(244, 162, 89, 0.28), transparent 60%), radial-gradient(900px 520px at 85% 10%, rgba(37, 111, 91, 0.22), transparent 55%), linear-gradient(#FFF6E9, #FFF6E9)",
+          "radial-gradient(1100px 620px at 18% 18%, rgba(244, 162, 89, 0.35), transparent 60%), radial-gradient(1000px 560px at 85% 10%, rgba(37, 111, 91, 0.28), transparent 55%), linear-gradient(#FFF6E9, #FFF6E9)",
       }}
     >
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
         <Header
-          budget={budget}
           currentPage="home"
           onNavigate={onNavigate}
           role={role}
-          totalSpent={totalSpent}
           sticky={false}
+          showSpend={false}
         />
 
-        <section className="relative overflow-hidden rounded-[44px] border border-white/60 bg-white/55 shadow-card backdrop-blur-xl">
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/20 via-white/35 to-brand-green/15" />
+        <section className="relative overflow-hidden rounded-[44px] border border-white/60 bg-white/45 shadow-card backdrop-blur-xl">
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/25 via-white/30 to-brand-green/20" />
+          <div className="absolute inset-0 opacity-30" style={{ backgroundImage: "url('/food.webp')" }} />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
 
           <div className="relative grid gap-8 p-6 md:p-10 lg:grid-cols-12 lg:gap-10">
             <div className="lg:col-span-6">
@@ -60,13 +61,13 @@ function Homepage({ budget, totalSpent, role, onNavigate, onGoDashboard, onGoPla
 
               <div className="mt-8 grid gap-3 sm:grid-cols-3">
                 {[
-                  { label: 'KES ' + previewSpent.toLocaleString('en-KE'), value: 'Weekly spend (preview)' },
-                  { label: '7 days', value: 'Weekly plan' },
-                  { label: 'Live', value: 'Budget status' },
+                  { label: 'Real-time', value: 'Budget tracking' },
+                  { label: 'Auto', value: 'Grocery list' },
+                  { label: 'Library', value: 'Saved meals' },
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className="rounded-2xl border border-white/60 bg-gradient-to-br from-white/75 via-white/65 to-[#FFF0E0] p-4 shadow-sm"
+                    className="rounded-2xl border border-white/60 bg-gradient-to-br from-white/75 via-white/55 to-white/20 p-4 shadow-sm backdrop-blur"
                   >
                     <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#6B6058]">{item.label}</p>
                     <p className="mt-2 text-sm font-extrabold text-[#3D2A22]">{item.value}</p>
@@ -78,11 +79,11 @@ function Homepage({ budget, totalSpent, role, onNavigate, onGoDashboard, onGoPla
             <div className="lg:col-span-6">
               <div className="relative mx-auto h-[520px] w-full max-w-[560px]">
                 {[
-                  { cls: 'left-0 top-6 h-44 w-36 rotate-[-6deg]' },
-                  { cls: 'right-0 top-10 h-52 w-40 rotate-[7deg]' },
-                  { cls: 'left-16 bottom-0 h-52 w-44 rotate-[4deg]' },
-                  { cls: 'right-16 bottom-10 h-44 w-36 rotate-[-8deg]' },
-                  { cls: 'left-1/2 top-1/2 h-64 w-56 -translate-x-1/2 -translate-y-1/2 rotate-[1deg]' },
+                  { cls: 'left-0 top-6 h-44 w-36 rotate-[-6deg]', src: "/meal.webp" },
+                  { cls: 'right-0 top-10 h-52 w-40 rotate-[7deg]', src: "/food.webp" },
+                  { cls: 'left-16 bottom-0 h-52 w-44 rotate-[4deg]', src: "/homemade.webp" },
+                  { cls: 'right-16 bottom-10 h-44 w-36 rotate-[-8deg]', src: "/meal.webp" },
+                  { cls: 'left-1/2 top-1/2 h-64 w-56 -translate-x-1/2 -translate-y-1/2 rotate-[1deg]', src: "/food.webp" },
                 ].map((img, idx) => (
                   <div
                     key={idx}
@@ -90,7 +91,7 @@ function Homepage({ budget, totalSpent, role, onNavigate, onGoDashboard, onGoPla
                   >
                     <div
                       className="h-full w-full bg-cover bg-center"
-                      style={{ backgroundImage: "url('/homemade.webp')" }}
+                      style={{ backgroundImage: `url('${img.src}')` }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                   </div>
@@ -120,39 +121,48 @@ function Homepage({ budget, totalSpent, role, onNavigate, onGoDashboard, onGoPla
                     title: 'Smart budgeting',
                     desc: 'Set a weekly limit and see spend vs budget in real time.',
                     icon: WalletCards,
-                    bg: 'from-brand-green/18 via-white/55 to-white/35',
+                    bg: 'from-brand-green/22 via-white/25 to-brand-orange/10',
+                    image: "/food.webp",
                   },
                   {
                     title: 'Auto grocery list',
                     desc: 'Generate a grocery list summary from your weekly plan.',
                     icon: ListChecks,
-                    bg: 'from-brand-orange/22 via-white/55 to-white/35',
+                    bg: 'from-brand-orange/26 via-white/25 to-brand-green/10',
+                    image: "/meal.webp",
                   },
                   {
                     title: 'Meal library',
                     desc: 'Save meal ideas and reuse them across your weekly plans.',
                     icon: Library,
-                    bg: 'from-brand-green/12 via-white/55 to-brand-orange/14',
+                    bg: 'from-brand-green/18 via-white/25 to-brand-orange/18',
+                    image: "/homemade.webp",
                   },
                   {
                     title: 'Weekly overview',
                     desc: 'One dashboard that keeps totals, days, and status easy to read.',
                     icon: Flame,
-                    bg: 'from-brand-orange/18 via-white/55 to-brand-green/12',
+                    bg: 'from-brand-orange/18 via-white/25 to-brand-green/18',
+                    image: "/food.webp",
                   },
                 ].map((card) => {
                   const Icon = card.icon
                   return (
                     <div
                       key={card.title}
-                      className={`rounded-[26px] border border-white/65 bg-gradient-to-br ${card.bg} p-6 shadow-sm`}
+                      className={`relative overflow-hidden rounded-[26px] border border-white/65 bg-gradient-to-br ${card.bg} p-6 shadow-sm`}
                     >
+                      <div
+                        className="absolute inset-0 opacity-25"
+                        style={{ backgroundImage: `url('${card.image}')` }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
                       <div className="flex items-start justify-between gap-4">
-                        <div>
+                        <div className="relative">
                           <p className="text-lg font-extrabold text-[#3D2A22]">{card.title}</p>
                           <p className="mt-2 text-sm leading-relaxed text-[#6B6058]">{card.desc}</p>
                         </div>
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/70 text-brand-green shadow-sm">
+                        <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-white/70 text-brand-green shadow-sm">
                           <Icon size={20} />
                         </div>
                       </div>
@@ -178,7 +188,7 @@ function Homepage({ budget, totalSpent, role, onNavigate, onGoDashboard, onGoPla
                     <p className="mt-1 text-xl font-extrabold text-[#3D2A22]">Weekly Plan</p>
                   </div>
                   <div className="rounded-full bg-brand-green px-3 py-1 text-xs font-extrabold text-white">
-                    KES {previewSpent.toLocaleString('en-KE')}
+                    Example: KES {exampleSpend.toLocaleString('en-KE')}
                   </div>
                 </div>
 

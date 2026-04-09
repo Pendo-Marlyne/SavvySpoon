@@ -164,12 +164,10 @@ function App() {
           tone={toast.tone}
         />
         <Homepage
-          budget={budget}
           onGoDashboard={() => navigate('dashboard', { restricted: true })}
           onGoPlanner={() => navigate('planner')}
           onNavigate={navigate}
           role={role}
-          totalSpent={weeklyTotal}
         />
         <Footer onNavigate={navigate} role={role} />
       </>
