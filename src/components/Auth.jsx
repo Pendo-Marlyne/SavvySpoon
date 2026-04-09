@@ -46,8 +46,11 @@ function Auth({ onAuthSuccess }) {
           </div>
         </section>
 
-        <section className="flex items-center justify-center bg-white/70 p-6 backdrop-blur-xl md:p-10">
-          <div className="w-full max-w-md">
+        <section className="relative flex items-center justify-center p-6 md:p-10">
+          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/homemade.webp')" }} />
+          <div className="absolute inset-0 bg-gradient-to-br from-white/55 via-white/40 to-amber-100/30 backdrop-blur-sm" />
+
+          <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/45 bg-white/55 p-6 shadow-card backdrop-blur-xl md:p-8">
             <div className="mb-6 flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-orange text-white">
                 <div className="flex items-center gap-0.5">
@@ -66,32 +69,38 @@ function Auth({ onAuthSuccess }) {
               <button
                 className={`group relative rounded-xl px-3 py-2 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-300/60 ${
                   !isSignup
-                    ? 'bg-white/70 text-brand-green shadow-sm ring-1 ring-white/60'
-                    : 'text-slate-700 hover:bg-white/40'
+                      ? 'bg-gradient-to-br from-amber-300 via-orange-400 to-amber-500 text-slate-900 shadow-md ring-1 ring-amber-200/60'
+                      : 'text-slate-800 hover:bg-white/45'
                 }`}
                 onClick={() => setMode('signin')}
                 type="button"
               >
-                <span className="relative z-10">Sign In</span>
-                <span className="pointer-events-none absolute inset-0 -z-0 rounded-xl opacity-0 blur-xl transition-opacity duration-200 group-hover:opacity-70 group-focus-visible:opacity-80"
-                  style={{ background: 'radial-gradient(60% 80% at 50% 50%, rgba(245, 158, 11, 0.45), rgba(245, 158, 11, 0))' }}
-                />
-                Sign In
+                  <span className="relative z-10 font-extrabold tracking-wide">Sign In</span>
+                  <span
+                    className="pointer-events-none absolute inset-0 -z-0 rounded-xl opacity-0 blur-2xl transition-opacity duration-200 group-hover:opacity-90 group-focus-visible:opacity-95"
+                    style={{
+                      background:
+                        'radial-gradient(70% 90% at 50% 45%, rgba(245, 158, 11, 0.75), rgba(245, 158, 11, 0))',
+                    }}
+                  />
               </button>
               <button
                 className={`group relative rounded-xl px-3 py-2 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-300/60 ${
                   isSignup
-                    ? 'bg-white/70 text-brand-green shadow-sm ring-1 ring-white/60'
-                    : 'text-slate-700 hover:bg-white/40'
+                      ? 'bg-gradient-to-br from-amber-300 via-orange-400 to-amber-500 text-slate-900 shadow-md ring-1 ring-amber-200/60'
+                      : 'text-slate-800 hover:bg-white/45'
                 }`}
                 onClick={() => setMode('signup')}
                 type="button"
               >
-                <span className="relative z-10">Create Account</span>
-                <span className="pointer-events-none absolute inset-0 -z-0 rounded-xl opacity-0 blur-xl transition-opacity duration-200 group-hover:opacity-70 group-focus-visible:opacity-80"
-                  style={{ background: 'radial-gradient(60% 80% at 50% 50%, rgba(245, 158, 11, 0.45), rgba(245, 158, 11, 0))' }}
-                />
-                Create Account
+                  <span className="relative z-10 font-extrabold tracking-wide">Create Account</span>
+                  <span
+                    className="pointer-events-none absolute inset-0 -z-0 rounded-xl opacity-0 blur-2xl transition-opacity duration-200 group-hover:opacity-90 group-focus-visible:opacity-95"
+                    style={{
+                      background:
+                        'radial-gradient(70% 90% at 50% 45%, rgba(245, 158, 11, 0.75), rgba(245, 158, 11, 0))',
+                    }}
+                  />
               </button>
             </div>
             </div>
@@ -156,10 +165,6 @@ function Auth({ onAuthSuccess }) {
             >
               Continue as Guest
             </button>
-
-            <p className="mt-4 text-xs text-slate-600">
-              Guest mode gives access to the homepage and a quick overview of weekly budgeting and ingredients.
-            </p>
           </div>
         </section>
       </div>
