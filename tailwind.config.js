@@ -5,14 +5,17 @@ export default {
     extend: {
       colors: {
         brand: {
-          green: '#1F6B4F',
-          'green-dark': '#154A37',
-          orange: '#F28C28',
-          cream: '#F7F5EF',
+          // primary action green
+          green: '#256F5B',
+          'green-dark': '#1E5948',
+          // warm accent orange
+          orange: '#F4A259',
+          // soft cream background
+          cream: '#FFF6E9',
         },
       },
       boxShadow: {
-        card: '0 10px 25px -12px rgba(21, 74, 55, 0.35)',
+        card: '0 18px 45px -24px rgba(38, 87, 71, 0.55)',
       },
     },
   },

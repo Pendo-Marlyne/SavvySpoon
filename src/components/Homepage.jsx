@@ -1,13 +1,15 @@
-import { ArrowRight, Banknote, ListChecks, Sparkles } from 'lucide-react'
+import { ArrowRight, Flame, Library, ListChecks, Sparkles, WalletCards } from 'lucide-react'
 import Header from './Header'
 
 function Homepage({ budget, totalSpent, role, onNavigate, onGoDashboard, onGoPlanner }) {
+  const previewSpent = Number.isFinite(Number(totalSpent)) && Number(totalSpent) > 0 ? Number(totalSpent) : 1380
+
   return (
     <main
-      className="min-h-screen bg-brand-cream bg-cover bg-center px-4 py-8 text-zinc-900 md:px-8"
+      className="min-h-screen bg-brand-cream px-4 py-8 text-[#3D2A22] md:px-8"
       style={{
         backgroundImage:
-          "linear-gradient(rgba(247,245,239,0.78), rgba(247,245,239,0.86)), url('/homemade.webp')",
+          "radial-gradient(1000px 600px at 15% 20%, rgba(244, 162, 89, 0.28), transparent 60%), radial-gradient(900px 520px at 85% 10%, rgba(37, 111, 91, 0.22), transparent 55%), linear-gradient(#FFF6E9, #FFF6E9)",
       }}
     >
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
@@ -17,86 +19,185 @@ function Homepage({ budget, totalSpent, role, onNavigate, onGoDashboard, onGoPla
           onNavigate={onNavigate}
           role={role}
           totalSpent={totalSpent}
+          sticky={false}
         />
 
-        <section className="grid gap-6 lg:grid-cols-12">
-          <div className="lg:col-span-7">
-            <div className="relative overflow-hidden rounded-[32px] border border-white/45 bg-white/35 p-8 shadow-card backdrop-blur-xl md:p-12">
-              <div
-                className="absolute inset-0 bg-cover bg-center opacity-25"
-                style={{ backgroundImage: "url('/homemade.webp')" }}
-              />
-              <div className="relative z-10">
-                <p className="inline-flex items-center gap-2 rounded-full bg-amber-200/35 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.22em] text-amber-950">
-                  <Sparkles size={14} />
-                  Smart meal + budget planner
-                </p>
-                <h2 className="mt-5 text-4xl font-extrabold leading-tight text-slate-900 md:text-6xl">
-                  Make your week tasty.
-                  <span className="block text-brand-green">Keep your spending savvy.</span>
-                </h2>
-                <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-800/80">
-                  Build a weekly plan, track costs in KES, and generate a grocery list—without jumping between apps.
-                </p>
+        <section className="relative overflow-hidden rounded-[44px] border border-white/60 bg-white/55 shadow-card backdrop-blur-xl">
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/20 via-white/35 to-brand-green/15" />
 
-                <div className="mt-7 flex flex-wrap items-center gap-3">
-                  <button
-                    className="inline-flex items-center gap-2 rounded-full bg-brand-green px-6 py-3 text-sm font-extrabold text-white transition hover:bg-brand-green-dark"
-                    onClick={onGoPlanner}
-                    type="button"
+          <div className="relative grid gap-8 p-6 md:p-10 lg:grid-cols-12 lg:gap-10">
+            <div className="lg:col-span-6">
+              <p className="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">
+                <Flame size={14} className="text-brand-orange" />
+                Main entry point
+              </p>
+              <h2 className="mt-5 text-5xl font-extrabold leading-[1.02] tracking-tight md:text-7xl">
+                Eat well.
+                <span className="block text-brand-green">Spend less.</span>
+                <span className="block text-brand-orange">Stress never.</span>
+              </h2>
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#6B6058]">
+                All in one meal planner that tracks budget in real time—plan your week, generate a grocery list, and save money effortlessly.
+              </p>
+
+              <div className="mt-7 flex flex-wrap items-center gap-3">
+                <button
+                  className="inline-flex items-center gap-2 rounded-full bg-brand-green px-7 py-3 text-sm font-extrabold text-white shadow-sm transition hover:bg-brand-green-dark"
+                  onClick={onGoPlanner}
+                  type="button"
+                >
+                  Start planning
+                  <ArrowRight size={16} />
+                </button>
+                <button
+                  className="rounded-full border border-brand-orange bg-white/85 px-7 py-3 text-sm font-extrabold text-[#3D2A22] shadow-sm transition hover:bg-[#FFF0E0]"
+                  onClick={onGoDashboard}
+                  type="button"
+                >
+                  Open dashboard
+                </button>
+              </div>
+
+              <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                {[
+                  { label: 'KES ' + previewSpent.toLocaleString('en-KE'), value: 'Weekly spend (preview)' },
+                  { label: '7 days', value: 'Weekly plan' },
+                  { label: 'Live', value: 'Budget status' },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="rounded-2xl border border-white/60 bg-gradient-to-br from-white/75 via-white/65 to-[#FFF0E0] p-4 shadow-sm"
                   >
-                    Start planning
-                    <ArrowRight size={16} />
-                  </button>
-                  <button
-                    className="rounded-full border border-white/55 bg-white/35 px-6 py-3 text-sm font-extrabold text-slate-900 backdrop-blur transition hover:bg-white/55"
-                    onClick={onGoDashboard}
-                    type="button"
+                    <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#6B6058]">{item.label}</p>
+                    <p className="mt-2 text-sm font-extrabold text-[#3D2A22]">{item.value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="lg:col-span-6">
+              <div className="relative mx-auto h-[520px] w-full max-w-[560px]">
+                {[
+                  { cls: 'left-0 top-6 h-44 w-36 rotate-[-6deg]' },
+                  { cls: 'right-0 top-10 h-52 w-40 rotate-[7deg]' },
+                  { cls: 'left-16 bottom-0 h-52 w-44 rotate-[4deg]' },
+                  { cls: 'right-16 bottom-10 h-44 w-36 rotate-[-8deg]' },
+                  { cls: 'left-1/2 top-1/2 h-64 w-56 -translate-x-1/2 -translate-y-1/2 rotate-[1deg]' },
+                ].map((img, idx) => (
+                  <div
+                    key={idx}
+                    className={`absolute ${img.cls} overflow-hidden rounded-[32px] border border-white/70 bg-gradient-to-br from-white/75 via-white/55 to-white/20 shadow-lg`}
                   >
-                    View dashboard
-                  </button>
-                </div>
+                    <div
+                      className="h-full w-full bg-cover bg-center"
+                      style={{ backgroundImage: "url('/homemade.webp')" }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="grid gap-4 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <div className="rounded-[36px] border border-white/60 bg-gradient-to-br from-brand-green/10 via-white/55 to-brand-orange/12 p-7 shadow-card backdrop-blur-xl md:p-9">
+              <p className="inline-flex items-center gap-2 rounded-full bg-white/75 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">
+                <Sparkles size={14} className="text-brand-orange" />
+                Why Savvyspoon
+              </p>
+              <h3 className="mt-4 text-3xl font-extrabold leading-tight text-[#3D2A22] md:text-4xl">
+                Luxury planning vibes, practical weekly results.
+              </h3>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#6B6058] md:text-base">
+                Designed to feel premium—but built to keep your week organized, your grocery list ready, and your budget on track.
+              </p>
+
+              <div className="mt-6 grid gap-4 md:grid-cols-2">
+                {[
+                  {
+                    title: 'Smart budgeting',
+                    desc: 'Set a weekly limit and see spend vs budget in real time.',
+                    icon: WalletCards,
+                    bg: 'from-brand-green/18 via-white/55 to-white/35',
+                  },
+                  {
+                    title: 'Auto grocery list',
+                    desc: 'Generate a grocery list summary from your weekly plan.',
+                    icon: ListChecks,
+                    bg: 'from-brand-orange/22 via-white/55 to-white/35',
+                  },
+                  {
+                    title: 'Meal library',
+                    desc: 'Save meal ideas and reuse them across your weekly plans.',
+                    icon: Library,
+                    bg: 'from-brand-green/12 via-white/55 to-brand-orange/14',
+                  },
+                  {
+                    title: 'Weekly overview',
+                    desc: 'One dashboard that keeps totals, days, and status easy to read.',
+                    icon: Flame,
+                    bg: 'from-brand-orange/18 via-white/55 to-brand-green/12',
+                  },
+                ].map((card) => {
+                  const Icon = card.icon
+                  return (
+                    <div
+                      key={card.title}
+                      className={`rounded-[26px] border border-white/65 bg-gradient-to-br ${card.bg} p-6 shadow-sm`}
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <p className="text-lg font-extrabold text-[#3D2A22]">{card.title}</p>
+                          <p className="mt-2 text-sm leading-relaxed text-[#6B6058]">{card.desc}</p>
+                        </div>
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/70 text-brand-green shadow-sm">
+                          <Icon size={20} />
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </div>
 
           <div className="lg:col-span-5">
-            <div className="grid gap-4">
-              <div className="rounded-[28px] border border-white/45 bg-white/40 p-6 shadow-card backdrop-blur-xl">
+            <div className="rounded-[36px] border border-white/60 bg-gradient-to-br from-white/55 via-white/40 to-brand-cream p-7 shadow-card backdrop-blur-xl md:p-9">
+              <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">Visual teaser</p>
+              <h3 className="mt-3 text-2xl font-extrabold text-[#3D2A22]">A day card preview</h3>
+              <p className="mt-2 text-sm text-[#6B6058]">
+                Guests can preview how planning looks before creating an account.
+              </p>
+
+              <div className="mt-5 rounded-[28px] border border-white/70 bg-gradient-to-br from-white/80 via-white/60 to-[#FFF0E0] p-5 shadow-sm">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-slate-600">Weekly budget</p>
-                    <p className="mt-2 text-3xl font-extrabold text-slate-900">
-                      <span className="text-brand-orange">KES</span> {Number(budget || 0).toLocaleString('en-KE')}
-                    </p>
+                    <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">Monday</p>
+                    <p className="mt-1 text-xl font-extrabold text-[#3D2A22]">Weekly Plan</p>
                   </div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-400/90 text-slate-900 shadow-sm">
-                    <Banknote size={20} />
+                  <div className="rounded-full bg-brand-green px-3 py-1 text-xs font-extrabold text-white">
+                    KES {previewSpent.toLocaleString('en-KE')}
                   </div>
                 </div>
-              </div>
 
-              <div className="rounded-[28px] border border-white/45 bg-white/40 p-6 shadow-card backdrop-blur-xl">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-slate-600">Meal planning</p>
-                    <p className="mt-2 text-lg font-semibold text-slate-800">
-                      Breakfast • Lunch • Dinner
-                    </p>
-                    <p className="mt-1 text-sm text-slate-700/80">Assign meals per day and price them in KES.</p>
-                  </div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-green text-white shadow-sm">
-                    <ListChecks size={20} />
-                  </div>
+                <div className="mt-4 space-y-3">
+                  {[
+                    { label: 'Breakfast', value: 'Oat porridge + fruit' },
+                    { label: 'Lunch', value: 'Chicken rice bowl' },
+                    { label: 'Dinner', value: 'Beef stew + ugali' },
+                  ].map((row) => (
+                    <div key={row.label} className="flex items-center justify-between gap-3 rounded-2xl bg-white/70 px-4 py-3">
+                      <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">{row.label}</p>
+                      <p className="text-sm font-bold text-[#3D2A22]">{row.value}</p>
+                    </div>
+                  ))}
                 </div>
-              </div>
 
-              <div className="relative overflow-hidden rounded-[28px] border border-white/45 bg-white/30 p-6 shadow-card backdrop-blur-xl">
-                <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: "url('/homemade.webp')" }} />
-                <div className="relative">
-                  <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-slate-600">Grocery list</p>
-                  <p className="mt-2 text-xl font-extrabold text-slate-900">Turn plans into ingredients.</p>
-                  <p className="mt-1 text-sm text-slate-700/80">Generate a shopping-friendly summary for the week.</p>
+                <div className="mt-4 rounded-2xl bg-white/70 px-4 py-3">
+                  <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">Auto grocery list</p>
+                  <p className="mt-1 text-sm font-semibold text-[#3D2A22]">Oats • Milk • Bananas • Chicken • Rice • Tomatoes</p>
                 </div>
               </div>
             </div>

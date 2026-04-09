@@ -11,6 +11,7 @@ import DashboardCard from './components/DashboardCard'
 import Auth from './components/Auth'
 import Homepage from './components/Homepage'
 import Toast from './components/Toast'
+import Footer from './components/Footer'
 
 const defaultPlanner = {
   monday: {
@@ -108,9 +109,7 @@ function App() {
   const weekRows = Object.entries(weeklyPlanner)
   const allowAccess = ({ role: nextRole } = {}) => {
     setIsAuthenticated(true)
-    localStorage.setItem('savvyspoon.isAuthenticated', JSON.stringify(true))
     setRole(nextRole || 'guest')
-    localStorage.setItem('savvyspoon.role', JSON.stringify(nextRole || 'guest'))
     setPage('home')
   }
 
@@ -172,14 +171,22 @@ function App() {
           role={role}
           totalSpent={weeklyTotal}
         />
+        <Footer onNavigate={navigate} role={role} />
       </>
     )
   }
 
   if (page === 'planner') {
     return (
-      <main className="min-h-screen bg-brand-cream bg-cover bg-center px-4 py-8 text-zinc-900 md:px-8" style={{ backgroundImage: "linear-gradient(rgba(247,245,239,0.86), rgba(247,245,239,0.9)), url('/homemade.webp')" }}>
-        <div className="mx-auto max-w-6xl space-y-6">
+      <>
+        <main
+          className="min-h-screen bg-brand-cream bg-cover bg-center px-4 py-8 text-zinc-900 md:px-8"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(247,245,239,0.86), rgba(247,245,239,0.9)), url('/homemade.webp')",
+          }}
+        >
+          <div className="mx-auto max-w-6xl space-y-6">
           <Toast
             message={toast.message}
             onClose={() => setToast((current) => ({ ...current, open: false }))}
@@ -244,14 +251,17 @@ function App() {
               ))}
             </div>
           </section>
-        </div>
-      </main>
+          </div>
+        </main>
+        <Footer onNavigate={navigate} role={role} />
+      </>
     )
   }
 
   if (page === 'ingredients') {
     return (
-      <main
+      <>
+        <main
         className="min-h-screen bg-brand-cream bg-cover bg-center px-4 py-8 text-zinc-900 md:px-8"
         style={{
           backgroundImage:
@@ -275,12 +285,15 @@ function App() {
           </section>
         </div>
       </main>
+        <Footer onNavigate={navigate} role={role} />
+      </>
     )
   }
 
   if (page === 'budget') {
     return (
-      <main
+      <>
+        <main
         className="min-h-screen bg-brand-cream bg-cover bg-center px-4 py-8 text-zinc-900 md:px-8"
         style={{
           backgroundImage:
@@ -304,12 +317,15 @@ function App() {
           </section>
         </div>
       </main>
+        <Footer onNavigate={navigate} role={role} />
+      </>
     )
   }
 
   if (page === 'profile') {
     return (
-      <main
+      <>
+        <main
         className="min-h-screen bg-brand-cream bg-cover bg-center px-4 py-8 text-zinc-900 md:px-8"
         style={{
           backgroundImage:
@@ -333,15 +349,18 @@ function App() {
           </section>
         </div>
       </main>
+        <Footer onNavigate={navigate} role={role} />
+      </>
     )
   }
 
   return (
-    <main
-      className="min-h-screen bg-brand-cream bg-cover bg-fixed bg-center px-4 py-8 text-zinc-900 md:px-8"
-      style={{ backgroundImage: "linear-gradient(rgba(247,245,239,0.86), rgba(247,245,239,0.9)), url('/homemade.webp')" }}
-    >
-      <div className="mx-auto max-w-6xl space-y-6">
+    <>
+      <main
+        className="min-h-screen bg-brand-cream bg-cover bg-fixed bg-center px-4 py-8 text-zinc-900 md:px-8"
+        style={{ backgroundImage: "linear-gradient(rgba(247,245,239,0.86), rgba(247,245,239,0.9)), url('/homemade.webp')" }}
+      >
+        <div className="mx-auto max-w-6xl space-y-6">
         <Toast
           message={toast.message}
           onClose={() => setToast((current) => ({ ...current, open: false }))}
@@ -441,8 +460,10 @@ function App() {
             </table>
           </div>
         </section>
-      </div>
-    </main>
+        </div>
+      </main>
+      <Footer onNavigate={navigate} role={role} />
+    </>
   )
 
 }

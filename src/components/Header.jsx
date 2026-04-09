@@ -12,18 +12,29 @@ const formatKes = (value) =>
     Number(value || 0),
   )
 
-function Header({ totalSpent = 0, budget = 12000, role = 'account', currentPage, onNavigate }) {
+function Header({
+  totalSpent = 0,
+  budget = 12000,
+  role = 'account',
+  currentPage,
+  onNavigate,
+  sticky = true,
+}) {
   const progress = budget > 0 ? Math.min((totalSpent / budget) * 100, 100) : 0
   const overBudget = totalSpent > budget
 
   return (
-    <header className="sticky top-3 z-40 overflow-hidden rounded-3xl border border-white/35 bg-white/45 shadow-card backdrop-blur-xl">
+    <header
+      className={`z-40 overflow-hidden rounded-3xl border border-white/40 bg-white/75 shadow-card backdrop-blur-xl ${
+        sticky ? 'sticky top-3' : ''
+      }`}
+    >
       <div className="absolute inset-y-0 left-0 hidden w-28 md:block">
         <div
           className="h-full w-full bg-cover bg-center"
           style={{ backgroundImage: "url('/homemade.webp')" }}
         />
-        <div className="absolute inset-0 bg-brand-green/30 backdrop-blur-md" />
+        <div className="absolute inset-0 bg-brand-cream/60 backdrop-blur-md" />
       </div>
 
       <div className="relative flex flex-nowrap items-center justify-between gap-3 p-3 md:gap-6 md:p-4 md:pl-36">
@@ -34,7 +45,7 @@ function Header({ totalSpent = 0, budget = 12000, role = 'account', currentPage,
               <Banknote size={15} />
             </div>
           </div>
-          <h1 className="truncate text-xl font-extrabold tracking-tight text-slate-900 md:text-2xl">
+          <h1 className="truncate text-xl font-extrabold tracking-tight text-[#3D2A22] md:text-2xl">
             <span className="text-brand-green">Savvy</span>
             <span className="text-brand-orange">spoon</span>
           </h1>
@@ -56,10 +67,10 @@ function Header({ totalSpent = 0, budget = 12000, role = 'account', currentPage,
               <button
                 className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition ${
                   isActive
-                    ? 'bg-white/70 text-brand-green shadow-sm'
+                    ? 'bg-brand-green text-white shadow-sm'
                     : isBlocked
-                      ? 'text-slate-500 hover:bg-white/30'
-                      : 'text-slate-800 hover:bg-white/55'
+                      ? 'text-slate-400 hover:bg-white/30'
+                      : 'text-[#6B6058] hover:bg-[#FFF0E0]'
                 }`}
                 key={item.id}
                 onClick={() => onNavigate?.(item.id, { restricted: item.restricted })}
@@ -72,24 +83,24 @@ function Header({ totalSpent = 0, budget = 12000, role = 'account', currentPage,
           })}
         </nav>
 
-        <div className="w-[58%] max-w-[420px] min-w-[185px] rounded-2xl border border-white/40 bg-white/60 p-2.5 backdrop-blur md:p-3">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-600 md:text-xs">
+        <div className="w-[58%] max-w-[420px] min-w-[185px] rounded-2xl border border-white/50 bg-white/70 p-2.5 backdrop-blur md:p-3">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6B6058] md:text-xs">
             Weekly Spend
           </p>
-          <p className="mt-1 text-xs text-slate-700 md:text-sm">
-            <span className={`font-bold ${overBudget ? 'text-red-600' : 'text-emerald-600'}`}>
+          <p className="mt-1 text-xs text-[#3D2A22] md:text-sm">
+            <span className={`font-bold ${overBudget ? 'text-red-600' : 'text-brand-green'}`}>
               {formatKes(totalSpent)}
             </span>{' '}
             / {formatKes(budget)}
           </p>
-          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-200">
+          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[#F5E3D1]">
             <div
-              className={`h-full rounded-full transition-all ${overBudget ? 'bg-red-500' : 'bg-emerald-500'}`}
+              className={`h-full rounded-full transition-all ${overBudget ? 'bg-red-500' : 'bg-brand-green'}`}
               style={{ width: `${progress}%` }}
             />
           </div>
           <p
-            className={`mt-1 text-[10px] font-semibold md:text-xs ${overBudget ? 'text-red-600' : 'text-emerald-600'}`}
+            className={`mt-1 text-[10px] font-semibold md:text-xs ${overBudget ? 'text-red-600' : 'text-brand-green'}`}
           >
             {overBudget ? 'Over budget' : 'Under budget'}
           </p>

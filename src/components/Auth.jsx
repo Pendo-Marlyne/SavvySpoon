@@ -12,23 +12,51 @@ function Auth({ onAuthSuccess }) {
 
   const isSignup = mode === 'signup'
   const passwordTooShort = (formData.password || '').length > 0 && (formData.password || '').length < 5
+  const [error, setError] = useState('')
 
   const handleChange = (field, value) => {
+    setError('')
     setFormData((current) => ({ ...current, [field]: value }))
   }
 
   const handleSubmit = (event) => {
     event.preventDefault()
     if ((formData.password || '').length < 5) return
-    localStorage.setItem(
-      'savvyspoon.userProfile',
-      JSON.stringify({
+
+    const trimmedEmail = (formData.email || '').trim().toLowerCase()
+    if (!trimmedEmail) {
+      setError('Please enter your Gmail address.')
+      return
+    }
+
+    if (isSignup) {
+      const profile = {
         name: formData.name || 'Savvyspoon User',
         location: formData.location || 'Kenya',
-        email: formData.email,
-      }),
-    )
-    onAuthSuccess({ role: 'account' })
+        email: trimmedEmail,
+        password: formData.password,
+      }
+      localStorage.setItem('savvyspoon.userProfile', JSON.stringify(profile))
+      onAuthSuccess({ role: 'account', profile })
+      return
+    }
+
+    const raw = localStorage.getItem('savvyspoon.userProfile')
+    if (!raw) {
+      setError('No account found. Please create an account first.')
+      return
+    }
+    try {
+      const stored = JSON.parse(raw)
+      const storedEmail = (stored.email || '').trim().toLowerCase()
+      if (storedEmail !== trimmedEmail || stored.password !== formData.password) {
+        setError('Email or password is incorrect.')
+        return
+      }
+      onAuthSuccess({ role: 'account', profile: stored })
+    } catch {
+      setError('Unable to read saved account. Please create a new account.')
+    }
   }
 
   return (
@@ -149,6 +177,7 @@ function Auth({ onAuthSuccess }) {
               {passwordTooShort ? (
                 <p className="text-xs font-semibold text-red-600">Password must be at least 5 characters.</p>
               ) : null}
+              {error ? <p className="text-xs font-semibold text-red-600">{error}</p> : null}
 
               <button
                 className="w-full rounded-xl bg-brand-green px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-green-dark"
