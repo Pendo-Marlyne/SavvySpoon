@@ -26,6 +26,9 @@ function App() {
   const [ingredientOverrides, setIngredientOverrides] = useState(() =>
     readStoredValue('savvyspoon.ingredientOverrides', {}),
   )
+  const [customIngredients, setCustomIngredients] = useState(() =>
+    readStoredValue('savvyspoon.customIngredients', []),
+  )
   const [weeklyPlanner, setWeeklyPlanner] = useState(() =>
     normalizePlanner(readStoredValue('savvyspoon.weeklyPlan', defaultPlanner)),
   )
@@ -70,7 +73,7 @@ function App() {
       return acc
     }, {})
 
-    return Object.values(groupedByMealIngredient)
+    const generatedItems = Object.values(groupedByMealIngredient)
       .map((item) => {
         const override = ingredientOverrides[item.id] || {}
         if (override.deleted) return null
@@ -91,8 +94,30 @@ function App() {
         }
       })
       .filter(Boolean)
-      .sort((a, b) => a.mealName.localeCompare(b.mealName))
-  }, [weeklyPlanner, ingredientOverrides])
+    const customItems = (customIngredients || [])
+      .map((item) => {
+        const override = ingredientOverrides[item.id] || {}
+        if (override.deleted) return null
+        return {
+          id: item.id,
+          mealName: item.mealName || 'Custom',
+          ingredientName: item.ingredientName || '',
+          count: 1,
+          unit: override.unit || item.unit || 'pcs',
+          quantity:
+            typeof override.quantity === 'number' && !Number.isNaN(override.quantity)
+              ? override.quantity
+              : Number(item.quantity || 1),
+          price:
+            typeof override.price === 'number' && !Number.isNaN(override.price)
+              ? override.price
+              : Number(item.price || 0),
+        }
+      })
+      .filter(Boolean)
+
+    return [...generatedItems, ...customItems].sort((a, b) => a.mealName.localeCompare(b.mealName))
+  }, [weeklyPlanner, ingredientOverrides, customIngredients])
 
   const updateIngredientField = (id, field, value) => {
     setIngredientOverrides((current) => {
@@ -121,6 +146,28 @@ function App() {
     })
   }
 
+  const addIngredientRow = (payload) => {
+    const ingredientName = (payload?.ingredientName || '').trim()
+    const mealName = (payload?.mealName || '').trim() || 'Custom'
+    if (!ingredientName) return
+
+    const id = `custom::${Date.now()}::${ingredientName.toLowerCase()}`
+    const item = {
+      id,
+      mealName,
+      ingredientName,
+      unit: payload?.unit || 'pcs',
+      quantity: Number(payload?.quantity || 1),
+      price: Number(payload?.price || 0),
+    }
+
+    setCustomIngredients((current) => {
+      const next = [...current, item]
+      localStorage.setItem('savvyspoon.customIngredients', JSON.stringify(next))
+      return next
+    })
+  }
+
   const allowAccess = (authData) => {
     setIsAuthenticated(true)
     setRole(authData?.role === 'account' ? 'account' : 'guest')
@@ -145,6 +192,10 @@ function App() {
 
   const plannerBg = {
     backgroundImage: "url('/spicy.jpg')",
+  }
+
+  const budgetBg = {
+    backgroundImage: "url('/tasty.jpg')",
   }
 
   if (!isAuthenticated) return <Auth onAuthSuccess={allowAccess} />
@@ -195,6 +246,7 @@ function App() {
             <Grocery
               groceryList={groceryList}
               formatKes={formatKes}
+              onAddIngredient={addIngredientRow}
               onDeleteIngredient={deleteIngredientRow}
               onUpdateIngredient={updateIngredientField}
             />
@@ -208,10 +260,17 @@ function App() {
   if (page === 'budget') {
     return (
       <>
-        <main className="min-h-screen bg-brand-cream bg-cover bg-fixed bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={appBg}>
-          <div className="mx-auto max-w-6xl space-y-6">
+        <main className="min-h-screen bg-cover bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={budgetBg}>
+          <div className="space-y-6">
             <Header budget={budget} currentPage="budget" onNavigate={navigate} showSpend totalSpent={weeklyTotal} />
-            <Budget budget={budget} weeklyTotal={weeklyTotal} dayTotals={dayTotals} formatKes={formatKes} updateBudget={updateBudget} />
+            <Budget
+              budget={budget}
+              weeklyTotal={weeklyTotal}
+              dayTotals={dayTotals}
+              formatKes={formatKes}
+              groceryList={groceryList}
+              updateBudget={updateBudget}
+            />
           </div>
         </main>
         <Footer onNavigate={navigate} />

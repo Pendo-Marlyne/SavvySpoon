@@ -1,6 +1,13 @@
+import { useEffect } from 'react'
 import { X } from 'lucide-react'
 
 function Toast({ open, title, message, tone = 'warning', onClose }) {
+  useEffect(() => {
+    if (!open || !onClose) return undefined
+    const timeoutId = window.setTimeout(() => onClose(), 4000)
+    return () => window.clearTimeout(timeoutId)
+  }, [open, onClose])
+
   if (!open) return null
 
   const toneStyles =

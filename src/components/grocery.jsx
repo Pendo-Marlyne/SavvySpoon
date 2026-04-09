@@ -1,36 +1,105 @@
 import { CircleDollarSign, PackagePlus, ShoppingCart, Trash2 } from 'lucide-react'
+import { useState } from 'react'
 
 const mealImages = ['/meal.webp', '/food.webp', '/homemade.webp', '/spicy.jpg']
+const unitOptions = ['pcs', 'kg', 'loaves', 'ltrs', 'egg']
 
-function Grocery({ groceryList, formatKes, onDeleteIngredient, onUpdateIngredient }) {
+function Grocery({ groceryList, formatKes, onDeleteIngredient, onUpdateIngredient, onAddIngredient }) {
+  const groceryTotal = groceryList.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0), 0)
+
+  const [newItem, setNewItem] = useState({
+    ingredientName: '',
+    mealName: '',
+    quantity: 1,
+    unit: 'pcs',
+    price: 0,
+  })
+
+  const handleAddIngredient = () => {
+    if (!newItem.ingredientName.trim()) return
+    onAddIngredient?.(newItem)
+    setNewItem({
+      ingredientName: '',
+      mealName: '',
+      quantity: 1,
+      unit: 'pcs',
+      price: 0,
+    })
+  }
+
   return (
     <section
-      className="animate-fade-up rounded-3xl border border-brand-orange/35 bg-black/45 p-6 shadow-card backdrop-blur-md"
+      className="animate-fade-up rounded-[2rem] border border-[#f4a259]/45 bg-black/28 p-6 shadow-card"
       style={{
         backgroundImage:
-          "linear-gradient(rgba(0,0,0,0.42), rgba(0,0,0,0.42)), url('/spicy.jpg')",
+          "linear-gradient(rgba(0,0,0,0.26), rgba(0,0,0,0.22)), url('/spicy.jpg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
     >
-      <h2 className="flex items-center gap-2 text-2xl font-extrabold text-brand-cream">
-        <ShoppingCart size={22} />
-        Ingredients & Cost Page
-      </h2>
-      <p className="mt-1 text-sm font-semibold text-brand-orange">
-        Edit ingredient quantities, choose units (pcs/kg), set prices, and delete meal-specific rows.
+      <div className="rounded-2xl border border-[#f4a259]/45 bg-white/72 px-4 py-4 shadow-[inset_0_0_24px_rgba(244,162,89,0.12)] backdrop-blur">
+        <h2 className="flex items-center justify-center gap-2 text-center text-3xl font-black tracking-wide text-[#3D2A22]">
+          <ShoppingCart size={24} />
+          INGREDIENT MENU
+        </h2>
+        <div className="mx-auto mt-2 h-[2px] w-44 bg-gradient-to-r from-transparent via-[#f4a259] to-transparent" />
+      </div>
+      <p className="mt-4 text-center text-sm font-bold text-[#3D2A22]">
+        Edit ingredient quantities, choose units (pcs, kg, loaves, ltrs, egg), set prices, and delete meal-specific rows.
       </p>
+      <div className="mt-4 grid gap-3 rounded-2xl border border-[#f4a259]/55 bg-gradient-to-r from-[#0f2f86]/80 via-[#0b3e6f]/72 to-[#f97316]/55 p-4 md:grid-cols-5">
+        <input
+          className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#4338ca]"
+          onChange={(event) => setNewItem((current) => ({ ...current, ingredientName: event.target.value }))}
+          placeholder="Add new ingredient"
+          type="text"
+          value={newItem.ingredientName}
+        />
+        <input
+          className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#4338ca]"
+          onChange={(event) => setNewItem((current) => ({ ...current, mealName: event.target.value }))}
+          placeholder="Meal (optional)"
+          type="text"
+          value={newItem.mealName}
+        />
+        <input
+          className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#4338ca]"
+          min="0"
+          onChange={(event) => setNewItem((current) => ({ ...current, quantity: Number(event.target.value || 0) }))}
+          step="0.5"
+          type="number"
+          value={newItem.quantity}
+        />
+        <select
+          className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#4338ca]"
+          onChange={(event) => setNewItem((current) => ({ ...current, unit: event.target.value }))}
+          value={newItem.unit}
+        >
+          {unitOptions.map((unit) => (
+            <option key={unit} value={unit}>
+              {unit}
+            </option>
+          ))}
+        </select>
+        <button
+          className="rounded-lg border border-[#fff6e9]/70 bg-gradient-to-r from-[#4338ca] to-[#f97316] px-3 py-2 text-sm font-black uppercase tracking-wide text-[#fff6e9] transition hover:brightness-110"
+          onClick={handleAddIngredient}
+          type="button"
+        >
+          Add Ingredient
+        </button>
+      </div>
       <div className="mt-5 grid gap-4 md:grid-cols-2">
         {groceryList.length > 0 ? (
           groceryList.map((item, index) => (
             <article
               key={item.id}
-              className="animate-fade-up rounded-2xl border border-brand-orange/45 bg-black/50 p-4 shadow-[0_10px_26px_-16px_rgba(0,0,0,0.85)]"
+              className="animate-fade-up rounded-2xl border border-[#f4a259]/50 bg-black/84 p-4 shadow-[0_12px_30px_-16px_rgba(0,0,0,0.9)] transition hover:-translate-y-0.5 hover:shadow-[0_0_22px_rgba(244,162,89,0.3)]"
               style={{ animationDelay: `${index * 60}ms` }}
             >
-              <div className="mb-3 flex items-center justify-between gap-3">
+              <div className="mb-3 flex items-center justify-between gap-3 border-b border-[#f4a259]/25 pb-3">
                 <div className="flex min-w-0 items-center gap-3">
-                  <div className="h-14 w-14 overflow-hidden rounded-full border-2 border-brand-orange/70">
+                  <div className="h-14 w-14 overflow-hidden rounded-full border-2 border-white bg-white shadow-[0_0_12px_rgba(244,162,89,0.25)]">
                     <img
                       alt={item.ingredientName}
                       className="h-full w-full object-cover"
@@ -38,12 +107,12 @@ function Grocery({ groceryList, formatKes, onDeleteIngredient, onUpdateIngredien
                     />
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate text-lg font-black tracking-tight text-brand-cream">{item.ingredientName}</p>
-                    <p className="truncate text-sm font-bold text-brand-orange">{item.mealName}</p>
+                    <p className="truncate text-xl font-black tracking-tight text-[#fff6e9]">{item.ingredientName}</p>
+                    <p className="truncate text-sm font-extrabold uppercase tracking-wide text-[#f4a259]">{item.mealName}</p>
                   </div>
                 </div>
                 <button
-                  className="rounded-full border border-red-300/60 bg-red-500/20 p-2 text-red-200 transition hover:bg-red-500/35"
+                  className="rounded-full border border-red-300/70 bg-red-500/20 p-2 text-red-200 transition hover:bg-red-500/35"
                   onClick={() => onDeleteIngredient?.(item.id)}
                   type="button"
                 >
@@ -52,13 +121,13 @@ function Grocery({ groceryList, formatKes, onDeleteIngredient, onUpdateIngredien
               </div>
 
               <div className="grid gap-3 sm:grid-cols-3">
-                <label className="rounded-xl border border-brand-green/50 bg-black/35 px-3 py-2">
-                  <span className="mb-1 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-brand-orange">
+                <label className="rounded-xl border border-[#1e5948]/65 bg-black/55 px-3 py-2">
+                  <span className="mb-1 flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-[#f4a259]">
                     <PackagePlus size={12} />
                     Quantity Needed
                   </span>
                   <input
-                    className="w-full rounded-lg border border-brand-green/55 bg-black/55 px-2 py-1.5 text-sm font-extrabold text-brand-cream outline-none focus:border-brand-orange"
+                    className="w-full rounded-lg border border-[#1e5948]/65 bg-black/65 px-2 py-1.5 text-sm font-black text-[#fff6e9] outline-none focus:border-[#f4a259]"
                     min="0"
                     onChange={(event) => onUpdateIngredient?.(item.id, 'quantity', event.target.value)}
                     step="0.5"
@@ -67,25 +136,28 @@ function Grocery({ groceryList, formatKes, onDeleteIngredient, onUpdateIngredien
                   />
                 </label>
 
-                <label className="rounded-xl border border-brand-green/50 bg-black/35 px-3 py-2">
-                  <span className="mb-1 block text-[11px] font-extrabold uppercase tracking-wider text-brand-orange">Unit</span>
+                <label className="rounded-xl border border-[#1e5948]/65 bg-black/55 px-3 py-2">
+                  <span className="mb-1 block text-[11px] font-black uppercase tracking-wider text-[#f4a259]">Unit</span>
                   <select
-                    className="w-full rounded-lg border border-brand-green/55 bg-black/55 px-2 py-1.5 text-sm font-extrabold text-brand-cream outline-none focus:border-brand-orange"
+                    className="w-full rounded-lg border border-[#1e5948]/65 bg-black/65 px-2 py-1.5 text-sm font-black text-[#fff6e9] outline-none focus:border-[#f4a259]"
                     onChange={(event) => onUpdateIngredient?.(item.id, 'unit', event.target.value)}
                     value={item.unit}
                   >
-                    <option value="pcs">pcs</option>
-                    <option value="kg">kg</option>
+                    {unitOptions.map((unit) => (
+                      <option key={unit} value={unit}>
+                        {unit}
+                      </option>
+                    ))}
                   </select>
                 </label>
 
-                <label className="rounded-xl border border-brand-green/50 bg-black/35 px-3 py-2">
-                  <span className="mb-1 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-brand-orange">
+                <label className="rounded-xl border border-[#1e5948]/65 bg-black/55 px-3 py-2">
+                  <span className="mb-1 flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-[#f4a259]">
                     <CircleDollarSign size={12} />
                     Price (KES)
                   </span>
                   <input
-                    className="w-full rounded-lg border border-brand-green/55 bg-black/55 px-2 py-1.5 text-sm font-extrabold text-brand-cream outline-none focus:border-brand-orange"
+                    className="w-full rounded-lg border border-[#1e5948]/65 bg-black/65 px-2 py-1.5 text-sm font-black text-[#fff6e9] outline-none focus:border-[#f4a259]"
                     min="0"
                     onChange={(event) => onUpdateIngredient?.(item.id, 'price', event.target.value)}
                     step="10"
@@ -95,9 +167,9 @@ function Grocery({ groceryList, formatKes, onDeleteIngredient, onUpdateIngredien
                 </label>
               </div>
 
-              <div className="mt-3 flex items-center justify-between rounded-xl border border-brand-orange/45 bg-brand-orange/20 px-3 py-2">
-                <span className="text-xs font-black uppercase tracking-wider text-brand-cream">Auto count: x{item.count}</span>
-                <span className="text-sm font-black text-brand-cream">{formatKes?.(item.price * item.quantity || 0)}</span>
+              <div className="mt-3 flex items-center justify-between rounded-xl border border-[#f4a259]/55 bg-[#f4a259]/16 px-3 py-2">
+                <span className="text-xs font-black uppercase tracking-wider text-[#fff6e9]">Auto count: x{item.count}</span>
+                <span className="text-base font-black text-[#fff6e9]">{formatKes?.(item.price * item.quantity || 0)}</span>
               </div>
             </article>
           ))
@@ -106,6 +178,13 @@ function Grocery({ groceryList, formatKes, onDeleteIngredient, onUpdateIngredien
             No ingredients yet. Add meal names in Weekly Planner.
           </p>
         )}
+      </div>
+
+      <div className="mt-6 flex justify-center">
+        <div className="flex h-40 w-40 flex-col items-center justify-center rounded-full border-4 border-[#f4a259]/80 bg-black/80 shadow-[0_0_28px_rgba(244,162,89,0.45)]">
+          <p className="text-[11px] font-black uppercase tracking-wider text-[#ffd8ad]">Grocery Total</p>
+          <p className="mt-1 text-center text-lg font-black text-[#fff6e9]">{formatKes?.(groceryTotal)}</p>
+        </div>
       </div>
     </section>
   )
