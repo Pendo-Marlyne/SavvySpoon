@@ -28,7 +28,7 @@ function Auth({ onAuthSuccess }) {
         email: formData.email,
       }),
     )
-    onAuthSuccess()
+    onAuthSuccess({ role: 'account' })
   }
 
   return (
@@ -160,7 +160,7 @@ function Auth({ onAuthSuccess }) {
 
             <button
               className="mt-3 w-full rounded-xl border border-brand-orange/45 bg-brand-orange/10 px-4 py-3 text-sm font-semibold text-brand-green-dark transition hover:bg-brand-orange/20"
-              onClick={onAuthSuccess}
+              onClick={() => onAuthSuccess({ role: 'guest' })}
               type="button"
             >
               Continue as Guest
