@@ -11,6 +11,7 @@ function Auth({ onAuthSuccess }) {
   })
 
   const isSignup = mode === 'signup'
+  const passwordTooShort = (formData.password || '').length > 0 && (formData.password || '').length < 5
 
   const handleChange = (field, value) => {
     setFormData((current) => ({ ...current, [field]: value }))
@@ -18,6 +19,7 @@ function Auth({ onAuthSuccess }) {
 
   const handleSubmit = (event) => {
     event.preventDefault()
+    if ((formData.password || '').length < 5) return
     localStorage.setItem(
       'savvyspoon.userProfile',
       JSON.stringify({
@@ -59,21 +61,39 @@ function Auth({ onAuthSuccess }) {
               </h1>
             </div>
 
-            <div className="mb-5 grid grid-cols-2 rounded-xl bg-slate-100 p-1">
+            <div className="mb-5 rounded-2xl border border-white/45 bg-white/35 p-1 shadow-sm backdrop-blur-xl">
+              <div className="grid grid-cols-2 rounded-xl bg-gradient-to-r from-amber-200/15 via-orange-200/10 to-amber-200/15 p-1">
               <button
-                className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${!isSignup ? 'bg-white text-brand-green shadow-sm' : 'text-slate-600'}`}
+                className={`group relative rounded-xl px-3 py-2 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-300/60 ${
+                  !isSignup
+                    ? 'bg-white/70 text-brand-green shadow-sm ring-1 ring-white/60'
+                    : 'text-slate-700 hover:bg-white/40'
+                }`}
                 onClick={() => setMode('signin')}
                 type="button"
               >
+                <span className="relative z-10">Sign In</span>
+                <span className="pointer-events-none absolute inset-0 -z-0 rounded-xl opacity-0 blur-xl transition-opacity duration-200 group-hover:opacity-70 group-focus-visible:opacity-80"
+                  style={{ background: 'radial-gradient(60% 80% at 50% 50%, rgba(245, 158, 11, 0.45), rgba(245, 158, 11, 0))' }}
+                />
                 Sign In
               </button>
               <button
-                className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${isSignup ? 'bg-white text-brand-green shadow-sm' : 'text-slate-600'}`}
+                className={`group relative rounded-xl px-3 py-2 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-300/60 ${
+                  isSignup
+                    ? 'bg-white/70 text-brand-green shadow-sm ring-1 ring-white/60'
+                    : 'text-slate-700 hover:bg-white/40'
+                }`}
                 onClick={() => setMode('signup')}
                 type="button"
               >
+                <span className="relative z-10">Create Account</span>
+                <span className="pointer-events-none absolute inset-0 -z-0 rounded-xl opacity-0 blur-xl transition-opacity duration-200 group-hover:opacity-70 group-focus-visible:opacity-80"
+                  style={{ background: 'radial-gradient(60% 80% at 50% 50%, rgba(245, 158, 11, 0.45), rgba(245, 158, 11, 0))' }}
+                />
                 Create Account
               </button>
+            </div>
             </div>
 
             <form className="space-y-3" onSubmit={handleSubmit}>
@@ -107,13 +127,19 @@ function Auth({ onAuthSuccess }) {
                 value={formData.email}
               />
               <input
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm focus:border-brand-green focus:outline-none"
+                className={`w-full rounded-xl border bg-white px-4 py-3 text-sm focus:outline-none ${
+                  passwordTooShort ? 'border-red-300 focus:border-red-500' : 'border-slate-300 focus:border-brand-green'
+                }`}
                 onChange={(event) => handleChange('password', event.target.value)}
-                placeholder="Password"
+                minLength={5}
+                placeholder="Password (min 5 characters)"
                 required
                 type="password"
                 value={formData.password}
               />
+              {passwordTooShort ? (
+                <p className="text-xs font-semibold text-red-600">Password must be at least 5 characters.</p>
+              ) : null}
 
               <button
                 className="w-full rounded-xl bg-brand-green px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-green-dark"
