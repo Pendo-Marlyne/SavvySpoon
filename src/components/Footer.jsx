@@ -1,4 +1,4 @@
-function Footer({ onNavigate, role }) {
+function Footer({ onNavigate }) {
   return (
     <footer className="relative mt-10 overflow-hidden rounded-3xl border border-sky-200/25 bg-gradient-to-br from-sky-900/65 via-sky-800/55 to-indigo-900/60 p-6 shadow-card backdrop-blur-xl">
       <div className="absolute inset-0 opacity-25" style={{ backgroundImage: "url('/hot-meal-bg.svg')" }} />
@@ -27,24 +27,18 @@ function Footer({ onNavigate, role }) {
         <div className="grid gap-3 sm:grid-cols-2">
           {[
             { id: 'home', label: 'Home', restricted: false },
-            { id: 'planner', label: 'Planner', restricted: false },
-            { id: 'dashboard', label: 'Dashboard', restricted: true },
-            { id: 'ingredients', label: 'Ingredients', restricted: false },
-            { id: 'budget', label: 'Budget', restricted: false },
-            { id: 'profile', label: 'My Profile', restricted: true },
+            { id: 'dashboard', label: 'Dashboard', restricted: false },
+            { id: 'planner', label: 'Weekly Planner', restricted: false },
+            { id: 'library', label: 'Meal Library', restricted: false },
+            { id: 'grocery', label: 'Grocery List', restricted: false },
+            { id: 'budget', label: 'Budget Setting', restricted: false },
           ].map((item) => {
-            const disabled = item.restricted && role === 'guest'
             return (
               <button
                 key={item.id}
                 type="button"
-                disabled={disabled}
-                onClick={() => onNavigate?.(item.id, { restricted: item.restricted })}
-                className={`text-left text-sm font-semibold transition ${
-                  disabled
-                    ? 'cursor-not-allowed text-sky-100/40'
-                    : 'text-sky-50/90 hover:text-amber-200'
-                }`}
+                onClick={() => onNavigate?.(item.id)}
+                className="text-left text-sm font-semibold text-sky-50/90 transition hover:text-amber-200"
               >
                 {item.label}
               </button>

@@ -1,7 +1,7 @@
 import { ArrowRight, Flame, Library, ListChecks, Sparkles, WalletCards } from 'lucide-react'
 import Header from './Header'
 
-function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
+function Homepage({ onNavigate, onGoDashboard, onGoPlanner }) {
   const exampleSpend = 1380
 
   return (
@@ -16,7 +16,6 @@ function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
         <Header
           currentPage="home"
           onNavigate={onNavigate}
-          role={role}
           sticky={false}
           showSpend={false}
         />
@@ -181,7 +180,7 @@ function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
                 Guests can preview how planning looks before creating an account.
               </p>
 
-              <div className="mt-5 rounded-[28px] border border-brand-orange/20 bg-gradient-to-br from-brand-cream/70 via-brand-cream/45 to-brand-orange/14 p-5 shadow-sm">
+              <div className="mt-5 rounded-[28px] border border-brand-orange/30 bg-gradient-to-br from-brand-orange/22 via-brand-green/12 to-brand-orange/28 p-5 shadow-sm">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">Monday</p>
@@ -198,14 +197,14 @@ function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
                     { label: 'Lunch', value: 'Chicken rice bowl' },
                     { label: 'Dinner', value: 'Beef stew + ugali' },
                   ].map((row) => (
-                    <div key={row.label} className="flex items-center justify-between gap-3 rounded-2xl bg-brand-cream/70 px-4 py-3">
+                    <div key={row.label} className="flex items-center justify-between gap-3 rounded-2xl bg-brand-orange/22 px-4 py-3">
                       <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">{row.label}</p>
                       <p className="text-sm font-bold text-[#3D2A22]">{row.value}</p>
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-4 rounded-2xl bg-brand-cream/70 px-4 py-3">
+                <div className="mt-4 rounded-2xl bg-brand-green/18 px-4 py-3">
                   <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">Auto grocery list</p>
                   <p className="mt-1 text-sm font-semibold text-[#3D2A22]">Oats • Milk • Bananas • Chicken • Rice • Tomatoes</p>
                 </div>

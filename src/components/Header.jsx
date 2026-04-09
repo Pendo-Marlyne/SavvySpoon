@@ -1,9 +1,10 @@
 import {
   Banknote,
   LayoutDashboard,
+  Library,
   ListChecks,
-  Salad,
-  UserCircle2,
+  ShoppingCart,
+  House,
   UtensilsCrossed,
 } from 'lucide-react'
 
@@ -15,7 +16,6 @@ const formatKes = (value) =>
 function Header({
   totalSpent = 0,
   budget = 12000,
-  role = 'account',
   currentPage,
   onNavigate,
   sticky = true,
@@ -54,27 +54,24 @@ function Header({
 
         <nav className="hidden items-center gap-2 lg:flex">
           {[
-            { id: 'home', label: 'Home', icon: Salad, restricted: false },
-            { id: 'planner', label: 'Planner', icon: ListChecks, restricted: false },
-            { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, restricted: true },
-            { id: 'ingredients', label: 'Ingredients', icon: Salad, restricted: false },
-            { id: 'budget', label: 'Budget', icon: Banknote, restricted: false },
-            { id: 'profile', label: 'My Profile', icon: UserCircle2, restricted: true },
+            { id: 'home', label: 'Home', icon: House },
+            { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+            { id: 'planner', label: 'Weekly Planner', icon: ListChecks },
+            { id: 'library', label: 'Meal Library', icon: Library },
+            { id: 'grocery', label: 'Grocery List', icon: ShoppingCart },
+            { id: 'budget', label: 'Budget Setting', icon: Banknote },
           ].map((item) => {
             const isActive = currentPage === item.id
-            const isBlocked = item.restricted && role === 'guest'
             const Icon = item.icon
             return (
               <button
                 className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition ${
                   isActive
                     ? 'bg-brand-green text-white shadow-sm'
-                    : isBlocked
-                      ? 'text-slate-400 hover:bg-brand-cream/20'
-                      : 'text-[#3D2A22] hover:bg-brand-orange/20'
+                    : 'text-[#3D2A22] hover:bg-brand-orange/20'
                 }`}
                 key={item.id}
-                onClick={() => onNavigate?.(item.id, { restricted: item.restricted })}
+                onClick={() => onNavigate?.(item.id)}
                 type="button"
               >
                 <Icon size={16} />
