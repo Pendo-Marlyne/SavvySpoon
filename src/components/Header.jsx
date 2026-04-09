@@ -57,10 +57,10 @@ function Header({
           {[
             { id: 'home', label: 'Home', icon: House },
             { id: 'planner', label: 'Weekly Planner', icon: ListChecks },
-            { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-            { id: 'library', label: 'Meal Library', icon: Library },
             { id: 'grocery', label: 'Grocery List', icon: ShoppingCart },
             { id: 'budget', label: 'Budget Setting', icon: Banknote },
+            { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+            { id: 'library', label: 'Meal Library', icon: Library },
           ].map((item) => {
             const isActive = currentPage === item.id
             const Icon = item.icon

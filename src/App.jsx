@@ -22,6 +22,7 @@ import {
 function App() {
   const [page, setPage] = useState('home')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [role, setRole] = useState('guest')
   const [weeklyPlanner, setWeeklyPlanner] = useState(() =>
     normalizePlanner(readStoredValue('savvyspoon.weeklyPlan', defaultPlanner)),
   )
@@ -61,12 +62,16 @@ function App() {
       .map(([name, count]) => ({ name, count }))
   }, [mealLibrary])
 
-  const allowAccess = () => {
+  const allowAccess = (authData) => {
     setIsAuthenticated(true)
+    setRole(authData?.role === 'account' ? 'account' : 'guest')
     setPage('home')
   }
 
-  const navigate = (nextPage) => setPage(nextPage)
+  const navigate = (nextPage) => {
+    if (role === 'guest' && nextPage !== 'home') return
+    setPage(nextPage)
+  }
 
   const updateBudget = (nextBudget) => {
     const parsed = Number(nextBudget || 0)
