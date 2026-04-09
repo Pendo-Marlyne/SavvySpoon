@@ -58,10 +58,9 @@ function Header({ totalSpent = 0, budget = 12000, role = 'account', currentPage,
                   isActive
                     ? 'bg-white/70 text-brand-green shadow-sm'
                     : isBlocked
-                      ? 'text-slate-400'
+                      ? 'text-slate-500 hover:bg-white/30'
                       : 'text-slate-800 hover:bg-white/55'
                 }`}
-                disabled={isBlocked}
                 key={item.id}
                 onClick={() => onNavigate?.(item.id, { restricted: item.restricted })}
                 type="button"

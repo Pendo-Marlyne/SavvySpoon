@@ -164,7 +164,14 @@ function App() {
           title={toast.title}
           tone={toast.tone}
         />
-        <Homepage budget={budget} onGoDashboard={() => navigate('dashboard', { restricted: true })} onGoPlanner={() => navigate('planner')} totalSpent={weeklyTotal} />
+        <Homepage
+          budget={budget}
+          onGoDashboard={() => navigate('dashboard', { restricted: true })}
+          onGoPlanner={() => navigate('planner')}
+          onNavigate={navigate}
+          role={role}
+          totalSpent={weeklyTotal}
+        />
       </>
     )
   }
@@ -236,6 +243,93 @@ function App() {
                 </article>
               ))}
             </div>
+          </section>
+        </div>
+      </main>
+    )
+  }
+
+  if (page === 'ingredients') {
+    return (
+      <main
+        className="min-h-screen bg-brand-cream bg-cover bg-center px-4 py-8 text-zinc-900 md:px-8"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(247,245,239,0.86), rgba(247,245,239,0.9)), url('/homemade.webp')",
+        }}
+      >
+        <div className="mx-auto max-w-6xl space-y-6">
+          <Toast
+            message={toast.message}
+            onClose={() => setToast((current) => ({ ...current, open: false }))}
+            open={toast.open}
+            title={toast.title}
+            tone={toast.tone}
+          />
+          <Header budget={budget} currentPage="ingredients" onNavigate={navigate} role={role} totalSpent={weeklyTotal} />
+          <section className="rounded-3xl border border-brand-green/15 bg-white/65 p-6 shadow-card backdrop-blur-xl">
+            <h2 className="text-2xl font-extrabold text-slate-900">Ingredient List</h2>
+            <p className="mt-2 text-sm text-slate-700/80">
+              This page will summarize ingredients generated from your weekly plan.
+            </p>
+          </section>
+        </div>
+      </main>
+    )
+  }
+
+  if (page === 'budget') {
+    return (
+      <main
+        className="min-h-screen bg-brand-cream bg-cover bg-center px-4 py-8 text-zinc-900 md:px-8"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(247,245,239,0.86), rgba(247,245,239,0.9)), url('/homemade.webp')",
+        }}
+      >
+        <div className="mx-auto max-w-6xl space-y-6">
+          <Toast
+            message={toast.message}
+            onClose={() => setToast((current) => ({ ...current, open: false }))}
+            open={toast.open}
+            title={toast.title}
+            tone={toast.tone}
+          />
+          <Header budget={budget} currentPage="budget" onNavigate={navigate} role={role} totalSpent={weeklyTotal} />
+          <section className="rounded-3xl border border-brand-green/15 bg-white/65 p-6 shadow-card backdrop-blur-xl">
+            <h2 className="text-2xl font-extrabold text-slate-900">Budget</h2>
+            <p className="mt-2 text-sm text-slate-700/80">
+              This page will let you set and update your weekly budget in KES.
+            </p>
+          </section>
+        </div>
+      </main>
+    )
+  }
+
+  if (page === 'profile') {
+    return (
+      <main
+        className="min-h-screen bg-brand-cream bg-cover bg-center px-4 py-8 text-zinc-900 md:px-8"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(247,245,239,0.86), rgba(247,245,239,0.9)), url('/homemade.webp')",
+        }}
+      >
+        <div className="mx-auto max-w-6xl space-y-6">
+          <Toast
+            message={toast.message}
+            onClose={() => setToast((current) => ({ ...current, open: false }))}
+            open={toast.open}
+            title={toast.title}
+            tone={toast.tone}
+          />
+          <Header budget={budget} currentPage="profile" onNavigate={navigate} role={role} totalSpent={weeklyTotal} />
+          <section className="rounded-3xl border border-brand-green/15 bg-white/65 p-6 shadow-card backdrop-blur-xl">
+            <h2 className="text-2xl font-extrabold text-slate-900">My Profile</h2>
+            <p className="mt-2 text-sm text-slate-700/80">
+              Account-only page. It will show personal details and saved preferences.
+            </p>
           </section>
         </div>
       </main>
