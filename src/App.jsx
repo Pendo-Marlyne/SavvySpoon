@@ -4,7 +4,7 @@ import Auth from './components/Auth'
 import Homepage from './components/Homepage'
 import Footer from './components/Footer'
 import Dashboard from './components/dashboard'
-import Week from './components/week'
+import WeeklyPlanner from './components/weeklyplanner'
 import MealLibrary from './components/meallibrary'
 import Grocery from './components/grocery'
 import Budget from './components/budget'
@@ -68,23 +68,6 @@ function App() {
 
   const navigate = (nextPage) => setPage(nextPage)
 
-  const updateMealField = (day, mealType, field, value) => {
-    setWeeklyPlanner((current) => {
-      const next = {
-        ...current,
-        [day]: {
-          ...current[day],
-          [mealType]: {
-            ...current[day][mealType],
-            [field]: field === 'cost' ? Number(value || 0) : value,
-          },
-        },
-      }
-      localStorage.setItem('savvyspoon.weeklyPlan', JSON.stringify(next))
-      return next
-    })
-  }
-
   const updateBudget = (nextBudget) => {
     const parsed = Number(nextBudget || 0)
     setBudget(parsed)
@@ -113,7 +96,7 @@ function App() {
         <main className="min-h-screen bg-brand-cream bg-cover bg-fixed bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={appBg}>
           <div className="mx-auto max-w-6xl space-y-6">
             <Header budget={budget} currentPage="planner" onNavigate={navigate} showSpend totalSpent={weeklyTotal} />
-            <Week weekRows={weekRows} mealTypes={mealTypes} getMealName={getMealName} getMealCost={getMealCost} updateMealField={updateMealField} />
+            <WeeklyPlanner weeklyPlanner={weeklyPlanner} setWeeklyPlanner={setWeeklyPlanner} formatKes={formatKes} />
           </div>
         </main>
         <Footer onNavigate={navigate} />

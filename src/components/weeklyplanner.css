@@ -1,0 +1,85 @@
+.weekly-planner-page {
+  border: 1px solid rgba(37, 111, 91, 0.2);
+  border-radius: 28px;
+  background:
+    radial-gradient(600px 300px at 20% 0%, rgba(37, 111, 91, 0.18), transparent 55%),
+    radial-gradient(500px 260px at 100% 100%, rgba(244, 162, 89, 0.16), transparent 55%),
+    rgba(255, 246, 233, 0.62);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  box-shadow: 0 18px 45px -24px rgba(38, 87, 71, 0.55);
+}
+
+.weekly-planner-grid {
+  margin-top: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+}
+
+.day-card {
+  border: 1px solid rgba(37, 111, 91, 0.22);
+  border-radius: 22px;
+  background:
+    linear-gradient(160deg, rgba(37, 111, 91, 0.2), rgba(244, 162, 89, 0.18)),
+    rgba(255, 246, 233, 0.45);
+  padding: 0.95rem;
+  animation: fadeUp 520ms ease-out both;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.day-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px -18px rgba(37, 111, 91, 0.55);
+}
+
+.day-card-title {
+  margin: 0 0 0.7rem;
+  font-weight: 800;
+  color: #1e5948;
+  text-transform: capitalize;
+}
+
+.meal-block {
+  border: 1px solid rgba(244, 162, 89, 0.3);
+  border-radius: 14px;
+  background: rgba(255, 246, 233, 0.58);
+  padding: 0.6rem;
+  margin-bottom: 0.55rem;
+}
+
+.meal-block:last-child {
+  margin-bottom: 0;
+}
+
+.meal-label {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #6b6058;
+}
+
+.meal-input {
+  width: 100%;
+  margin-bottom: 0.4rem;
+  border-radius: 10px;
+  border: 1px solid rgba(37, 111, 91, 0.25);
+  background: rgba(255, 246, 233, 0.78);
+  color: #3d2a22;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.82rem;
+}
+
+.meal-input:focus {
+  outline: 2px solid rgba(37, 111, 91, 0.4);
+  border-color: rgba(37, 111, 91, 0.6);
+}
+
+.meal-cost {
+  margin: 0.2rem 0 0;
+  font-size: 0.72rem;
+  color: #3d2a22;
+  font-weight: 700;
+}

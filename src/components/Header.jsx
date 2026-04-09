@@ -38,7 +38,7 @@ function Header({
         <div className="absolute inset-0 bg-brand-orange/20 backdrop-blur-md" />
       </div>
 
-      <div className="relative flex flex-nowrap items-center justify-between gap-3 p-3 md:gap-6 md:p-4 md:pl-36">
+      <div className="relative flex flex-wrap items-center justify-between gap-3 p-3 md:gap-4 md:p-4 md:pl-36">
         <div className="flex min-w-0 items-center gap-2 md:gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-orange text-[#3D2A22] shadow-md">
             <div className="flex items-center gap-0.5">
@@ -52,11 +52,12 @@ function Header({
           </h1>
         </div>
 
-        <nav className="hidden items-center gap-2 lg:flex">
+        <nav className="order-3 w-full overflow-x-auto md:order-2 md:w-auto">
+          <div className="flex min-w-max items-center gap-2 pr-1">
           {[
             { id: 'home', label: 'Home', icon: House },
-            { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
             { id: 'planner', label: 'Weekly Planner', icon: ListChecks },
+            { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
             { id: 'library', label: 'Meal Library', icon: Library },
             { id: 'grocery', label: 'Grocery List', icon: ShoppingCart },
             { id: 'budget', label: 'Budget Setting', icon: Banknote },
@@ -65,10 +66,10 @@ function Header({
             const Icon = item.icon
             return (
               <button
-                className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition ${
+                className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                   isActive
-                    ? 'bg-brand-green text-white shadow-sm'
-                    : 'text-[#3D2A22] hover:bg-brand-orange/20'
+                    ? 'bg-brand-green text-brand-cream shadow-md shadow-brand-green/35'
+                    : 'text-[#3D2A22] hover:bg-brand-orange/20 hover:shadow-[0_0_18px_rgba(244,162,89,0.55)]'
                 }`}
                 key={item.id}
                 onClick={() => onNavigate?.(item.id)}
@@ -79,10 +80,11 @@ function Header({
               </button>
             )
           })}
+          </div>
         </nav>
 
         {showSpend ? (
-          <div className="w-[58%] max-w-[420px] min-w-[185px] rounded-2xl border border-brand-orange/25 bg-brand-cream/65 p-2.5 backdrop-blur md:p-3">
+          <div className="order-2 w-full rounded-2xl border border-brand-orange/25 bg-brand-cream/65 p-2.5 backdrop-blur md:order-3 md:w-[58%] md:max-w-[420px] md:min-w-[185px] md:p-3">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-[#3D2A22] md:text-xs">
               Weekly Spend
             </p>
