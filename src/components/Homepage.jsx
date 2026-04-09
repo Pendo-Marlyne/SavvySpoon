@@ -6,10 +6,10 @@ function Homepage({ onNavigate, onGoDashboard, onGoPlanner }) {
 
   return (
     <main
-      className="min-h-screen bg-brand-cream px-4 py-8 text-[#3D2A22] md:px-8"
+      className="min-h-screen bg-brand-cream bg-fixed px-4 py-8 text-[#3D2A22] md:px-8"
       style={{
         backgroundImage:
-          "radial-gradient(1100px 620px at 18% 18%, rgba(244, 162, 89, 0.35), transparent 60%), radial-gradient(1000px 560px at 85% 10%, rgba(37, 111, 91, 0.28), transparent 55%), linear-gradient(#FFF6E9, #FFF6E9)",
+          "radial-gradient(1100px 620px at 18% 18%, rgba(244, 162, 89, 0.35), transparent 60%), radial-gradient(1000px 560px at 85% 10%, rgba(37, 111, 91, 0.28), transparent 55%), linear-gradient(rgba(255,246,233,0.92), rgba(255,246,233,0.9)), url('/food.webp')",
       }}
     >
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
@@ -78,15 +78,15 @@ function Homepage({ onNavigate, onGoDashboard, onGoPlanner }) {
             <div className="lg:col-span-6">
               <div className="relative mx-auto h-[520px] w-full max-w-[560px]">
                 {[
-                  { cls: 'left-0 top-6 h-44 w-36 rotate-[-6deg]', src: "/meal.webp" },
-                  { cls: 'right-0 top-10 h-52 w-40 rotate-[7deg]', src: "/food.webp" },
-                  { cls: 'left-16 bottom-0 h-52 w-44 rotate-[4deg]', src: "/homemade.webp" },
-                  { cls: 'right-16 bottom-10 h-44 w-36 rotate-[-8deg]', src: "/meal.webp" },
-                  { cls: 'left-1/2 top-1/2 h-64 w-56 -translate-x-1/2 -translate-y-1/2 rotate-[1deg]', src: "/food.webp" },
+                  { cls: 'left-0 top-6 h-44 w-36 rotate-[-6deg]', src: "/meal.webp", motion: 'animate-float-soft delay-1' },
+                  { cls: 'right-0 top-10 h-52 w-40 rotate-[7deg]', src: "/food.webp", motion: 'animate-float-soft delay-2' },
+                  { cls: 'left-16 bottom-0 h-52 w-44 rotate-[4deg]', src: "/homemade.webp", motion: 'animate-float-soft delay-3' },
+                  { cls: 'right-16 bottom-10 h-44 w-36 rotate-[-8deg]', src: "/meal.webp", motion: 'animate-float-soft delay-4' },
+                  { cls: 'left-1/2 top-1/2 h-64 w-56 -translate-x-1/2 -translate-y-1/2 rotate-[1deg]', src: "/food.webp", motion: 'animate-float-soft' },
                 ].map((img, idx) => (
                   <div
                     key={idx}
-                    className={`absolute ${img.cls} overflow-hidden rounded-[32px] border border-brand-orange/25 bg-gradient-to-br from-brand-cream/75 via-brand-cream/45 to-brand-orange/10 shadow-lg`}
+                    className={`absolute ${img.cls} ${img.motion} overflow-hidden rounded-[32px] border border-brand-orange/25 bg-gradient-to-br from-brand-cream/75 via-brand-cream/45 to-brand-orange/10 shadow-lg transition-transform duration-300 hover:scale-[1.03]`}
                   >
                     <div
                       className="h-full w-full bg-cover bg-center"

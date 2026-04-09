@@ -1,13 +1,9 @@
 .weekly-planner-page {
-  border: 1px solid rgba(37, 111, 91, 0.2);
+  border: 1px solid #1e5948;
   border-radius: 28px;
-  background:
-    radial-gradient(600px 300px at 20% 0%, rgba(37, 111, 91, 0.18), transparent 55%),
-    radial-gradient(500px 260px at 100% 100%, rgba(244, 162, 89, 0.16), transparent 55%),
-    rgba(255, 246, 233, 0.62);
-  backdrop-filter: blur(10px);
+  background: transparent;
   padding: 1.5rem;
-  box-shadow: 0 18px 45px -24px rgba(38, 87, 71, 0.55);
+  box-shadow: 0 10px 26px -20px rgba(0, 0, 0, 0.8);
 }
 
 .weekly-planner-grid {
@@ -17,69 +13,228 @@
   gap: 1rem;
 }
 
-.day-card {
-  border: 1px solid rgba(37, 111, 91, 0.22);
+.day-tab-card {
+  text-align: left;
+  border: 1px solid #1e5948;
   border-radius: 22px;
-  background:
-    linear-gradient(160deg, rgba(37, 111, 91, 0.2), rgba(244, 162, 89, 0.18)),
-    rgba(255, 246, 233, 0.45);
+  background: rgba(0, 0, 0, 0.46);
+  backdrop-filter: blur(6px);
   padding: 0.95rem;
+  cursor: pointer;
   animation: fadeUp 520ms ease-out both;
-  transition: transform 180ms ease, box-shadow 180ms ease;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, filter 180ms ease;
 }
 
-.day-card:hover {
+.day-tab-card:nth-child(1) {
+  background: linear-gradient(rgba(8, 46, 78, 0.72), rgba(0, 0, 0, 0.52));
+}
+
+.day-tab-card:nth-child(2) {
+  background: linear-gradient(rgba(30, 89, 72, 0.74), rgba(0, 0, 0, 0.54));
+}
+
+.day-tab-card:nth-child(3) {
+  background: linear-gradient(rgba(124, 66, 19, 0.76), rgba(0, 0, 0, 0.56));
+}
+
+.day-tab-card:nth-child(4) {
+  background: linear-gradient(rgba(63, 31, 97, 0.74), rgba(0, 0, 0, 0.54));
+}
+
+.day-tab-card:nth-child(5) {
+  background: linear-gradient(rgba(21, 78, 62, 0.74), rgba(0, 0, 0, 0.54));
+}
+
+.day-tab-card:nth-child(6) {
+  background: linear-gradient(rgba(94, 44, 18, 0.75), rgba(0, 0, 0, 0.55));
+}
+
+.day-tab-card:nth-child(7) {
+  background: linear-gradient(rgba(11, 62, 111, 0.74), rgba(0, 0, 0, 0.54));
+}
+
+.day-tab-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px -18px rgba(37, 111, 91, 0.55);
+  border-color: #f4a259;
+  box-shadow:
+    0 0 0 1px rgba(244, 162, 89, 0.7),
+    0 0 20px rgba(244, 162, 89, 0.52),
+    0 14px 34px -20px rgba(244, 162, 89, 0.65);
+  filter: saturate(1.2);
 }
 
-.day-card-title {
-  margin: 0 0 0.7rem;
-  font-weight: 800;
-  color: #1e5948;
+.day-tab-card-active {
+  border-color: #ff9f2d;
+  box-shadow:
+    0 0 0 2px rgba(255, 159, 45, 0.9),
+    0 0 32px rgba(255, 159, 45, 0.7),
+    0 18px 38px -18px rgba(255, 159, 45, 0.75);
+  filter: saturate(1.35) brightness(1.06);
+}
+
+.day-tab-card-active:hover {
+  box-shadow:
+    0 0 0 2px rgba(255, 159, 45, 1),
+    0 0 38px rgba(255, 159, 45, 0.78),
+    0 20px 42px -16px rgba(255, 159, 45, 0.82);
+}
+
+.day-tab-title {
+  margin: 0;
+  font-size: 1.12rem;
+  font-weight: 900;
+  color: #fff6e9;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 0 rgba(255, 246, 233, 0.45);
   text-transform: capitalize;
 }
 
-.meal-block {
-  border: 1px solid rgba(244, 162, 89, 0.3);
-  border-radius: 14px;
-  background: rgba(255, 246, 233, 0.58);
-  padding: 0.6rem;
-  margin-bottom: 0.55rem;
+.day-tab-sub {
+  margin: 0.2rem 0 0;
+  font-size: 0.95rem;
+  color: #ffd8ad;
+  font-weight: 900;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
 }
 
-.meal-block:last-child {
-  margin-bottom: 0;
+.day-tab-total {
+  margin: 0.45rem 0 0;
+  font-size: 1.12rem;
+  color: #fff6e9;
+  font-weight: 900;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+}
+
+.day-detail-panel {
+  margin-top: 1.2rem;
+  border: 1px solid #f4a259;
+  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(7px);
+  padding: 1rem;
+}
+
+.day-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.day-detail-kicker {
+  margin: 0;
+  font-size: 0.84rem;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  font-weight: 900;
+  color: #1a120d;
+  text-shadow: 0 1px 0 rgba(255, 246, 233, 0.35);
+}
+
+.day-detail-title {
+  margin: 0.2rem 0 0;
+  font-size: 1.9rem;
+  font-weight: 900;
+  text-transform: capitalize;
+  color: #06110c;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 0 rgba(255, 246, 233, 0.45);
+  font-family: "Ink Free", "Segoe UI", "Trebuchet MS", sans-serif;
+}
+
+.luxury-cost-circle {
+  flex: 0 0 auto;
+  width: 128px;
+  height: 128px;
+  border-radius: 999px;
+  border: 3px solid #f4a259;
+  background: rgba(0, 0, 0, 0.42);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 24px -16px rgba(0, 0, 0, 0.65);
+}
+
+.luxury-cost-value {
+  font-size: 1.02rem;
+  font-weight: 900;
+  color: #07140e;
+  text-shadow: 0 1px 0 rgba(255, 246, 233, 0.45);
+  font-family: "Ink Free", "Segoe UI", "Trebuchet MS", sans-serif;
+  text-align: center;
+  line-height: 1.15;
+}
+
+.luxury-cost-label {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1a120d;
+  font-weight: 900;
+  text-shadow: 0 1px 0 rgba(255, 246, 233, 0.35);
+}
+
+.day-meals-grid {
+  display: grid;
+  gap: 0.6rem;
+}
+
+@media (min-width: 760px) {
+  .day-meals-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.meal-block {
+  border: 1px solid #f4a259;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(4px);
+  padding: 0.6rem;
 }
 
 .meal-label {
   margin: 0 0 0.35rem;
-  font-size: 0.72rem;
+  font-size: 1.2rem;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  font-weight: 700;
-  color: #6b6058;
+  font-weight: 900;
+  color: #e1720a;
+  text-shadow: 0 1px 0 rgba(255, 246, 233, 0.45);
+  font-family: "Ink Free", "Segoe UI", "Trebuchet MS", sans-serif;
 }
 
 .meal-input {
   width: 100%;
   margin-bottom: 0.4rem;
   border-radius: 10px;
-  border: 1px solid rgba(37, 111, 91, 0.25);
-  background: rgba(255, 246, 233, 0.78);
-  color: #3d2a22;
-  padding: 0.5rem 0.65rem;
-  font-size: 0.82rem;
+  border: 2px solid #1e5948;
+  background: rgba(0, 0, 0, 0.38);
+  color: #fff6e9;
+  padding: 0.58rem 0.72rem;
+  font-size: 1.04rem;
+  font-weight: 800;
+  text-shadow: 0 1px 0 rgba(255, 246, 233, 0.4);
+  font-family: "Ink Free", "Segoe UI", "Trebuchet MS", sans-serif;
 }
 
 .meal-input:focus {
-  outline: 2px solid rgba(37, 111, 91, 0.4);
-  border-color: rgba(37, 111, 91, 0.6);
+  outline: 2px solid #f4a259;
+  border-color: #f4a259;
+}
+
+.meal-input::placeholder {
+  color: rgba(255, 246, 233, 0.75);
 }
 
 .meal-cost {
   margin: 0.2rem 0 0;
-  font-size: 0.72rem;
-  color: #3d2a22;
-  font-weight: 700;
+  font-size: 1.16rem;
+  color: #fff6e9;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  font-family: "Ink Free", "Segoe UI", "Trebuchet MS", sans-serif;
 }

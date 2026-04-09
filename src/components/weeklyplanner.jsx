@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react'
 import './weeklyplanner.css'
 
 const orderedDays = [
@@ -17,6 +18,8 @@ const mealUi = [
 ]
 
 function WeeklyPlanner({ weeklyPlanner, setWeeklyPlanner, formatKes }) {
+  const [activeDay, setActiveDay] = useState('monday')
+
   const updateMealField = (day, mealType, field, value) => {
     setWeeklyPlanner((current) => {
       const next = {
@@ -34,44 +37,74 @@ function WeeklyPlanner({ weeklyPlanner, setWeeklyPlanner, formatKes }) {
     })
   }
 
+  const activeMeals = weeklyPlanner[activeDay]
+  const activeTotal = useMemo(
+    () => mealUi.reduce((sum, meal) => sum + Number(activeMeals?.[meal.key]?.cost || 0), 0),
+    [activeMeals],
+  )
+
   return (
     <section className="weekly-planner-page animate-fade-up">
       <h2 className="text-2xl font-bold text-brand-green-dark">Weekly Planner Page</h2>
       <p className="mt-1 text-sm text-[#6B6058]">
-        Main interaction page: build your 7-day meal plan with Breakfast, Lunch and Supper.
+        Main interaction page: choose a day card, then build Breakfast, Lunch, and Supper for that day.
       </p>
 
       <div className="weekly-planner-grid">
         {orderedDays.map((day, dayIndex) => {
-          const meals = weeklyPlanner[day]
+          const dayTotal = mealUi.reduce((sum, meal) => sum + Number(weeklyPlanner?.[day]?.[meal.key]?.cost || 0), 0)
+          const isActive = day === activeDay
           return (
-            <article className={`day-card delay-${dayIndex % 2 === 0 ? '0' : '1'}`} key={day}>
-              <h3 className="day-card-title">{day}</h3>
-              {mealUi.map((meal) => (
-                <div className="meal-block" key={`${day}-${meal.key}`}>
-                  <p className="meal-label">{meal.label}</p>
-                  <input
-                    className="meal-input"
-                    onChange={(event) => updateMealField(day, meal.key, 'name', event.target.value)}
-                    placeholder={`${meal.label} meal`}
-                    type="text"
-                    value={meals?.[meal.key]?.name || ''}
-                  />
-                  <input
-                    className="meal-input"
-                    min="0"
-                    onChange={(event) => updateMealField(day, meal.key, 'cost', event.target.value)}
-                    placeholder="Cost in KES"
-                    type="number"
-                    value={Number(meals?.[meal.key]?.cost || 0)}
-                  />
-                  <p className="meal-cost">Cost: {formatKes(meals?.[meal.key]?.cost || 0)}</p>
-                </div>
-              ))}
-            </article>
+            <button
+              className={`day-tab-card ${isActive ? 'day-tab-card-active' : ''} delay-${dayIndex % 2 === 0 ? '0' : '1'}`}
+              key={day}
+              onClick={() => setActiveDay(day)}
+              type="button"
+            >
+              <p className="day-tab-title">{day}</p>
+              <p className="day-tab-sub">View and edit meals</p>
+              <p className="day-tab-total">{formatKes(dayTotal)}</p>
+            </button>
           )
         })}
       </div>
+
+      <section className="day-detail-panel animate-fade-up delay-1">
+        <div className="day-detail-header">
+          <div>
+            <p className="day-detail-kicker">Selected day</p>
+            <h3 className="day-detail-title">{activeDay}</h3>
+          </div>
+          <div className="luxury-cost-circle">
+            <span className="luxury-cost-value">{formatKes(activeTotal)}</span>
+            <span className="luxury-cost-label">Daily Total</span>
+          </div>
+        </div>
+
+        <div className="day-meals-grid">
+          {mealUi.map((meal) => (
+            <div className="meal-block" key={`${activeDay}-${meal.key}`}>
+              <p className="meal-label">{meal.label}</p>
+              <input
+                className="meal-input"
+                onChange={(event) => updateMealField(activeDay, meal.key, 'name', event.target.value)}
+                placeholder={`${meal.label} meal`}
+                type="text"
+                value={activeMeals?.[meal.key]?.name || ''}
+              />
+              <input
+                className="meal-input"
+                min="0"
+                onChange={(event) => updateMealField(activeDay, meal.key, 'cost', event.target.value)}
+                placeholder="Cost in KES"
+                type="number"
+                value={Number(activeMeals?.[meal.key]?.cost || 0)}
+              />
+              <p className="meal-cost">Cost: {formatKes(activeMeals?.[meal.key]?.cost || 0)}</p>
+            </div>
+          ))}
+        </div>
+      </section>
     </section>
   )
 }

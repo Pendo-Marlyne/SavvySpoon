@@ -79,6 +79,10 @@ function App() {
       "linear-gradient(rgba(255,246,233,0.86), rgba(255,246,233,0.9)), url('/food.webp')",
   }
 
+  const plannerBg = {
+    backgroundImage: "url('/spicy.jpg')",
+  }
+
   if (!isAuthenticated) return <Auth onAuthSuccess={allowAccess} />
 
   if (page === 'home') {
@@ -93,7 +97,7 @@ function App() {
   if (page === 'planner') {
     return (
       <>
-        <main className="min-h-screen bg-brand-cream bg-cover bg-fixed bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={appBg}>
+        <main className="min-h-screen bg-brand-cream bg-cover bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={plannerBg}>
           <div className="mx-auto max-w-6xl space-y-6">
             <Header budget={budget} currentPage="planner" onNavigate={navigate} showSpend totalSpent={weeklyTotal} />
             <WeeklyPlanner weeklyPlanner={weeklyPlanner} setWeeklyPlanner={setWeeklyPlanner} formatKes={formatKes} />

@@ -18,7 +18,7 @@ function Header({
   budget = 12000,
   currentPage,
   onNavigate,
-  sticky = true,
+  sticky = false,
   showSpend = true,
 }) {
   const progress = budget > 0 ? Math.min((totalSpent / budget) * 100, 100) : 0
@@ -26,34 +26,34 @@ function Header({
 
   return (
     <header
-      className={`z-40 overflow-hidden rounded-3xl border border-brand-orange/25 bg-brand-orange/20 shadow-card backdrop-blur-xl ${
-        sticky ? 'sticky top-3' : ''
+      className={`z-30 overflow-hidden rounded-2xl border border-[#f4a259]/35 bg-gradient-to-r from-[#111111]/86 via-[#1e5948]/82 to-[#0b3e6f]/80 shadow-card backdrop-blur-xl ${
+        sticky ? 'sticky top-2' : ''
       }`}
     >
-      <div className="absolute inset-y-0 left-0 hidden w-28 md:block">
+      <div className="absolute inset-y-0 left-0 hidden w-20 md:block">
         <div
           className="h-full w-full bg-cover bg-center"
           style={{ backgroundImage: "url('/homemade.webp')" }}
         />
-        <div className="absolute inset-0 bg-brand-orange/20 backdrop-blur-md" />
+        <div className="absolute inset-0 bg-[#111111]/35 backdrop-blur-md" />
       </div>
 
-      <div className="relative flex flex-wrap items-center justify-between gap-3 p-3 md:gap-4 md:p-4 md:pl-36">
-        <div className="flex min-w-0 items-center gap-2 md:gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-orange text-[#3D2A22] shadow-md">
+      <div className="relative flex flex-wrap items-center justify-between gap-2 p-2 md:flex-nowrap md:gap-2.5 md:px-2.5 md:py-2 md:pl-24">
+        <div className="flex min-w-0 items-center gap-2">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#f4a259] text-[#111111] shadow-md">
             <div className="flex items-center gap-0.5">
-              <UtensilsCrossed size={17} />
-              <Banknote size={15} />
+              <UtensilsCrossed size={14} />
+              <Banknote size={12} />
             </div>
           </div>
-          <h1 className="truncate text-xl font-extrabold tracking-tight text-[#3D2A22] md:text-2xl">
-            <span className="text-brand-green">Savvy</span>
-            <span className="text-[#3D2A22]">spoon</span>
+          <h1 className="truncate text-lg font-extrabold tracking-tight text-[#f6efe4] md:text-xl">
+            <span className="text-[#4ecb94]">Savvy</span>
+            <span className="text-[#f4a259]">spoon</span>
           </h1>
         </div>
 
-        <nav className="order-3 w-full overflow-x-auto md:order-2 md:w-auto">
-          <div className="flex min-w-max items-center gap-2 pr-1">
+        <nav className="order-3 w-full overflow-x-auto scrollbar-hide md:order-2 md:w-auto md:flex-1">
+          <div className="flex min-w-max items-center gap-1.5 pr-1 md:justify-center">
           {[
             { id: 'home', label: 'Home', icon: House },
             { id: 'planner', label: 'Weekly Planner', icon: ListChecks },
@@ -66,16 +66,16 @@ function Header({
             const Icon = item.icon
             return (
               <button
-                className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
+                className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 text-xs font-extrabold transition-all duration-200 ${
                   isActive
-                    ? 'bg-brand-green text-brand-cream shadow-md shadow-brand-green/35'
-                    : 'text-[#3D2A22] hover:bg-brand-orange/20 hover:shadow-[0_0_18px_rgba(244,162,89,0.55)]'
+                    ? 'border-[#4ecb94]/65 bg-[#1e5948] text-[#050505] shadow-md shadow-[#1e5948]/40'
+                    : 'border-[#c86b1a] bg-[#f4a259] text-[#050505] hover:border-[#f4a259] hover:bg-[#f6b06e] hover:shadow-[0_0_16px_rgba(244,162,89,0.45)]'
                 }`}
                 key={item.id}
                 onClick={() => onNavigate?.(item.id)}
                 type="button"
               >
-                <Icon size={16} />
+                <Icon size={14} />
                 {item.label}
               </button>
             )
@@ -84,24 +84,24 @@ function Header({
         </nav>
 
         {showSpend ? (
-          <div className="order-2 w-full rounded-2xl border border-brand-orange/25 bg-brand-cream/65 p-2.5 backdrop-blur md:order-3 md:w-[58%] md:max-w-[420px] md:min-w-[185px] md:p-3">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#3D2A22] md:text-xs">
+          <div className="order-2 w-full rounded-xl border border-[#f4a259]/45 bg-[#111111]/38 px-2.5 py-2 backdrop-blur md:order-3 md:w-auto md:min-w-[205px]">
+            <p className="text-[9px] font-semibold uppercase tracking-wider text-[#f6efe4]/90 md:text-[10px]">
               Weekly Spend
             </p>
-            <p className="mt-1 text-xs text-[#3D2A22] md:text-sm">
-              <span className={`font-bold ${overBudget ? 'text-red-600' : 'text-brand-green'}`}>
+            <p className="mt-0.5 text-[11px] text-[#f6efe4] md:text-xs">
+              <span className={`font-bold ${overBudget ? 'text-red-400' : 'text-[#4ecb94]'}`}>
                 {formatKes(totalSpent)}
               </span>{' '}
               / {formatKes(budget)}
             </p>
-            <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-brand-orange/25">
+            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#f4a259]/25">
               <div
-                className={`h-full rounded-full transition-all ${overBudget ? 'bg-red-500' : 'bg-brand-green'}`}
+                className={`h-full rounded-full transition-all ${overBudget ? 'bg-red-500' : 'bg-[#4ecb94]'}`}
                 style={{ width: `${progress}%` }}
               />
             </div>
             <p
-              className={`mt-1 text-[10px] font-semibold md:text-xs ${overBudget ? 'text-red-600' : 'text-brand-green'}`}
+              className={`mt-1 text-[9px] font-semibold md:text-[10px] ${overBudget ? 'text-red-400' : 'text-[#4ecb94]'}`}
             >
               {overBudget ? 'Over budget' : 'Under budget'}
             </p>
