@@ -193,7 +193,7 @@ function App() {
             tone={toast.tone}
           />
           <Header budget={budget} currentPage="planner" onNavigate={navigate} role={role} totalSpent={weeklyTotal} />
-          <section className="rounded-3xl border border-brand-green/15 bg-white p-6 shadow-card">
+          <section className="rounded-3xl border border-brand-orange/20 bg-brand-cream/60 p-6 shadow-card backdrop-blur-xl">
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h2 className="text-2xl font-bold text-brand-green-dark">Weekly Meal Planner</h2>
@@ -275,7 +275,7 @@ function App() {
             tone={toast.tone}
           />
           <Header budget={budget} currentPage="ingredients" onNavigate={navigate} role={role} totalSpent={weeklyTotal} />
-          <section className="rounded-3xl border border-brand-green/15 bg-white/65 p-6 shadow-card backdrop-blur-xl">
+          <section className="rounded-3xl border border-brand-orange/20 bg-brand-cream/55 p-6 shadow-card backdrop-blur-xl">
             <h2 className="text-2xl font-extrabold text-slate-900">Ingredient List</h2>
             <p className="mt-2 text-sm text-slate-700/80">
               This page will summarize ingredients generated from your weekly plan.
@@ -307,7 +307,7 @@ function App() {
             tone={toast.tone}
           />
           <Header budget={budget} currentPage="budget" onNavigate={navigate} role={role} totalSpent={weeklyTotal} />
-          <section className="rounded-3xl border border-brand-green/15 bg-white/65 p-6 shadow-card backdrop-blur-xl">
+          <section className="rounded-3xl border border-brand-orange/20 bg-brand-cream/55 p-6 shadow-card backdrop-blur-xl">
             <h2 className="text-2xl font-extrabold text-slate-900">Budget</h2>
             <p className="mt-2 text-sm text-slate-700/80">
               This page will let you set and update your weekly budget in KES.
@@ -339,7 +339,7 @@ function App() {
             tone={toast.tone}
           />
           <Header budget={budget} currentPage="profile" onNavigate={navigate} role={role} totalSpent={weeklyTotal} />
-          <section className="rounded-3xl border border-brand-green/15 bg-white/65 p-6 shadow-card backdrop-blur-xl">
+          <section className="rounded-3xl border border-brand-orange/20 bg-brand-cream/55 p-6 shadow-card backdrop-blur-xl">
             <h2 className="text-2xl font-extrabold text-slate-900">My Profile</h2>
             <p className="mt-2 text-sm text-slate-700/80">
               Account-only page. It will show personal details and saved preferences.
@@ -369,7 +369,7 @@ function App() {
         <Header budget={budget} currentPage="dashboard" onNavigate={navigate} role={role} totalSpent={weeklyTotal} />
         <div className="flex justify-end">
           <button
-            className="rounded-full border border-brand-green/35 bg-white px-4 py-2 text-sm font-semibold text-brand-green-dark"
+            className="rounded-full border border-brand-orange/25 bg-brand-cream/70 px-4 py-2 text-sm font-semibold text-[#3D2A22] backdrop-blur"
             onClick={() => navigate('home')}
             type="button"
           >
@@ -408,7 +408,7 @@ function App() {
           />
         </section>
 
-        <section className="rounded-3xl border border-brand-green/15 bg-white p-6 shadow-card">
+        <section className="rounded-3xl border border-brand-orange/20 bg-brand-cream/60 p-6 shadow-card backdrop-blur-xl">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="flex items-center gap-2 text-xl font-semibold text-brand-green-dark">
               <CookingPot size={22} />

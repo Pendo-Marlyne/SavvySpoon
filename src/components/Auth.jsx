@@ -61,12 +61,12 @@ function Auth({ onAuthSuccess }) {
 
   return (
     <main className="min-h-screen bg-cover bg-center px-4 py-6 md:px-8" style={{ backgroundImage: "url('/homemade.webp')" }}>
-      <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-6xl overflow-hidden rounded-3xl border border-white/35 bg-white/30 shadow-card backdrop-blur-sm lg:grid-cols-2">
+      <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-6xl overflow-hidden rounded-3xl border border-brand-orange/25 bg-brand-orange/10 shadow-card backdrop-blur-sm lg:grid-cols-2">
         <section className="relative hidden lg:block">
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/homemade.webp')" }} />
           <div className="absolute inset-0 bg-gradient-to-br from-orange-500/85 via-amber-500/75 to-orange-700/85" />
-          <div className="relative z-10 flex h-full flex-col justify-end p-10 text-white">
-            <p className="text-4xl font-extrabold italic leading-tight text-amber-100">
+          <div className="relative z-10 flex h-full flex-col justify-end p-10 text-brand-cream">
+            <p className="text-4xl font-extrabold italic leading-tight text-brand-cream">
               Master Your Kitchen
               <br />
               Master Your Budget
@@ -78,27 +78,27 @@ function Auth({ onAuthSuccess }) {
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/homemade.webp')" }} />
           <div className="absolute inset-0 bg-gradient-to-br from-black/10 via-black/5 to-amber-50/20 backdrop-blur-[2px]" />
 
-          <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/60 bg-white/25 p-6 shadow-card backdrop-blur-xl md:p-8">
+          <div className="relative z-10 w-full max-w-md rounded-3xl border border-brand-orange/25 bg-brand-cream/25 p-6 shadow-card backdrop-blur-xl md:p-8">
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-orange text-white">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-orange text-[#3D2A22]">
                 <div className="flex items-center gap-0.5">
                   <UtensilsCrossed size={16} />
                   <Banknote size={14} />
                 </div>
               </div>
-              <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">
+              <h1 className="text-2xl font-extrabold tracking-tight text-[#3D2A22]">
                 <span className="text-brand-green">Savvy</span>
-                <span className="text-brand-orange">spoon</span>
+                <span className="text-[#3D2A22]">spoon</span>
               </h1>
             </div>
 
-            <div className="mb-5 rounded-2xl border border-white/45 bg-white/35 p-1 shadow-sm backdrop-blur-xl">
+            <div className="mb-5 rounded-2xl border border-brand-orange/25 bg-brand-orange/10 p-1 shadow-sm backdrop-blur-xl">
               <div className="grid grid-cols-2 rounded-xl bg-gradient-to-r from-amber-200/15 via-orange-200/10 to-amber-200/15 p-1">
               <button
                 className={`group relative rounded-xl px-3 py-2 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-300/60 ${
                   !isSignup
                       ? 'bg-gradient-to-br from-amber-300 via-orange-400 to-amber-500 text-slate-900 shadow-md ring-1 ring-amber-200/60'
-                      : 'text-slate-800 hover:bg-white/45'
+                      : 'text-[#3D2A22] hover:bg-brand-cream/20'
                 }`}
                 onClick={() => setMode('signin')}
                 type="button"
@@ -116,7 +116,7 @@ function Auth({ onAuthSuccess }) {
                 className={`group relative rounded-xl px-3 py-2 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-300/60 ${
                   isSignup
                       ? 'bg-gradient-to-br from-amber-300 via-orange-400 to-amber-500 text-slate-900 shadow-md ring-1 ring-amber-200/60'
-                      : 'text-slate-800 hover:bg-white/45'
+                      : 'text-[#3D2A22] hover:bg-brand-cream/20'
                 }`}
                 onClick={() => setMode('signup')}
                 type="button"
@@ -140,14 +140,14 @@ function Auth({ onAuthSuccess }) {
                 }`}
               >
                 <input
-                  className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm focus:border-brand-green focus:outline-none"
+                  className="rounded-xl border border-slate-300 bg-brand-cream/60 px-4 py-3 text-sm focus:border-brand-green focus:outline-none"
                   onChange={(event) => handleChange('name', event.target.value)}
                   placeholder="Name"
                   type="text"
                   value={formData.name}
                 />
                 <input
-                  className="mt-3 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm focus:border-brand-green focus:outline-none"
+                  className="mt-3 rounded-xl border border-slate-300 bg-brand-cream/60 px-4 py-3 text-sm focus:border-brand-green focus:outline-none"
                   onChange={(event) => handleChange('location', event.target.value)}
                   placeholder="Location"
                   type="text"
@@ -156,7 +156,7 @@ function Auth({ onAuthSuccess }) {
               </div>
 
               <input
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm focus:border-brand-green focus:outline-none"
+                className="w-full rounded-xl border border-slate-300 bg-brand-cream/60 px-4 py-3 text-sm focus:border-brand-green focus:outline-none"
                 onChange={(event) => handleChange('email', event.target.value)}
                 placeholder="Gmail address"
                 required
@@ -164,7 +164,7 @@ function Auth({ onAuthSuccess }) {
                 value={formData.email}
               />
               <input
-                className={`w-full rounded-xl border bg-white px-4 py-3 text-sm focus:outline-none ${
+                className={`w-full rounded-xl border bg-brand-cream/60 px-4 py-3 text-sm focus:outline-none ${
                   passwordTooShort ? 'border-red-300 focus:border-red-500' : 'border-slate-300 focus:border-brand-green'
                 }`}
                 onChange={(event) => handleChange('password', event.target.value)}

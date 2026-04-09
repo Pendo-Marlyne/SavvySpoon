@@ -21,14 +21,14 @@ function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
           showSpend={false}
         />
 
-        <section className="relative overflow-hidden rounded-[44px] border border-white/60 bg-white/45 shadow-card backdrop-blur-xl">
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/25 via-white/30 to-brand-green/20" />
+        <section className="relative overflow-hidden rounded-[44px] border border-brand-orange/25 bg-brand-cream/55 shadow-card backdrop-blur-xl">
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/25 via-brand-cream/25 to-brand-green/20" />
           <div className="absolute inset-0 opacity-30" style={{ backgroundImage: "url('/food.webp')" }} />
           <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
 
           <div className="relative grid gap-8 p-6 md:p-10 lg:grid-cols-12 lg:gap-10">
             <div className="lg:col-span-6">
-              <p className="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">
+              <p className="inline-flex items-center gap-2 rounded-full bg-brand-cream/70 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">
                 <Flame size={14} className="text-brand-orange" />
                 Main entry point
               </p>
@@ -43,7 +43,7 @@ function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
 
               <div className="mt-7 flex flex-wrap items-center gap-3">
                 <button
-                  className="inline-flex items-center gap-2 rounded-full bg-brand-green px-7 py-3 text-sm font-extrabold text-white shadow-sm transition hover:bg-brand-green-dark"
+                  className="inline-flex items-center gap-2 rounded-full bg-brand-green px-7 py-3 text-sm font-extrabold text-brand-cream shadow-sm transition hover:bg-brand-green-dark"
                   onClick={onGoPlanner}
                   type="button"
                 >
@@ -51,7 +51,7 @@ function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
                   <ArrowRight size={16} />
                 </button>
                 <button
-                  className="rounded-full border border-brand-orange bg-white/85 px-7 py-3 text-sm font-extrabold text-[#3D2A22] shadow-sm transition hover:bg-[#FFF0E0]"
+                  className="rounded-full border border-brand-orange bg-brand-cream/70 px-7 py-3 text-sm font-extrabold text-[#3D2A22] shadow-sm transition hover:bg-brand-orange/15"
                   onClick={onGoDashboard}
                   type="button"
                 >
@@ -67,7 +67,7 @@ function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className="rounded-2xl border border-white/60 bg-gradient-to-br from-white/75 via-white/55 to-white/20 p-4 shadow-sm backdrop-blur"
+                    className="rounded-2xl border border-brand-orange/20 bg-gradient-to-br from-brand-cream/70 via-brand-cream/45 to-brand-orange/10 p-4 shadow-sm backdrop-blur"
                   >
                     <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#6B6058]">{item.label}</p>
                     <p className="mt-2 text-sm font-extrabold text-[#3D2A22]">{item.value}</p>
@@ -87,7 +87,7 @@ function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
                 ].map((img, idx) => (
                   <div
                     key={idx}
-                    className={`absolute ${img.cls} overflow-hidden rounded-[32px] border border-white/70 bg-gradient-to-br from-white/75 via-white/55 to-white/20 shadow-lg`}
+                    className={`absolute ${img.cls} overflow-hidden rounded-[32px] border border-brand-orange/25 bg-gradient-to-br from-brand-cream/75 via-brand-cream/45 to-brand-orange/10 shadow-lg`}
                   >
                     <div
                       className="h-full w-full bg-cover bg-center"
@@ -103,8 +103,8 @@ function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
 
         <section className="grid gap-4 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <div className="rounded-[36px] border border-white/60 bg-gradient-to-br from-brand-green/10 via-white/55 to-brand-orange/12 p-7 shadow-card backdrop-blur-xl md:p-9">
-              <p className="inline-flex items-center gap-2 rounded-full bg-white/75 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">
+            <div className="rounded-[36px] border border-brand-orange/20 bg-gradient-to-br from-brand-green/10 via-brand-cream/35 to-brand-orange/16 p-7 shadow-card backdrop-blur-xl md:p-9">
+              <p className="inline-flex items-center gap-2 rounded-full bg-brand-cream/70 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">
                 <Sparkles size={14} className="text-brand-orange" />
                 Why Savvyspoon
               </p>
@@ -121,28 +121,28 @@ function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
                     title: 'Smart budgeting',
                     desc: 'Set a weekly limit and see spend vs budget in real time.',
                     icon: WalletCards,
-                    bg: 'from-brand-green/22 via-white/25 to-brand-orange/10',
+                    bg: 'from-brand-green/22 via-brand-cream/28 to-brand-orange/10',
                     image: "/food.webp",
                   },
                   {
                     title: 'Auto grocery list',
                     desc: 'Generate a grocery list summary from your weekly plan.',
                     icon: ListChecks,
-                    bg: 'from-brand-orange/26 via-white/25 to-brand-green/10',
+                    bg: 'from-brand-orange/26 via-brand-cream/28 to-brand-green/10',
                     image: "/meal.webp",
                   },
                   {
                     title: 'Meal library',
                     desc: 'Save meal ideas and reuse them across your weekly plans.',
                     icon: Library,
-                    bg: 'from-brand-green/18 via-white/25 to-brand-orange/18',
+                    bg: 'from-brand-green/18 via-brand-cream/28 to-brand-orange/18',
                     image: "/homemade.webp",
                   },
                   {
                     title: 'Weekly overview',
                     desc: 'One dashboard that keeps totals, days, and status easy to read.',
                     icon: Flame,
-                    bg: 'from-brand-orange/18 via-white/25 to-brand-green/18',
+                    bg: 'from-brand-orange/18 via-brand-cream/28 to-brand-green/18',
                     image: "/food.webp",
                   },
                 ].map((card) => {
@@ -150,7 +150,7 @@ function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
                   return (
                     <div
                       key={card.title}
-                      className={`relative overflow-hidden rounded-[26px] border border-white/65 bg-gradient-to-br ${card.bg} p-6 shadow-sm`}
+                      className={`relative overflow-hidden rounded-[26px] border border-brand-orange/20 bg-gradient-to-br ${card.bg} p-6 shadow-sm`}
                     >
                       <div
                         className="absolute inset-0 opacity-25"
@@ -162,7 +162,7 @@ function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
                           <p className="text-lg font-extrabold text-[#3D2A22]">{card.title}</p>
                           <p className="mt-2 text-sm leading-relaxed text-[#6B6058]">{card.desc}</p>
                         </div>
-                        <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-white/70 text-brand-green shadow-sm">
+                        <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-cream/70 text-brand-green shadow-sm">
                           <Icon size={20} />
                         </div>
                       </div>
@@ -174,20 +174,20 @@ function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
           </div>
 
           <div className="lg:col-span-5">
-            <div className="rounded-[36px] border border-white/60 bg-gradient-to-br from-white/55 via-white/40 to-brand-cream p-7 shadow-card backdrop-blur-xl md:p-9">
+            <div className="rounded-[36px] border border-brand-orange/20 bg-gradient-to-br from-brand-cream/55 via-brand-cream/35 to-brand-green/10 p-7 shadow-card backdrop-blur-xl md:p-9">
               <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">Visual teaser</p>
               <h3 className="mt-3 text-2xl font-extrabold text-[#3D2A22]">A day card preview</h3>
               <p className="mt-2 text-sm text-[#6B6058]">
                 Guests can preview how planning looks before creating an account.
               </p>
 
-              <div className="mt-5 rounded-[28px] border border-white/70 bg-gradient-to-br from-white/80 via-white/60 to-[#FFF0E0] p-5 shadow-sm">
+              <div className="mt-5 rounded-[28px] border border-brand-orange/20 bg-gradient-to-br from-brand-cream/70 via-brand-cream/45 to-brand-orange/14 p-5 shadow-sm">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">Monday</p>
                     <p className="mt-1 text-xl font-extrabold text-[#3D2A22]">Weekly Plan</p>
                   </div>
-                  <div className="rounded-full bg-brand-green px-3 py-1 text-xs font-extrabold text-white">
+                  <div className="rounded-full bg-brand-green px-3 py-1 text-xs font-extrabold text-brand-cream">
                     Example: KES {exampleSpend.toLocaleString('en-KE')}
                   </div>
                 </div>
@@ -198,14 +198,14 @@ function Homepage({ role, onNavigate, onGoDashboard, onGoPlanner }) {
                     { label: 'Lunch', value: 'Chicken rice bowl' },
                     { label: 'Dinner', value: 'Beef stew + ugali' },
                   ].map((row) => (
-                    <div key={row.label} className="flex items-center justify-between gap-3 rounded-2xl bg-white/70 px-4 py-3">
+                    <div key={row.label} className="flex items-center justify-between gap-3 rounded-2xl bg-brand-cream/70 px-4 py-3">
                       <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">{row.label}</p>
                       <p className="text-sm font-bold text-[#3D2A22]">{row.value}</p>
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-4 rounded-2xl bg-white/70 px-4 py-3">
+                <div className="mt-4 rounded-2xl bg-brand-cream/70 px-4 py-3">
                   <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#6B6058]">Auto grocery list</p>
                   <p className="mt-1 text-sm font-semibold text-[#3D2A22]">Oats • Milk • Bananas • Chicken • Rice • Tomatoes</p>
                 </div>

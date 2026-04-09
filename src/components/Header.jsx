@@ -26,7 +26,7 @@ function Header({
 
   return (
     <header
-      className={`z-40 overflow-hidden rounded-3xl border border-white/40 bg-white/75 shadow-card backdrop-blur-xl ${
+      className={`z-40 overflow-hidden rounded-3xl border border-brand-orange/25 bg-brand-orange/20 shadow-card backdrop-blur-xl ${
         sticky ? 'sticky top-3' : ''
       }`}
     >
@@ -35,12 +35,12 @@ function Header({
           className="h-full w-full bg-cover bg-center"
           style={{ backgroundImage: "url('/homemade.webp')" }}
         />
-        <div className="absolute inset-0 bg-brand-cream/60 backdrop-blur-md" />
+        <div className="absolute inset-0 bg-brand-orange/20 backdrop-blur-md" />
       </div>
 
       <div className="relative flex flex-nowrap items-center justify-between gap-3 p-3 md:gap-6 md:p-4 md:pl-36">
         <div className="flex min-w-0 items-center gap-2 md:gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-orange text-white shadow-md">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-orange text-[#3D2A22] shadow-md">
             <div className="flex items-center gap-0.5">
               <UtensilsCrossed size={17} />
               <Banknote size={15} />
@@ -48,7 +48,7 @@ function Header({
           </div>
           <h1 className="truncate text-xl font-extrabold tracking-tight text-[#3D2A22] md:text-2xl">
             <span className="text-brand-green">Savvy</span>
-            <span className="text-brand-orange">spoon</span>
+            <span className="text-[#3D2A22]">spoon</span>
           </h1>
         </div>
 
@@ -70,8 +70,8 @@ function Header({
                   isActive
                     ? 'bg-brand-green text-white shadow-sm'
                     : isBlocked
-                      ? 'text-slate-400 hover:bg-white/30'
-                      : 'text-[#6B6058] hover:bg-[#FFF0E0]'
+                      ? 'text-slate-400 hover:bg-brand-cream/20'
+                      : 'text-[#3D2A22] hover:bg-brand-orange/20'
                 }`}
                 key={item.id}
                 onClick={() => onNavigate?.(item.id, { restricted: item.restricted })}
@@ -85,8 +85,8 @@ function Header({
         </nav>
 
         {showSpend ? (
-          <div className="w-[58%] max-w-[420px] min-w-[185px] rounded-2xl border border-white/50 bg-white/70 p-2.5 backdrop-blur md:p-3">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6B6058] md:text-xs">
+          <div className="w-[58%] max-w-[420px] min-w-[185px] rounded-2xl border border-brand-orange/25 bg-brand-cream/65 p-2.5 backdrop-blur md:p-3">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#3D2A22] md:text-xs">
               Weekly Spend
             </p>
             <p className="mt-1 text-xs text-[#3D2A22] md:text-sm">
@@ -95,7 +95,7 @@ function Header({
               </span>{' '}
               / {formatKes(budget)}
             </p>
-            <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[#F5E3D1]">
+            <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-brand-orange/25">
               <div
                 className={`h-full rounded-full transition-all ${overBudget ? 'bg-red-500' : 'bg-brand-green'}`}
                 style={{ width: `${progress}%` }}

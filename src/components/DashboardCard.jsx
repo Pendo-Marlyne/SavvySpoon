@@ -1,7 +1,7 @@
 const toneClasses = {
-  green: 'bg-brand-green text-white',
+  green: 'bg-brand-green text-[#FFF6E9]',
   orange: 'bg-brand-orange text-zinc-900',
-  neutral: 'bg-white text-zinc-900 border border-zinc-200',
+  neutral: 'bg-brand-cream/70 text-[#3D2A22] border border-brand-orange/20',
 }
 
 function DashboardCard({ title, value, caption, tone, icon }) {
