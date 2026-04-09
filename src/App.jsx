@@ -23,6 +23,9 @@ function App() {
   const [page, setPage] = useState('home')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [role, setRole] = useState('guest')
+  const [ingredientOverrides, setIngredientOverrides] = useState(() =>
+    readStoredValue('savvyspoon.ingredientOverrides', {}),
+  )
   const [weeklyPlanner, setWeeklyPlanner] = useState(() =>
     normalizePlanner(readStoredValue('savvyspoon.weeklyPlan', defaultPlanner)),
   )
@@ -46,21 +49,77 @@ function App() {
   }, [weekRows])
 
   const groceryList = useMemo(() => {
-    const items = []
-    mealLibrary.forEach((meal) => {
-      const words = meal.toLowerCase().split(/[\s&-]+/)
-      words.forEach((word) => {
-        if (ingredientMap[word]) items.push(ingredientMap[word])
+    const mealEntries = Object.values(weeklyPlanner).flatMap((meals) =>
+      mealTypes
+        .map((type) => getMealName(meals?.[type]).trim())
+        .filter(Boolean),
+    )
+
+    const groupedByMealIngredient = mealEntries.reduce((acc, mealName) => {
+      const words = mealName.toLowerCase().split(/[\s&-]+/)
+      const ingredients = [...new Set(words.map((word) => ingredientMap[word]).filter(Boolean))]
+
+      ingredients.forEach((ingredientName) => {
+        const id = `${mealName.toLowerCase()}::${ingredientName.toLowerCase()}`
+        if (!acc[id]) {
+          acc[id] = { id, mealName, ingredientName, count: 0 }
+        }
+        acc[id].count += 1
       })
-    })
-    const counts = items.reduce((acc, item) => {
-      acc[item] = (acc[item] || 0) + 1
+
       return acc
     }, {})
-    return Object.entries(counts)
-      .sort((a, b) => b[1] - a[1])
-      .map(([name, count]) => ({ name, count }))
-  }, [mealLibrary])
+
+    return Object.values(groupedByMealIngredient)
+      .map((item) => {
+        const override = ingredientOverrides[item.id] || {}
+        if (override.deleted) return null
+        return {
+          id: item.id,
+          mealName: item.mealName,
+          ingredientName: item.ingredientName,
+          count: item.count,
+          unit: override.unit || 'pcs',
+          quantity:
+            typeof override.quantity === 'number' && !Number.isNaN(override.quantity)
+              ? override.quantity
+              : item.count,
+          price:
+            typeof override.price === 'number' && !Number.isNaN(override.price)
+              ? override.price
+              : 0,
+        }
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.mealName.localeCompare(b.mealName))
+  }, [weeklyPlanner, ingredientOverrides])
+
+  const updateIngredientField = (id, field, value) => {
+    setIngredientOverrides((current) => {
+      const previous = current[id] || {}
+      const parsedNumber = Number(value || 0)
+      const nextForId =
+        field === 'unit'
+          ? { ...previous, unit: value, deleted: false }
+          : {
+              ...previous,
+              [field]: Number.isNaN(parsedNumber) ? 0 : parsedNumber,
+              deleted: false,
+            }
+      const next = { ...current, [id]: nextForId }
+      localStorage.setItem('savvyspoon.ingredientOverrides', JSON.stringify(next))
+      return next
+    })
+  }
+
+  const deleteIngredientRow = (id) => {
+    setIngredientOverrides((current) => {
+      const previous = current[id] || {}
+      const next = { ...current, [id]: { ...previous, deleted: true } }
+      localStorage.setItem('savvyspoon.ingredientOverrides', JSON.stringify(next))
+      return next
+    })
+  }
 
   const allowAccess = (authData) => {
     setIsAuthenticated(true)
@@ -133,7 +192,12 @@ function App() {
         <main className="min-h-screen bg-brand-cream bg-cover bg-fixed bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={appBg}>
           <div className="mx-auto max-w-6xl space-y-6">
             <Header budget={budget} currentPage="grocery" onNavigate={navigate} showSpend totalSpent={weeklyTotal} />
-            <Grocery groceryList={groceryList} />
+            <Grocery
+              groceryList={groceryList}
+              formatKes={formatKes}
+              onDeleteIngredient={deleteIngredientRow}
+              onUpdateIngredient={updateIngredientField}
+            />
           </div>
         </main>
         <Footer onNavigate={navigate} />
