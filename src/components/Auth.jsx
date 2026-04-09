@@ -48,9 +48,9 @@ function Auth({ onAuthSuccess }) {
 
         <section className="relative flex items-center justify-center p-6 md:p-10">
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/homemade.webp')" }} />
-          <div className="absolute inset-0 bg-gradient-to-br from-white/55 via-white/40 to-amber-100/30 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-gradient-to-br from-black/10 via-black/5 to-amber-50/20 backdrop-blur-[2px]" />
 
-          <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/45 bg-white/55 p-6 shadow-card backdrop-blur-xl md:p-8">
+          <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/60 bg-white/25 p-6 shadow-card backdrop-blur-xl md:p-8">
             <div className="mb-6 flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-orange text-white">
                 <div className="flex items-center gap-0.5">
