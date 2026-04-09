@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import Header from './components/Header'
 import DashboardCard from './components/DashboardCard'
+import Auth from './components/Auth'
 
 const defaultPlanner = {
   monday: {
@@ -83,6 +84,7 @@ const getMealName = (meal) => (typeof meal === 'number' ? '' : meal?.name || '')
 
 function App() {
   const [page, setPage] = useState('home')
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [weeklyPlanner, setWeeklyPlanner] = useState(() =>
     normalizePlanner(readStoredValue('savvyspoon.weeklyPlan', defaultPlanner)),
   )
@@ -101,6 +103,14 @@ function App() {
   }, [budget, weeklyPlanner])
 
   const weekRows = Object.entries(weeklyPlanner)
+  const allowAccess = () => {
+    setIsAuthenticated(true)
+    localStorage.setItem('savvyspoon.isAuthenticated', JSON.stringify(true))
+  }
+
+  if (!isAuthenticated) {
+    return <Auth onAuthSuccess={allowAccess} />
+  }
 
   const updateMealField = (day, mealType, field, value) => {
     setWeeklyPlanner((current) => {
