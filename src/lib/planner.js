@@ -1,42 +1,44 @@
-export const defaultPlanner = {
+export const mealTypes = ['breakfast', 'lunch', 'dinner']
+
+export const createEmptyPlanner = () => ({
   monday: {
-    breakfast: { name: 'Fruit Oat Porridge', cost: 350 },
-    lunch: { name: 'Chicken Rice Bowl', cost: 600 },
-    dinner: { name: 'Beef Stew & Ugali', cost: 850 },
+    breakfast: { name: '', cost: 0 },
+    lunch: { name: '', cost: 0 },
+    dinner: { name: '', cost: 0 },
   },
   tuesday: {
-    breakfast: { name: 'Mandazi & Tea', cost: 320 },
-    lunch: { name: 'Tilapia & Greens', cost: 620 },
-    dinner: { name: 'Pilau with Kachumbari', cost: 880 },
+    breakfast: { name: '', cost: 0 },
+    lunch: { name: '', cost: 0 },
+    dinner: { name: '', cost: 0 },
   },
   wednesday: {
-    breakfast: { name: 'Avocado Toast', cost: 360 },
-    lunch: { name: 'Bean Stew & Rice', cost: 590 },
-    dinner: { name: 'Roasted Chicken Tray', cost: 900 },
+    breakfast: { name: '', cost: 0 },
+    lunch: { name: '', cost: 0 },
+    dinner: { name: '', cost: 0 },
   },
   thursday: {
-    breakfast: { name: 'Yoghurt Granola Bowl', cost: 330 },
-    lunch: { name: 'Chapati Wraps', cost: 610 },
-    dinner: { name: 'Fish Coconut Curry', cost: 870 },
+    breakfast: { name: '', cost: 0 },
+    lunch: { name: '', cost: 0 },
+    dinner: { name: '', cost: 0 },
   },
   friday: {
-    breakfast: { name: 'Egg Muffin Sandwich', cost: 380 },
-    lunch: { name: 'Pasta Primavera', cost: 650 },
-    dinner: { name: 'Nyama Choma Platter', cost: 980 },
+    breakfast: { name: '', cost: 0 },
+    lunch: { name: '', cost: 0 },
+    dinner: { name: '', cost: 0 },
   },
   saturday: {
-    breakfast: { name: 'Pancakes & Honey', cost: 420 },
-    lunch: { name: 'Chicken Biryani', cost: 700 },
-    dinner: { name: 'Creamy Stir Fry', cost: 1050 },
+    breakfast: { name: '', cost: 0 },
+    lunch: { name: '', cost: 0 },
+    dinner: { name: '', cost: 0 },
   },
   sunday: {
-    breakfast: { name: 'Sweet Potato & Eggs', cost: 390 },
-    lunch: { name: 'Githeri Special', cost: 680 },
-    dinner: { name: 'Family Roast Dinner', cost: 950 },
+    breakfast: { name: '', cost: 0 },
+    lunch: { name: '', cost: 0 },
+    dinner: { name: '', cost: 0 },
   },
-}
+})
 
-export const mealTypes = ['breakfast', 'lunch', 'dinner']
+export const defaultPlanner = createEmptyPlanner()
 
 export const ingredientMap = {
   oat: 'Oats',

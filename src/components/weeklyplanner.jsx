@@ -17,7 +17,7 @@ const mealUi = [
   { key: 'dinner', label: 'Supper' },
 ]
 
-function WeeklyPlanner({ weeklyPlanner, setWeeklyPlanner, formatKes }) {
+function WeeklyPlanner({ weeklyPlanner, setWeeklyPlanner, formatKes, savedMeals = [], onSaveMealToLibrary }) {
   const [activeDay, setActiveDay] = useState('monday')
 
   const updateMealField = (day, mealType, field, value) => {
@@ -32,7 +32,6 @@ function WeeklyPlanner({ weeklyPlanner, setWeeklyPlanner, formatKes }) {
           },
         },
       }
-      localStorage.setItem('savvyspoon.weeklyPlan', JSON.stringify(next))
       return next
     })
   }
@@ -92,6 +91,20 @@ function WeeklyPlanner({ weeklyPlanner, setWeeklyPlanner, formatKes }) {
                 type="text"
                 value={activeMeals?.[meal.key]?.name || ''}
               />
+              <select
+                className="meal-input"
+                onChange={(event) => updateMealField(activeDay, meal.key, 'name', event.target.value)}
+                value=""
+              >
+                <option value="" disabled>
+                  Use from meal library
+                </option>
+                {savedMeals.map((savedMeal) => (
+                  <option key={savedMeal.id} value={savedMeal.name}>
+                    {savedMeal.name}
+                  </option>
+                ))}
+              </select>
               <input
                 className="meal-input"
                 min="0"
@@ -100,6 +113,15 @@ function WeeklyPlanner({ weeklyPlanner, setWeeklyPlanner, formatKes }) {
                 type="number"
                 value={Number(activeMeals?.[meal.key]?.cost || 0)}
               />
+              <button
+                className="meal-input"
+                onClick={() =>
+                  onSaveMealToLibrary?.(activeMeals?.[meal.key]?.name || '', activeMeals?.[meal.key]?.cost || 0)
+                }
+                type="button"
+              >
+                Save meal to library
+              </button>
               <p className="meal-cost">Cost: {formatKes(activeMeals?.[meal.key]?.cost || 0)}</p>
             </div>
           ))}

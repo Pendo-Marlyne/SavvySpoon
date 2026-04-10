@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Toast from './Toast'
 
-function Budget({ budget, weeklyTotal, dayTotals, groceryList, formatKes, updateBudget }) {
+function Budget({ budget, weeklyTotal, dayTotals, groceryList, formatKes, updateBudget, statusStorageKey = 'savvyspoon.budgetStatus' }) {
   const [dismissedToastKey, setDismissedToastKey] = useState('')
 
   const spentPercent = budget > 0 ? Math.min((weeklyTotal / budget) * 100, 100) : 0
@@ -33,8 +33,8 @@ function Budget({ budget, weeklyTotal, dayTotals, groceryList, formatKes, update
   useEffect(() => {
     const status = isOverBudget ? 'over' : 'under'
     const statusPayload = { status, weeklyTotal, budget, updatedAt: Date.now() }
-    localStorage.setItem('savvyspoon.budgetStatus', JSON.stringify(statusPayload))
-  }, [budget, weeklyTotal, isOverBudget])
+    localStorage.setItem(statusStorageKey, JSON.stringify(statusPayload))
+  }, [budget, weeklyTotal, isOverBudget, statusStorageKey])
 
   return (
     <section className="animate-fade-up p-1">

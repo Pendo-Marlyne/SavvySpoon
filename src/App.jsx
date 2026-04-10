@@ -1,15 +1,15 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Header from './components/Header'
 import Auth from './components/Auth'
 import Homepage from './components/Homepage'
 import Footer from './components/Footer'
-import Dashboard from './components/dashboard'
+import Profile from './components/profile'
 import WeeklyPlanner from './components/weeklyplanner'
 import MealLibrary from './components/meallibrary'
 import Grocery from './components/grocery'
 import Budget from './components/budget'
 import {
-  defaultPlanner,
+  createEmptyPlanner,
   mealTypes,
   ingredientMap,
   readStoredValue,
@@ -22,17 +22,20 @@ import {
 function App() {
   const [page, setPage] = useState('home')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [authInitialMode, setAuthInitialMode] = useState('signin')
   const [role, setRole] = useState('guest')
-  const [ingredientOverrides, setIngredientOverrides] = useState(() =>
-    readStoredValue('savvyspoon.ingredientOverrides', {}),
-  )
-  const [customIngredients, setCustomIngredients] = useState(() =>
-    readStoredValue('savvyspoon.customIngredients', []),
-  )
-  const [weeklyPlanner, setWeeklyPlanner] = useState(() =>
-    normalizePlanner(readStoredValue('savvyspoon.weeklyPlan', defaultPlanner)),
-  )
-  const [budget, setBudget] = useState(() => Number(readStoredValue('savvyspoon.budget', 12000)))
+  const [currentUser, setCurrentUser] = useState(null)
+  const [ingredientOverrides, setIngredientOverrides] = useState({})
+  const [customIngredients, setCustomIngredients] = useState([])
+  const [savedMeals, setSavedMeals] = useState([])
+  const [favoriteMealIds, setFavoriteMealIds] = useState([])
+  const [weeklyPlanner, setWeeklyPlanner] = useState(createEmptyPlanner())
+  const [budget, setBudget] = useState(0)
+
+  const userKey = useCallback((suffix) => {
+    const username = currentUser?.username
+    return username ? `savvyspoon.user.${username}.${suffix}` : null
+  }, [currentUser])
 
   const weekRows = Object.entries(weeklyPlanner)
   const dayTotals = useMemo(
@@ -46,10 +49,7 @@ function App() {
   const weeklyTotal = dayTotals.reduce((sum, row) => sum + row.total, 0)
   const isUnderBudget = weeklyTotal <= budget
 
-  const mealLibrary = useMemo(() => {
-    const names = weekRows.flatMap(([, meals]) => mealTypes.map((type) => getMealName(meals[type]).trim()))
-    return [...new Set(names.filter(Boolean))]
-  }, [weekRows])
+  const mealLibrary = useMemo(() => savedMeals, [savedMeals])
 
   const groceryList = useMemo(() => {
     const mealEntries = Object.values(weeklyPlanner).flatMap((meals) =>
@@ -131,18 +131,14 @@ function App() {
               [field]: Number.isNaN(parsedNumber) ? 0 : parsedNumber,
               deleted: false,
             }
-      const next = { ...current, [id]: nextForId }
-      localStorage.setItem('savvyspoon.ingredientOverrides', JSON.stringify(next))
-      return next
+      return { ...current, [id]: nextForId }
     })
   }
 
   const deleteIngredientRow = (id) => {
     setIngredientOverrides((current) => {
       const previous = current[id] || {}
-      const next = { ...current, [id]: { ...previous, deleted: true } }
-      localStorage.setItem('savvyspoon.ingredientOverrides', JSON.stringify(next))
-      return next
+      return { ...current, [id]: { ...previous, deleted: true } }
     })
   }
 
@@ -162,15 +158,68 @@ function App() {
     }
 
     setCustomIngredients((current) => {
-      const next = [...current, item]
-      localStorage.setItem('savvyspoon.customIngredients', JSON.stringify(next))
-      return next
+      return [...current, item]
     })
   }
 
+  const saveMealToLibrary = (mealName, cost = 0) => {
+    const name = (mealName || '').trim()
+    if (!name) return
+    setSavedMeals((current) => {
+      const exists = current.some((meal) => meal.name.toLowerCase() === name.toLowerCase())
+      if (exists) return current
+      return [...current, { id: `meal-${Date.now()}`, name, defaultCost: Number(cost || 0) }]
+    })
+  }
+
+  const toggleFavoriteMeal = (mealId) => {
+    setFavoriteMealIds((current) =>
+      current.includes(mealId) ? current.filter((id) => id !== mealId) : [...current, mealId],
+    )
+  }
+
+  const applyMealFromLibrary = (meal, day, mealType) => {
+    if (!meal?.name || !day || !mealType) return
+    setWeeklyPlanner((current) => ({
+      ...current,
+      [day]: {
+        ...current[day],
+        [mealType]: {
+          ...current[day][mealType],
+          name: meal.name,
+          cost: Number(meal.defaultCost || current[day][mealType].cost || 0),
+        },
+      },
+    }))
+  }
+
   const allowAccess = (authData) => {
+    const nextRole = authData?.role === 'account' ? 'account' : 'guest'
+    const profile = authData?.profile || null
     setIsAuthenticated(true)
-    setRole(authData?.role === 'account' ? 'account' : 'guest')
+    setRole(nextRole)
+    setCurrentUser(profile)
+    if (nextRole === 'account' && profile?.username) {
+      const planner = normalizePlanner(readStoredValue(`savvyspoon.user.${profile.username}.weeklyPlan`, createEmptyPlanner()))
+      const nextBudget = Number(readStoredValue(`savvyspoon.user.${profile.username}.budget`, 0))
+      const overrides = readStoredValue(`savvyspoon.user.${profile.username}.ingredientOverrides`, {})
+      const customs = readStoredValue(`savvyspoon.user.${profile.username}.customIngredients`, [])
+      const saved = readStoredValue(`savvyspoon.user.${profile.username}.savedMeals`, [])
+      const favorites = readStoredValue(`savvyspoon.user.${profile.username}.favoriteMealIds`, [])
+      setWeeklyPlanner(planner)
+      setBudget(nextBudget)
+      setIngredientOverrides(overrides)
+      setCustomIngredients(customs)
+      setSavedMeals(saved)
+      setFavoriteMealIds(favorites)
+    } else {
+      setWeeklyPlanner(createEmptyPlanner())
+      setBudget(0)
+      setIngredientOverrides({})
+      setCustomIngredients([])
+      setSavedMeals([])
+      setFavoriteMealIds([])
+    }
     setPage('home')
   }
 
@@ -182,8 +231,52 @@ function App() {
   const updateBudget = (nextBudget) => {
     const parsed = Number(nextBudget || 0)
     setBudget(parsed)
-    localStorage.setItem('savvyspoon.budget', JSON.stringify(parsed))
   }
+
+  const openCreateAccount = () => {
+    setAuthInitialMode('signup')
+    setPage('auth')
+    setIsAuthenticated(false)
+    setRole('guest')
+    setCurrentUser(null)
+  }
+
+  useEffect(() => {
+    if (!isAuthenticated || role !== 'account') return
+    const plannerStorageKey = userKey('weeklyPlan')
+    const budgetStorageKey = userKey('budget')
+    const overridesStorageKey = userKey('ingredientOverrides')
+    const customStorageKey = userKey('customIngredients')
+    const savedMealsStorageKey = userKey('savedMeals')
+    const favoriteMealsStorageKey = userKey('favoriteMealIds')
+    if (
+      !plannerStorageKey ||
+      !budgetStorageKey ||
+      !overridesStorageKey ||
+      !customStorageKey ||
+      !savedMealsStorageKey ||
+      !favoriteMealsStorageKey
+    )
+      return
+
+    localStorage.setItem(plannerStorageKey, JSON.stringify(weeklyPlanner))
+    localStorage.setItem(budgetStorageKey, JSON.stringify(budget))
+    localStorage.setItem(overridesStorageKey, JSON.stringify(ingredientOverrides))
+    localStorage.setItem(customStorageKey, JSON.stringify(customIngredients))
+    localStorage.setItem(savedMealsStorageKey, JSON.stringify(savedMeals))
+    localStorage.setItem(favoriteMealsStorageKey, JSON.stringify(favoriteMealIds))
+  }, [
+    isAuthenticated,
+    role,
+    currentUser,
+    weeklyPlanner,
+    budget,
+    ingredientOverrides,
+    customIngredients,
+    savedMeals,
+    favoriteMealIds,
+    userKey,
+  ])
 
   const appBg = {
     backgroundImage:
@@ -198,12 +291,22 @@ function App() {
     backgroundImage: "url('/tasty.jpg')",
   }
 
-  if (!isAuthenticated) return <Auth onAuthSuccess={allowAccess} />
+  const libraryBg = {
+    backgroundImage: "url('/meal.webp')",
+  }
+
+  if (!isAuthenticated) return <Auth onAuthSuccess={allowAccess} initialMode={authInitialMode} />
 
   if (page === 'home') {
     return (
       <>
-        <Homepage onGoDashboard={() => navigate('dashboard')} onGoPlanner={() => navigate('planner')} onNavigate={navigate} />
+        <Homepage
+          onGoProfile={() => navigate('profile')}
+          onGoPlanner={() => navigate('planner')}
+          onNavigate={navigate}
+          role={role}
+          onCreateAccount={openCreateAccount}
+        />
         <Footer onNavigate={navigate} />
       </>
     )
@@ -215,7 +318,13 @@ function App() {
         <main className="min-h-screen bg-brand-cream bg-cover bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={plannerBg}>
           <div className="mx-auto max-w-6xl space-y-6">
             <Header budget={budget} currentPage="planner" onNavigate={navigate} showSpend totalSpent={weeklyTotal} />
-            <WeeklyPlanner weeklyPlanner={weeklyPlanner} setWeeklyPlanner={setWeeklyPlanner} formatKes={formatKes} />
+            <WeeklyPlanner
+              weeklyPlanner={weeklyPlanner}
+              setWeeklyPlanner={setWeeklyPlanner}
+              formatKes={formatKes}
+              savedMeals={savedMeals}
+              onSaveMealToLibrary={saveMealToLibrary}
+            />
           </div>
         </main>
         <Footer onNavigate={navigate} />
@@ -226,10 +335,15 @@ function App() {
   if (page === 'library') {
     return (
       <>
-        <main className="min-h-screen bg-brand-cream bg-cover bg-fixed bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={appBg}>
+        <main className="min-h-screen bg-cover bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={libraryBg}>
           <div className="mx-auto max-w-6xl space-y-6">
             <Header budget={budget} currentPage="library" onNavigate={navigate} showSpend totalSpent={weeklyTotal} />
-            <MealLibrary mealLibrary={mealLibrary} />
+            <MealLibrary
+              mealLibrary={mealLibrary}
+              favoriteMealIds={favoriteMealIds}
+              onToggleFavorite={toggleFavoriteMeal}
+              onApplyMealToPlanner={applyMealFromLibrary}
+            />
           </div>
         </main>
         <Footer onNavigate={navigate} />
@@ -270,6 +384,7 @@ function App() {
               formatKes={formatKes}
               groceryList={groceryList}
               updateBudget={updateBudget}
+              statusStorageKey={userKey('budgetStatus') || 'savvyspoon.budgetStatus'}
             />
           </div>
         </main>
@@ -278,25 +393,30 @@ function App() {
     )
   }
 
-  return (
-    <>
-      <main className="min-h-screen bg-brand-cream bg-cover bg-fixed bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={appBg}>
-        <div className="mx-auto max-w-6xl space-y-6">
-          <Header budget={budget} currentPage="dashboard" onNavigate={navigate} showSpend totalSpent={weeklyTotal} />
-          <Dashboard
-            weeklyTotal={weeklyTotal}
-            budget={budget}
-            isUnderBudget={isUnderBudget}
-            weekRows={weekRows}
-            groceryList={groceryList}
-            formatKes={formatKes}
-            getMealCost={getMealCost}
-          />
-        </div>
-      </main>
-      <Footer onNavigate={navigate} />
-    </>
-  )
+  if (page === 'profile') {
+    return (
+      <>
+        <main className="min-h-screen bg-brand-cream bg-cover bg-fixed bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={appBg}>
+          <div className="mx-auto max-w-6xl space-y-6">
+            <Header budget={budget} currentPage="profile" onNavigate={navigate} showSpend totalSpent={weeklyTotal} />
+            <Profile
+              userProfile={currentUser}
+              weeklyTotal={weeklyTotal}
+              budget={budget}
+              isUnderBudget={isUnderBudget}
+              weekRows={weekRows}
+              groceryList={groceryList}
+              formatKes={formatKes}
+              getMealCost={getMealCost}
+            />
+          </div>
+        </main>
+        <Footer onNavigate={navigate} />
+      </>
+    )
+  }
+
+  return null
 }
 
 export default App

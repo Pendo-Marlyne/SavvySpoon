@@ -1,7 +1,7 @@
 import { ArrowRight, Flame, Library, ListChecks, Sparkles, WalletCards } from 'lucide-react'
 import Header from './Header'
 
-function Homepage({ onNavigate, onGoDashboard, onGoPlanner }) {
+function Homepage({ onNavigate, onGoProfile, onGoPlanner, role = 'guest', onCreateAccount }) {
   const exampleSpend = 1380
 
   return (
@@ -49,13 +49,23 @@ function Homepage({ onNavigate, onGoDashboard, onGoPlanner }) {
                   Start planning
                   <ArrowRight size={16} />
                 </button>
-                <button
-                  className="rounded-full border border-brand-orange bg-brand-cream/70 px-7 py-3 text-sm font-extrabold text-[#3D2A22] shadow-sm transition hover:bg-brand-orange/15"
-                  onClick={onGoDashboard}
-                  type="button"
-                >
-                  Open dashboard
-                </button>
+                {role === 'guest' ? (
+                  <button
+                    className="rounded-full border border-brand-orange bg-brand-cream/70 px-7 py-3 text-sm font-extrabold text-[#3D2A22] shadow-sm transition hover:bg-brand-orange/15"
+                    onClick={onCreateAccount}
+                    type="button"
+                  >
+                    Create account
+                  </button>
+                ) : (
+                  <button
+                    className="rounded-full border border-brand-orange bg-brand-cream/70 px-7 py-3 text-sm font-extrabold text-[#3D2A22] shadow-sm transition hover:bg-brand-orange/15"
+                    onClick={onGoProfile}
+                    type="button"
+                  >
+                    Open profile
+                  </button>
+                )}
               </div>
 
               <div className="mt-8 grid gap-3 sm:grid-cols-3">
@@ -139,7 +149,7 @@ function Homepage({ onNavigate, onGoDashboard, onGoPlanner }) {
                   },
                   {
                     title: 'Weekly overview',
-                    desc: 'One dashboard that keeps totals, days, and status easy to read.',
+                    desc: 'One profile overview that keeps totals, days, and status easy to read.',
                     icon: Flame,
                     bg: 'from-brand-orange/18 via-brand-cream/28 to-brand-green/18',
                     image: "/food.webp",

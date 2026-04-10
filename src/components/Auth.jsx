@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Banknote, UtensilsCrossed } from 'lucide-react'
 
-function Auth({ onAuthSuccess }) {
-  const [mode, setMode] = useState('signin')
+function Auth({ onAuthSuccess, initialMode = 'signin' }) {
+  const [mode, setMode] = useState(initialMode)
   const [formData, setFormData] = useState({
     name: '',
     location: '',
-    email: '',
+    username: '',
     password: '',
   })
 
@@ -19,38 +19,47 @@ function Auth({ onAuthSuccess }) {
     setFormData((current) => ({ ...current, [field]: value }))
   }
 
+  useEffect(() => {
+    setMode(initialMode)
+  }, [initialMode])
+
   const handleSubmit = (event) => {
     event.preventDefault()
     if ((formData.password || '').length < 5) return
 
-    const trimmedEmail = (formData.email || '').trim().toLowerCase()
-    if (!trimmedEmail) {
-      setError('Please enter your Gmail address.')
+    const trimmedUsername = (formData.username || '').trim().toLowerCase()
+    if (!trimmedUsername) {
+      setError('Please enter your username.')
       return
     }
 
+    const users = JSON.parse(localStorage.getItem('savvyspoon.users') || '{}')
+
     if (isSignup) {
+      if (users[trimmedUsername]) {
+        setError('Username already exists. Please choose another one.')
+        return
+      }
       const profile = {
         name: formData.name || 'Savvyspoon User',
         location: formData.location || 'Kenya',
-        email: trimmedEmail,
+        username: trimmedUsername,
         password: formData.password,
       }
-      localStorage.setItem('savvyspoon.userProfile', JSON.stringify(profile))
+      const nextUsers = { ...users, [trimmedUsername]: profile }
+      localStorage.setItem('savvyspoon.users', JSON.stringify(nextUsers))
       onAuthSuccess({ role: 'account', profile })
       return
     }
 
-    const raw = localStorage.getItem('savvyspoon.userProfile')
-    if (!raw) {
+    if (Object.keys(users).length === 0) {
       setError('No account found. Please create an account first.')
       return
     }
     try {
-      const stored = JSON.parse(raw)
-      const storedEmail = (stored.email || '').trim().toLowerCase()
-      if (storedEmail !== trimmedEmail || stored.password !== formData.password) {
-        setError('Email or password is incorrect.')
+      const stored = users[trimmedUsername]
+      if (!stored || stored.password !== formData.password) {
+        setError('Username or password is incorrect.')
         return
       }
       onAuthSuccess({ role: 'account', profile: stored })
@@ -157,11 +166,11 @@ function Auth({ onAuthSuccess }) {
 
               <input
                 className="w-full rounded-xl border border-slate-300 bg-brand-cream/60 px-4 py-3 text-sm focus:border-brand-green focus:outline-none"
-                onChange={(event) => handleChange('email', event.target.value)}
-                placeholder="Gmail address"
+                onChange={(event) => handleChange('username', event.target.value)}
+                placeholder="Username"
                 required
-                type="email"
-                value={formData.email}
+                type="text"
+                value={formData.username}
               />
               <input
                 className={`w-full rounded-xl border bg-brand-cream/60 px-4 py-3 text-sm focus:outline-none ${
