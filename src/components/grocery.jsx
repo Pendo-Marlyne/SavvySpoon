@@ -47,23 +47,23 @@ function Grocery({ groceryList, formatKes, onDeleteIngredient, onUpdateIngredien
       <p className="mt-4 text-center text-sm font-bold text-[#3D2A22]">
         Edit ingredient quantities, choose units (pcs, kg, loaves, ltrs, egg), set prices, and delete meal-specific rows.
       </p>
-      <div className="mt-4 grid gap-3 rounded-2xl border border-[#f4a259]/55 bg-gradient-to-r from-[#0f2f86]/80 via-[#0b3e6f]/72 to-[#f97316]/55 p-4 md:grid-cols-5">
+      <div className="mt-4 grid gap-3 rounded-2xl border border-[#f4a259]/55 bg-black/78 p-4 md:grid-cols-5">
         <input
-          className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#4338ca]"
+          className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#f4a259]"
           onChange={(event) => setNewItem((current) => ({ ...current, ingredientName: event.target.value }))}
           placeholder="Add new ingredient"
           type="text"
           value={newItem.ingredientName}
         />
         <input
-          className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#4338ca]"
+          className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#f4a259]"
           onChange={(event) => setNewItem((current) => ({ ...current, mealName: event.target.value }))}
           placeholder="Meal (optional)"
           type="text"
           value={newItem.mealName}
         />
         <input
-          className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#4338ca]"
+          className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#f4a259]"
           min="0"
           onChange={(event) => setNewItem((current) => ({ ...current, quantity: Number(event.target.value || 0) }))}
           step="0.5"
@@ -71,7 +71,7 @@ function Grocery({ groceryList, formatKes, onDeleteIngredient, onUpdateIngredien
           value={newItem.quantity}
         />
         <select
-          className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#4338ca]"
+          className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#f4a259]"
           onChange={(event) => setNewItem((current) => ({ ...current, unit: event.target.value }))}
           value={newItem.unit}
         >
@@ -82,7 +82,7 @@ function Grocery({ groceryList, formatKes, onDeleteIngredient, onUpdateIngredien
           ))}
         </select>
         <button
-          className="rounded-lg border border-[#fff6e9]/70 bg-gradient-to-r from-[#4338ca] to-[#f97316] px-3 py-2 text-sm font-black uppercase tracking-wide text-[#fff6e9] transition hover:brightness-110"
+          className="rounded-lg border border-[#f4a259]/80 bg-black/90 px-3 py-2 text-sm font-black uppercase tracking-wide text-[#fff6e9] transition hover:bg-black"
           onClick={handleAddIngredient}
           type="button"
         >

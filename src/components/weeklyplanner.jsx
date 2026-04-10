@@ -68,7 +68,7 @@ function WeeklyPlanner({
       <div className="mt-3 max-w-xs">
         <label className="block text-xs font-black uppercase tracking-wider text-[#123c2d]">Week start date</label>
         <input
-          className="meal-input mt-1"
+          className="meal-input week-date-input mt-1"
           onChange={(event) => onWeekStartDateChange?.(event.target.value)}
           type="date"
           value={weekStartDate || ''}
@@ -146,7 +146,7 @@ function WeeklyPlanner({
       <section className="day-detail-panel animate-fade-up delay-1">
         <div className="day-detail-header">
           <div>
-            <p className="day-detail-kicker">Integrated meal library</p>
+            <p className="day-detail-kicker">Meal library</p>
             <h3 className="day-detail-title">Pick and plan instantly</h3>
           </div>
         </div>
