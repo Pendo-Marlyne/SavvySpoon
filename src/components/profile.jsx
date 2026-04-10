@@ -14,7 +14,7 @@ function Profile({ userProfile, weeklyTotal, budget, isUnderBudget, weekRows, gr
         }}
       >
         <h2
-          className="flex items-center gap-2 text-4xl font-black text-[#1e5948]"
+          className="flex items-center gap-2 text-4xl font-black text-[#0d2f24]"
           style={{ fontFamily: '"Ink Free", "Segoe UI", "Trebuchet MS", sans-serif' }}
         >
           <UserCircle2 size={24} />

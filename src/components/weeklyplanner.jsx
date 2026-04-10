@@ -44,8 +44,16 @@ function WeeklyPlanner({ weeklyPlanner, setWeeklyPlanner, formatKes, savedMeals 
 
   return (
     <section className="weekly-planner-page animate-fade-up">
-      <h2 className="text-2xl font-bold text-brand-green-dark">Weekly Planner Page</h2>
-      <p className="mt-1 text-sm text-[#6B6058]">
+      <h2
+        className="text-3xl font-black text-[#0d2f24]"
+        style={{ fontFamily: '"Ink Free", "Segoe UI", "Trebuchet MS", sans-serif' }}
+      >
+        Weekly Planner Page
+      </h2>
+      <p
+        className="mt-1 text-base font-black text-[#123c2d]"
+        style={{ fontFamily: '"Ink Free", "Segoe UI", "Trebuchet MS", sans-serif' }}
+      >
         Main interaction page: choose a day card, then build Breakfast, Lunch, and Supper for that day.
       </p>
 
