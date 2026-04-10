@@ -70,7 +70,15 @@ function Auth({ onAuthSuccess, initialMode = 'signin' }) {
 
   return (
     <main className="min-h-screen bg-cover bg-center px-4 py-6 md:px-8" style={{ backgroundImage: "url('/homemade.webp')" }}>
-      <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-6xl overflow-hidden rounded-3xl border border-brand-orange/25 bg-brand-orange/10 shadow-card backdrop-blur-sm lg:grid-cols-2">
+      <div
+        className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-6xl overflow-hidden rounded-3xl border border-brand-orange/25 shadow-card lg:grid-cols-2"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(244,162,89,0.18), rgba(244,162,89,0.16)), url('/veg.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
         <section className="relative hidden lg:block">
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/homemade.webp')" }} />
           <div className="absolute inset-0 bg-gradient-to-br from-orange-500/85 via-amber-500/75 to-orange-700/85" />
