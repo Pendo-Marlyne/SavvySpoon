@@ -15,42 +15,13 @@
 
 .day-tab-card {
   text-align: left;
-  border: 1px solid #1e5948;
+  border: 1px solid rgba(0, 0, 0, 0.45);
   border-radius: 22px;
-  background: rgba(0, 0, 0, 0.46);
-  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.88);
   padding: 0.95rem;
   cursor: pointer;
   animation: fadeUp 520ms ease-out both;
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, filter 180ms ease;
-}
-
-.day-tab-card:nth-child(1) {
-  background: linear-gradient(rgba(8, 46, 78, 0.72), rgba(0, 0, 0, 0.52));
-}
-
-.day-tab-card:nth-child(2) {
-  background: linear-gradient(rgba(30, 89, 72, 0.74), rgba(0, 0, 0, 0.54));
-}
-
-.day-tab-card:nth-child(3) {
-  background: linear-gradient(rgba(124, 66, 19, 0.76), rgba(0, 0, 0, 0.56));
-}
-
-.day-tab-card:nth-child(4) {
-  background: linear-gradient(rgba(63, 31, 97, 0.74), rgba(0, 0, 0, 0.54));
-}
-
-.day-tab-card:nth-child(5) {
-  background: linear-gradient(rgba(21, 78, 62, 0.74), rgba(0, 0, 0, 0.54));
-}
-
-.day-tab-card:nth-child(6) {
-  background: linear-gradient(rgba(94, 44, 18, 0.75), rgba(0, 0, 0, 0.55));
-}
-
-.day-tab-card:nth-child(7) {
-  background: linear-gradient(rgba(11, 62, 111, 0.74), rgba(0, 0, 0, 0.54));
 }
 
 .day-tab-card:hover {
@@ -83,7 +54,7 @@
   margin: 0;
   font-size: 1.12rem;
   font-weight: 900;
-  color: #fff6e9;
+  color: #111111;
   letter-spacing: 0.01em;
   text-shadow: 0 1px 0 rgba(255, 246, 233, 0.45);
   text-transform: capitalize;
@@ -92,7 +63,7 @@
 .day-tab-sub {
   margin: 0.2rem 0 0;
   font-size: 0.95rem;
-  color: #ffd8ad;
+  color: #222222;
   font-weight: 900;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
 }
@@ -100,7 +71,7 @@
 .day-tab-total {
   margin: 0.45rem 0 0;
   font-size: 1.12rem;
-  color: #fff6e9;
+  color: #111111;
   font-weight: 900;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
 }
@@ -109,8 +80,7 @@
   margin-top: 1.2rem;
   border: 1px solid #f4a259;
   border-radius: 24px;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(7px);
+  background: rgba(255, 255, 255, 0.9);
   padding: 1rem;
 }
 
@@ -128,7 +98,7 @@
   text-transform: uppercase;
   letter-spacing: 0.11em;
   font-weight: 900;
-  color: #1a120d;
+  color: #111111;
   text-shadow: 0 1px 0 rgba(255, 246, 233, 0.35);
 }
 
@@ -137,7 +107,7 @@
   font-size: 1.9rem;
   font-weight: 900;
   text-transform: capitalize;
-  color: #06110c;
+  color: #111111;
   letter-spacing: 0.02em;
   text-shadow: 0 1px 0 rgba(255, 246, 233, 0.45);
   font-family: "Ink Free", "Segoe UI", "Trebuchet MS", sans-serif;
@@ -149,7 +119,7 @@
   height: 128px;
   border-radius: 999px;
   border: 3px solid #f4a259;
-  background: rgba(0, 0, 0, 0.42);
+  background: rgba(0, 0, 0, 0.82);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -160,8 +130,8 @@
 .luxury-cost-value {
   font-size: 1.02rem;
   font-weight: 900;
-  color: #07140e;
-  text-shadow: 0 1px 0 rgba(255, 246, 233, 0.45);
+  color: #fff6e9;
+  text-shadow: none;
   font-family: "Ink Free", "Segoe UI", "Trebuchet MS", sans-serif;
   text-align: center;
   line-height: 1.15;
@@ -171,9 +141,9 @@
   font-size: 0.74rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #1a120d;
+  color: #ffd8ad;
   font-weight: 900;
-  text-shadow: 0 1px 0 rgba(255, 246, 233, 0.35);
+  text-shadow: none;
 }
 
 .day-meals-grid {
@@ -190,8 +160,7 @@
 .meal-block {
   border: 1px solid #f4a259;
   border-radius: 14px;
-  background: rgba(0, 0, 0, 0.42);
-  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.94);
   padding: 0.6rem;
 }
 
@@ -211,8 +180,8 @@
   margin-bottom: 0.4rem;
   border-radius: 10px;
   border: 2px solid #1e5948;
-  background: rgba(0, 0, 0, 0.38);
-  color: #fff6e9;
+  background: rgba(255, 255, 255, 0.96);
+  color: #111111;
   padding: 0.58rem 0.72rem;
   font-size: 1.04rem;
   font-weight: 800;
@@ -226,15 +195,23 @@
 }
 
 .meal-input::placeholder {
-  color: rgba(255, 246, 233, 0.75);
+  color: rgba(17, 17, 17, 0.6);
 }
 
 .meal-cost {
   margin: 0.2rem 0 0;
   font-size: 1.16rem;
-  color: #fff6e9;
+  color: #111111;
   font-weight: 900;
   letter-spacing: 0.01em;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
   font-family: "Ink Free", "Segoe UI", "Trebuchet MS", sans-serif;
+}
+
+.meal-fav-btn {
+  width: auto;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }

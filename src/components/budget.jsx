@@ -25,16 +25,21 @@ function Budget({ budget, weeklyTotal, dayTotals, groceryList, formatKes, update
 
   const maxIngredientSpend = Math.max(...ingredientSpendRows.map((row) => row.total), 1)
   const isOverBudget = weeklyTotal > budget
-  const toastTone = isOverBudget ? 'danger' : 'success'
-  const toastTitle = isOverBudget ? 'Welcome back! You are over budget' : 'Welcome back! You are under budget'
+  const hasReachedHalfBudget = spentPercent >= 50 && !isOverBudget
+  const toastTone = isOverBudget ? 'danger' : hasReachedHalfBudget ? 'warning' : 'success'
+  const toastTitle = isOverBudget
+    ? 'Welcome back! You are over budget'
+    : hasReachedHalfBudget
+      ? 'Budget Notice: 50% reached'
+      : 'Welcome back! You are under budget'
   const toastMessage = `Live update: ${formatKes(weeklyTotal)} of ${formatKes(budget)} used`
-  const toastKey = `${isOverBudget ? 'over' : 'under'}-${budget}-${weeklyTotal}`
+  const toastKey = `${isOverBudget ? 'over' : hasReachedHalfBudget ? 'half' : 'under'}-${budget}-${weeklyTotal}`
 
   useEffect(() => {
-    const status = isOverBudget ? 'over' : 'under'
+    const status = isOverBudget ? 'over' : hasReachedHalfBudget ? 'half' : 'under'
     const statusPayload = { status, weeklyTotal, budget, updatedAt: Date.now() }
     localStorage.setItem(statusStorageKey, JSON.stringify(statusPayload))
-  }, [budget, weeklyTotal, isOverBudget, statusStorageKey])
+  }, [budget, weeklyTotal, isOverBudget, hasReachedHalfBudget, statusStorageKey])
 
   return (
     <section className="animate-fade-up p-1">

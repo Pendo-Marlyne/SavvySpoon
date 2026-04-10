@@ -1,7 +1,6 @@
 import {
   Banknote,
   LayoutDashboard,
-  Library,
   ListChecks,
   ShoppingCart,
   House,
@@ -60,7 +59,6 @@ function Header({
             { id: 'grocery', label: 'Grocery List', icon: ShoppingCart },
             { id: 'budget', label: 'Budget Setting', icon: Banknote },
             { id: 'profile', label: 'Profile', icon: LayoutDashboard },
-            { id: 'library', label: 'Meal Library', icon: Library },
           ].map((item) => {
             const isActive = currentPage === item.id
             const Icon = item.icon

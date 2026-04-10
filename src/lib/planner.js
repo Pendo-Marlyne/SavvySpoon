@@ -1,42 +1,33 @@
 export const mealTypes = ['breakfast', 'lunch', 'dinner']
 
-export const createEmptyPlanner = () => ({
-  monday: {
-    breakfast: { name: '', cost: 0 },
-    lunch: { name: '', cost: 0 },
-    dinner: { name: '', cost: 0 },
-  },
-  tuesday: {
-    breakfast: { name: '', cost: 0 },
-    lunch: { name: '', cost: 0 },
-    dinner: { name: '', cost: 0 },
-  },
-  wednesday: {
-    breakfast: { name: '', cost: 0 },
-    lunch: { name: '', cost: 0 },
-    dinner: { name: '', cost: 0 },
-  },
-  thursday: {
-    breakfast: { name: '', cost: 0 },
-    lunch: { name: '', cost: 0 },
-    dinner: { name: '', cost: 0 },
-  },
-  friday: {
-    breakfast: { name: '', cost: 0 },
-    lunch: { name: '', cost: 0 },
-    dinner: { name: '', cost: 0 },
-  },
-  saturday: {
-    breakfast: { name: '', cost: 0 },
-    lunch: { name: '', cost: 0 },
-    dinner: { name: '', cost: 0 },
-  },
-  sunday: {
-    breakfast: { name: '', cost: 0 },
-    lunch: { name: '', cost: 0 },
-    dinner: { name: '', cost: 0 },
-  },
-})
+export const getIsoDate = (date = new Date()) => {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+export const generateWeekDates = (startDateIso = getIsoDate()) => {
+  const start = new Date(`${startDateIso}T00:00:00`)
+  if (Number.isNaN(start.getTime())) return [getIsoDate()]
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(start)
+    date.setDate(start.getDate() + index)
+    return getIsoDate(date)
+  })
+}
+
+export const createPlannerForDates = (dates = generateWeekDates()) =>
+  dates.reduce((acc, dateKey) => {
+    acc[dateKey] = {
+      breakfast: { name: '', cost: 0 },
+      lunch: { name: '', cost: 0 },
+      dinner: { name: '', cost: 0 },
+    }
+    return acc
+  }, {})
+
+export const createEmptyPlanner = () => createPlannerForDates(generateWeekDates())
 
 export const defaultPlanner = createEmptyPlanner()
 
@@ -67,9 +58,11 @@ export const readStoredValue = (key, fallback) => {
   }
 }
 
-export const normalizePlanner = (planner) => {
+export const normalizePlanner = (planner, requiredDates = Object.keys(planner || {})) => {
+  const source = planner || {}
   const base = {}
-  Object.entries(planner || {}).forEach(([day, meals]) => {
+  requiredDates.forEach((day) => {
+    const meals = source[day] || {}
     base[day] = {}
     mealTypes.forEach((mealType) => {
       const mealValue = meals?.[mealType]

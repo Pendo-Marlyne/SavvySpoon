@@ -1,15 +1,25 @@
 import { Heart, Library } from 'lucide-react'
 import { useState } from 'react'
 
-const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 const mealTypes = ['breakfast', 'lunch', 'dinner']
+const formatDayLabel = (dateKey) => {
+  const date = new Date(`${dateKey}T00:00:00`)
+  if (Number.isNaN(date.getTime())) return dateKey
+  return new Intl.DateTimeFormat('en-KE', { weekday: 'short', month: 'short', day: 'numeric' }).format(date)
+}
 
-function MealLibrary({ mealLibrary, favoriteMealIds = [], onToggleFavorite, onApplyMealToPlanner }) {
+function MealLibrary({
+  mealLibrary,
+  favoriteMealIds = [],
+  onToggleFavorite,
+  onApplyMealToPlanner,
+  plannerDayOptions = [],
+}) {
   const [selectionByMeal, setSelectionByMeal] = useState({})
 
   const getSelection = (mealId) =>
     selectionByMeal[mealId] || {
-      day: 'monday',
+      day: plannerDayOptions[0] || '',
       mealType: 'breakfast',
     }
 
@@ -53,9 +63,9 @@ function MealLibrary({ mealLibrary, favoriteMealIds = [], onToggleFavorite, onAp
                   }
                   value={getSelection(meal.id).day}
                 >
-                  {days.map((day) => (
+                  {plannerDayOptions.map((day) => (
                     <option key={day} value={day}>
-                      {day}
+                      {formatDayLabel(day)}
                     </option>
                   ))}
                 </select>

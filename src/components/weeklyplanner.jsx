@@ -1,15 +1,6 @@
+import { Heart } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import './weeklyplanner.css'
-
-const orderedDays = [
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
-  'saturday',
-  'sunday',
-]
 
 const mealUi = [
   { key: 'breakfast', label: 'Breakfast' },
@@ -17,8 +8,26 @@ const mealUi = [
   { key: 'dinner', label: 'Supper' },
 ]
 
-function WeeklyPlanner({ weeklyPlanner, setWeeklyPlanner, formatKes, savedMeals = [], onSaveMealToLibrary }) {
-  const [activeDay, setActiveDay] = useState('monday')
+const formatDayLabel = (dateKey) => {
+  const date = new Date(`${dateKey}T00:00:00`)
+  if (Number.isNaN(date.getTime())) return dateKey
+  return new Intl.DateTimeFormat('en-KE', { weekday: 'short', month: 'short', day: 'numeric' }).format(date)
+}
+
+function WeeklyPlanner({
+  weeklyPlanner,
+  setWeeklyPlanner,
+  savedMeals = [],
+  onSaveMealToLibrary,
+  weekDates = [],
+  weekStartDate,
+  onWeekStartDateChange,
+  favoriteMealIds = [],
+  onToggleFavorite,
+  onApplyMealToPlanner,
+}) {
+  const [activeDay, setActiveDay] = useState(weekDates[0] || '')
+  const resolvedActiveDay = weekDates.includes(activeDay) ? activeDay : weekDates[0] || ''
 
   const updateMealField = (day, mealType, field, value) => {
     setWeeklyPlanner((current) => {
@@ -28,7 +37,7 @@ function WeeklyPlanner({ weeklyPlanner, setWeeklyPlanner, formatKes, savedMeals 
           ...current[day],
           [mealType]: {
             ...current[day][mealType],
-            [field]: field === 'cost' ? Number(value || 0) : value,
+            [field]: value,
           },
         },
       }
@@ -36,9 +45,9 @@ function WeeklyPlanner({ weeklyPlanner, setWeeklyPlanner, formatKes, savedMeals 
     })
   }
 
-  const activeMeals = weeklyPlanner[activeDay]
-  const activeTotal = useMemo(
-    () => mealUi.reduce((sum, meal) => sum + Number(activeMeals?.[meal.key]?.cost || 0), 0),
+  const activeMeals = weeklyPlanner[resolvedActiveDay]
+  const plannedMealCount = useMemo(
+    () => mealUi.filter((meal) => (activeMeals?.[meal.key]?.name || '').trim()).length,
     [activeMeals],
   )
 
@@ -54,13 +63,22 @@ function WeeklyPlanner({ weeklyPlanner, setWeeklyPlanner, formatKes, savedMeals 
         className="mt-1 text-base font-black text-[#123c2d]"
         style={{ fontFamily: '"Ink Free", "Segoe UI", "Trebuchet MS", sans-serif' }}
       >
-        Main interaction page: choose a day card, then build Breakfast, Lunch, and Supper for that day.
+        Main interaction page: choose exact calendar dates, then build Breakfast, Lunch, and Supper for that date.
       </p>
+      <div className="mt-3 max-w-xs">
+        <label className="block text-xs font-black uppercase tracking-wider text-[#123c2d]">Week start date</label>
+        <input
+          className="meal-input mt-1"
+          onChange={(event) => onWeekStartDateChange?.(event.target.value)}
+          type="date"
+          value={weekStartDate || ''}
+        />
+      </div>
 
       <div className="weekly-planner-grid">
-        {orderedDays.map((day, dayIndex) => {
-          const dayTotal = mealUi.reduce((sum, meal) => sum + Number(weeklyPlanner?.[day]?.[meal.key]?.cost || 0), 0)
-          const isActive = day === activeDay
+        {weekDates.map((day, dayIndex) => {
+          const dayPlannedCount = mealUi.filter((meal) => (weeklyPlanner?.[day]?.[meal.key]?.name || '').trim()).length
+          const isActive = day === resolvedActiveDay
           return (
             <button
               className={`day-tab-card ${isActive ? 'day-tab-card-active' : ''} delay-${dayIndex % 2 === 0 ? '0' : '1'}`}
@@ -68,9 +86,9 @@ function WeeklyPlanner({ weeklyPlanner, setWeeklyPlanner, formatKes, savedMeals 
               onClick={() => setActiveDay(day)}
               type="button"
             >
-              <p className="day-tab-title">{day}</p>
+              <p className="day-tab-title">{formatDayLabel(day)}</p>
               <p className="day-tab-sub">View and edit meals</p>
-              <p className="day-tab-total">{formatKes(dayTotal)}</p>
+              <p className="day-tab-total">{dayPlannedCount} meals planned</p>
             </button>
           )
         })}
@@ -80,28 +98,28 @@ function WeeklyPlanner({ weeklyPlanner, setWeeklyPlanner, formatKes, savedMeals 
         <div className="day-detail-header">
           <div>
             <p className="day-detail-kicker">Selected day</p>
-            <h3 className="day-detail-title">{activeDay}</h3>
+            <h3 className="day-detail-title">{formatDayLabel(resolvedActiveDay)}</h3>
           </div>
           <div className="luxury-cost-circle">
-            <span className="luxury-cost-value">{formatKes(activeTotal)}</span>
-            <span className="luxury-cost-label">Daily Total</span>
+            <span className="luxury-cost-value">{plannedMealCount}</span>
+            <span className="luxury-cost-label">Meals Planned</span>
           </div>
         </div>
 
         <div className="day-meals-grid">
           {mealUi.map((meal) => (
-            <div className="meal-block" key={`${activeDay}-${meal.key}`}>
+            <div className="meal-block" key={`${resolvedActiveDay}-${meal.key}`}>
               <p className="meal-label">{meal.label}</p>
               <input
                 className="meal-input"
-                onChange={(event) => updateMealField(activeDay, meal.key, 'name', event.target.value)}
+                onChange={(event) => updateMealField(resolvedActiveDay, meal.key, 'name', event.target.value)}
                 placeholder={`${meal.label} meal`}
                 type="text"
                 value={activeMeals?.[meal.key]?.name || ''}
               />
               <select
                 className="meal-input"
-                onChange={(event) => updateMealField(activeDay, meal.key, 'name', event.target.value)}
+                onChange={(event) => updateMealField(resolvedActiveDay, meal.key, 'name', event.target.value)}
                 value=""
               >
                 <option value="" disabled>
@@ -113,26 +131,69 @@ function WeeklyPlanner({ weeklyPlanner, setWeeklyPlanner, formatKes, savedMeals 
                   </option>
                 ))}
               </select>
-              <input
-                className="meal-input"
-                min="0"
-                onChange={(event) => updateMealField(activeDay, meal.key, 'cost', event.target.value)}
-                placeholder="Cost in KES"
-                type="number"
-                value={Number(activeMeals?.[meal.key]?.cost || 0)}
-              />
               <button
                 className="meal-input"
-                onClick={() =>
-                  onSaveMealToLibrary?.(activeMeals?.[meal.key]?.name || '', activeMeals?.[meal.key]?.cost || 0)
-                }
+                onClick={() => onSaveMealToLibrary?.(activeMeals?.[meal.key]?.name || '')}
                 type="button"
               >
                 Save meal to library
               </button>
-              <p className="meal-cost">Cost: {formatKes(activeMeals?.[meal.key]?.cost || 0)}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="day-detail-panel animate-fade-up delay-1">
+        <div className="day-detail-header">
+          <div>
+            <p className="day-detail-kicker">Integrated meal library</p>
+            <h3 className="day-detail-title">Pick and plan instantly</h3>
+          </div>
+        </div>
+        <div className="day-meals-grid">
+          {savedMeals.length > 0 ? (
+            savedMeals.map((meal) => {
+              const isFav = favoriteMealIds.includes(meal.id)
+              return (
+                <div className="meal-block" key={meal.id}>
+                  <p className="meal-label">{meal.name}</p>
+                  <div className="flex gap-2">
+                    <button
+                      className="meal-input"
+                      onClick={() => onApplyMealToPlanner?.(meal, resolvedActiveDay, 'breakfast')}
+                      type="button"
+                    >
+                      Plan for Breakfast
+                    </button>
+                    <button
+                      className="meal-input"
+                      onClick={() => onApplyMealToPlanner?.(meal, resolvedActiveDay, 'lunch')}
+                      type="button"
+                    >
+                      Plan for Lunch
+                    </button>
+                    <button
+                      className="meal-input"
+                      onClick={() => onApplyMealToPlanner?.(meal, resolvedActiveDay, 'dinner')}
+                      type="button"
+                    >
+                      Plan for Supper
+                    </button>
+                    <button
+                      aria-label="Toggle favorite meal"
+                      className="meal-input meal-fav-btn"
+                      onClick={() => onToggleFavorite?.(meal.id)}
+                      type="button"
+                    >
+                      <Heart fill={isFav ? 'currentColor' : 'none'} size={16} />
+                    </button>
+                  </div>
+                </div>
+              )
+            })
+          ) : (
+            <p className="meal-cost">No meals saved yet. Save meals above to build your personal library.</p>
+          )}
         </div>
       </section>
     </section>

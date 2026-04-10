@@ -5,11 +5,13 @@ import Homepage from './components/Homepage'
 import Footer from './components/Footer'
 import Profile from './components/profile'
 import WeeklyPlanner from './components/weeklyplanner'
-import MealLibrary from './components/meallibrary'
 import Grocery from './components/grocery'
 import Budget from './components/budget'
 import {
   createEmptyPlanner,
+  createPlannerForDates,
+  generateWeekDates,
+  getIsoDate,
   mealTypes,
   ingredientMap,
   readStoredValue,
@@ -29,6 +31,7 @@ function App() {
   const [customIngredients, setCustomIngredients] = useState([])
   const [savedMeals, setSavedMeals] = useState([])
   const [favoriteMealIds, setFavoriteMealIds] = useState([])
+  const [weekStartDate, setWeekStartDate] = useState(getIsoDate())
   const [weeklyPlanner, setWeeklyPlanner] = useState(createEmptyPlanner())
   const [budget, setBudget] = useState(0)
 
@@ -36,6 +39,8 @@ function App() {
     const username = currentUser?.username
     return username ? `savvyspoon.user.${username}.${suffix}` : null
   }, [currentUser])
+
+  const weekDates = useMemo(() => generateWeekDates(weekStartDate), [weekStartDate])
 
   const weekRows = Object.entries(weeklyPlanner)
   const dayTotals = useMemo(
@@ -46,11 +51,6 @@ function App() {
       })),
     [weekRows],
   )
-  const weeklyTotal = dayTotals.reduce((sum, row) => sum + row.total, 0)
-  const isUnderBudget = weeklyTotal <= budget
-
-  const mealLibrary = useMemo(() => savedMeals, [savedMeals])
-
   const groceryList = useMemo(() => {
     const mealEntries = Object.values(weeklyPlanner).flatMap((meals) =>
       mealTypes
@@ -119,6 +119,16 @@ function App() {
     return [...generatedItems, ...customItems].sort((a, b) => a.mealName.localeCompare(b.mealName))
   }, [weeklyPlanner, ingredientOverrides, customIngredients])
 
+  const weeklyTotal = useMemo(
+    () =>
+      groceryList.reduce(
+        (sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0),
+        0,
+      ),
+    [groceryList],
+  )
+  const isUnderBudget = weeklyTotal <= budget
+
   const updateIngredientField = (id, field, value) => {
     setIngredientOverrides((current) => {
       const previous = current[id] || {}
@@ -162,13 +172,13 @@ function App() {
     })
   }
 
-  const saveMealToLibrary = (mealName, cost = 0) => {
+  const saveMealToLibrary = (mealName) => {
     const name = (mealName || '').trim()
     if (!name) return
     setSavedMeals((current) => {
       const exists = current.some((meal) => meal.name.toLowerCase() === name.toLowerCase())
       if (exists) return current
-      return [...current, { id: `meal-${Date.now()}`, name, defaultCost: Number(cost || 0) }]
+      return [...current, { id: `meal-${Date.now()}`, name }]
     })
   }
 
@@ -187,10 +197,24 @@ function App() {
         [mealType]: {
           ...current[day][mealType],
           name: meal.name,
-          cost: Number(meal.defaultCost || current[day][mealType].cost || 0),
         },
       },
     }))
+  }
+
+  const changeWeekStartDate = (nextDate) => {
+    if (!nextDate) return
+    setWeekStartDate(nextDate)
+    const requiredDates = generateWeekDates(nextDate)
+    if (role === 'account' && currentUser?.username) {
+      const storedPlanner = readStoredValue(
+        `savvyspoon.user.${currentUser.username}.weeklyPlan.${nextDate}`,
+        createPlannerForDates(requiredDates),
+      )
+      setWeeklyPlanner(normalizePlanner(storedPlanner, requiredDates))
+      return
+    }
+    setWeeklyPlanner(createPlannerForDates(requiredDates))
   }
 
   const allowAccess = (authData) => {
@@ -200,12 +224,21 @@ function App() {
     setRole(nextRole)
     setCurrentUser(profile)
     if (nextRole === 'account' && profile?.username) {
-      const planner = normalizePlanner(readStoredValue(`savvyspoon.user.${profile.username}.weeklyPlan`, createEmptyPlanner()))
+      const storedWeekStart = readStoredValue(`savvyspoon.user.${profile.username}.weekStartDate`, getIsoDate())
+      const requiredDates = generateWeekDates(storedWeekStart)
+      const planner = normalizePlanner(
+        readStoredValue(
+          `savvyspoon.user.${profile.username}.weeklyPlan.${storedWeekStart}`,
+          createPlannerForDates(requiredDates),
+        ),
+        requiredDates,
+      )
       const nextBudget = Number(readStoredValue(`savvyspoon.user.${profile.username}.budget`, 0))
       const overrides = readStoredValue(`savvyspoon.user.${profile.username}.ingredientOverrides`, {})
       const customs = readStoredValue(`savvyspoon.user.${profile.username}.customIngredients`, [])
       const saved = readStoredValue(`savvyspoon.user.${profile.username}.savedMeals`, [])
       const favorites = readStoredValue(`savvyspoon.user.${profile.username}.favoriteMealIds`, [])
+      setWeekStartDate(storedWeekStart)
       setWeeklyPlanner(planner)
       setBudget(nextBudget)
       setIngredientOverrides(overrides)
@@ -213,7 +246,9 @@ function App() {
       setSavedMeals(saved)
       setFavoriteMealIds(favorites)
     } else {
-      setWeeklyPlanner(createEmptyPlanner())
+      const guestWeekStart = getIsoDate()
+      setWeekStartDate(guestWeekStart)
+      setWeeklyPlanner(createPlannerForDates(generateWeekDates(guestWeekStart)))
       setBudget(0)
       setIngredientOverrides({})
       setCustomIngredients([])
@@ -224,6 +259,10 @@ function App() {
   }
 
   const navigate = (nextPage) => {
+    if (nextPage === 'library') {
+      setPage('planner')
+      return
+    }
     if (role === 'guest' && nextPage !== 'home') return
     setPage(nextPage)
   }
@@ -243,19 +282,21 @@ function App() {
 
   useEffect(() => {
     if (!isAuthenticated || role !== 'account') return
-    const plannerStorageKey = userKey('weeklyPlan')
+    const plannerStorageKey = userKey(`weeklyPlan.${weekStartDate}`)
     const budgetStorageKey = userKey('budget')
     const overridesStorageKey = userKey('ingredientOverrides')
     const customStorageKey = userKey('customIngredients')
     const savedMealsStorageKey = userKey('savedMeals')
     const favoriteMealsStorageKey = userKey('favoriteMealIds')
+    const weekStartStorageKey = userKey('weekStartDate')
     if (
       !plannerStorageKey ||
       !budgetStorageKey ||
       !overridesStorageKey ||
       !customStorageKey ||
       !savedMealsStorageKey ||
-      !favoriteMealsStorageKey
+      !favoriteMealsStorageKey ||
+      !weekStartStorageKey
     )
       return
 
@@ -265,6 +306,7 @@ function App() {
     localStorage.setItem(customStorageKey, JSON.stringify(customIngredients))
     localStorage.setItem(savedMealsStorageKey, JSON.stringify(savedMeals))
     localStorage.setItem(favoriteMealsStorageKey, JSON.stringify(favoriteMealIds))
+    localStorage.setItem(weekStartStorageKey, JSON.stringify(weekStartDate))
   }, [
     isAuthenticated,
     role,
@@ -275,6 +317,7 @@ function App() {
     customIngredients,
     savedMeals,
     favoriteMealIds,
+    weekStartDate,
     userKey,
   ])
 
@@ -289,10 +332,6 @@ function App() {
 
   const budgetBg = {
     backgroundImage: "url('/tasty.jpg')",
-  }
-
-  const libraryBg = {
-    backgroundImage: "url('/meal.webp')",
   }
 
   if (!isAuthenticated) return <Auth onAuthSuccess={allowAccess} initialMode={authInitialMode} />
@@ -321,25 +360,11 @@ function App() {
             <WeeklyPlanner
               weeklyPlanner={weeklyPlanner}
               setWeeklyPlanner={setWeeklyPlanner}
-              formatKes={formatKes}
               savedMeals={savedMeals}
               onSaveMealToLibrary={saveMealToLibrary}
-            />
-          </div>
-        </main>
-        <Footer onNavigate={navigate} />
-      </>
-    )
-  }
-
-  if (page === 'library') {
-    return (
-      <>
-        <main className="min-h-screen bg-cover bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={libraryBg}>
-          <div className="mx-auto max-w-6xl space-y-6">
-            <Header budget={budget} currentPage="library" onNavigate={navigate} showSpend totalSpent={weeklyTotal} />
-            <MealLibrary
-              mealLibrary={mealLibrary}
+              weekDates={weekDates}
+              weekStartDate={weekStartDate}
+              onWeekStartDateChange={changeWeekStartDate}
               favoriteMealIds={favoriteMealIds}
               onToggleFavorite={toggleFavoriteMeal}
               onApplyMealToPlanner={applyMealFromLibrary}

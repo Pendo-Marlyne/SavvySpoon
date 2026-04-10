@@ -29,7 +29,6 @@ function Footer({ onNavigate }) {
             { id: 'home', label: 'Home', restricted: false },
             { id: 'profile', label: 'Profile', restricted: false },
             { id: 'planner', label: 'Weekly Planner', restricted: false },
-            { id: 'library', label: 'Meal Library', restricted: false },
             { id: 'grocery', label: 'Grocery List', restricted: false },
             { id: 'budget', label: 'Budget Setting', restricted: false },
           ].map((item) => {
