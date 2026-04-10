@@ -33,9 +33,9 @@ function Header({
       <div className="absolute inset-y-0 left-0 hidden w-20 md:block">
         <div
           className="h-full w-full bg-cover bg-center"
-          style={{ backgroundImage: "url('/homemade.webp')" }}
+          style={{ backgroundImage: "url('/veg.jpg')" }}
         />
-        <div className="absolute inset-0 bg-[#111111]/35 backdrop-blur-md" />
+        <div className="absolute inset-0 bg-[#111111]/12" />
       </div>
 
       <div className="relative flex flex-wrap items-center justify-between gap-2 p-2 md:flex-nowrap md:gap-2.5 md:px-2.5 md:py-2 md:pl-24">
