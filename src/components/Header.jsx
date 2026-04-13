@@ -69,7 +69,7 @@ function Header({
                 className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 text-xs font-extrabold transition-all duration-200 ${
                   isActive
                     ? 'border-[#4ecb94]/65 bg-[#1e5948] text-[#050505] shadow-md shadow-[#1e5948]/40'
-                    : 'border-[#c86b1a] bg-[#f4a259] text-[#050505] hover:border-[#f4a259] hover:bg-[#f6b06e] hover:shadow-[0_0_16px_rgba(244,162,89,0.45)]'
+                    : 'border-[#c86b1a] bg-[#f4a259] text-[#050505] hover:border-[#f4a259] hover:bg-[#f6b06e]'
                 }`}
                 key={item.id}
                 onClick={() => onNavigate?.(item.id)}

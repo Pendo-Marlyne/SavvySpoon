@@ -1,9 +1,55 @@
 .weekly-planner-page {
-  border: 1px solid #1e5948;
-  border-radius: 28px;
-  background: transparent;
+  border: 1px solid rgba(30, 89, 72, 0.45);
+  border-radius: 24px;
+  background: linear-gradient(160deg, rgba(255, 248, 238, 0.95), rgba(255, 244, 230, 0.9));
   padding: 1.5rem;
-  box-shadow: 0 10px 26px -20px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 16px 36px -24px rgba(17, 17, 17, 0.55);
+}
+
+.planner-topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.planner-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 800;
+  color: #6b6058;
+}
+
+.planner-title {
+  margin: 0.2rem 0 0;
+  font-size: 1.75rem;
+  line-height: 1.2;
+  font-weight: 800;
+  color: #1b2a25;
+}
+
+.planner-subtitle {
+  margin: 0.45rem 0 0;
+  font-size: 0.92rem;
+  color: #4c5b55;
+  max-width: 600px;
+}
+
+.planner-date-wrap {
+  min-width: 220px;
+}
+
+.planner-date-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  font-weight: 700;
+  color: #5f6f69;
 }
 
 .weekly-planner-grid {
@@ -15,72 +61,89 @@
 
 .day-tab-card {
   text-align: left;
-  border: 1px solid rgba(0, 0, 0, 0.45);
-  border-radius: 22px;
-  background: linear-gradient(160deg, rgba(245, 245, 245, 0.88), rgba(234, 234, 234, 0.82));
-  padding: 0.95rem;
+  border: 1px solid rgba(30, 89, 72, 0.18);
+  border-radius: 16px;
+  background: #ffffff;
+  padding: 0.9rem;
   cursor: pointer;
   animation: fadeUp 520ms ease-out both;
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, filter 180ms ease;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
 }
 
 .day-tab-card:hover {
-  transform: translateY(-3px);
-  border-color: #f4a259;
-  box-shadow:
-    0 0 0 1px rgba(244, 162, 89, 0.7),
-    0 0 20px rgba(244, 162, 89, 0.52),
-    0 14px 34px -20px rgba(244, 162, 89, 0.65);
-  filter: saturate(1.2);
+  transform: translateY(-2px);
+  border-color: rgba(30, 89, 72, 0.35);
+  box-shadow: 0 10px 24px -20px rgba(17, 17, 17, 0.4);
 }
 
 .day-tab-card-active {
-  border-color: #ff9f2d;
-  box-shadow:
-    0 0 0 2px rgba(255, 159, 45, 0.9),
-    0 0 32px rgba(255, 159, 45, 0.7),
-    0 18px 38px -18px rgba(255, 159, 45, 0.75);
-  filter: saturate(1.35) brightness(1.06);
+  border-color: rgba(30, 89, 72, 0.5);
+  background: linear-gradient(180deg, #ffffff, #f7fbfa);
+  box-shadow: inset 0 0 0 1px rgba(30, 89, 72, 0.12);
 }
 
 .day-tab-card-active:hover {
-  box-shadow:
-    0 0 0 2px rgba(255, 159, 45, 1),
-    0 0 38px rgba(255, 159, 45, 0.78),
-    0 20px 42px -16px rgba(255, 159, 45, 0.82);
+  box-shadow: inset 0 0 0 1px rgba(30, 89, 72, 0.18), 0 10px 24px -20px rgba(17, 17, 17, 0.35);
 }
 
 .day-tab-title {
   margin: 0;
-  font-size: 1.12rem;
-  font-weight: 900;
-  color: #111111;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1f2a25;
   letter-spacing: 0.01em;
-  text-shadow: 0 1px 0 rgba(255, 246, 233, 0.45);
   text-transform: capitalize;
 }
 
 .day-tab-sub {
   margin: 0.2rem 0 0;
-  font-size: 0.95rem;
-  color: #222222;
-  font-weight: 900;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+  font-size: 0.78rem;
+  color: #6a7872;
+  font-weight: 600;
 }
 
 .day-tab-total {
   margin: 0.45rem 0 0;
-  font-size: 1.12rem;
-  color: #111111;
-  font-weight: 900;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+  font-size: 0.85rem;
+  color: #256f5b;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.planner-metrics {
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.planner-metric-chip {
+  border: 1px solid rgba(30, 89, 72, 0.28);
+  border-radius: 999px;
+  background: #ffffff;
+  padding: 0.4rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.planner-metric-value {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #1f2a25;
+}
+
+.planner-metric-label {
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6b7772;
+  font-weight: 700;
 }
 
 .day-detail-panel {
   margin-top: 1.2rem;
-  border: 1px solid #f4a259;
-  border-radius: 24px;
-  background: rgba(245, 245, 245, 0.9);
+  border: 1px solid rgba(30, 89, 72, 0.28);
+  border-radius: 20px;
+  background: #ffffff;
   padding: 1rem;
 }
 
@@ -94,56 +157,20 @@
 
 .day-detail-kicker {
   margin: 0;
-  font-size: 0.84rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.11em;
-  font-weight: 900;
-  color: #111111;
-  text-shadow: 0 1px 0 rgba(255, 246, 233, 0.35);
+  letter-spacing: 0.13em;
+  font-weight: 700;
+  color: #6c7973;
 }
 
 .day-detail-title {
   margin: 0.2rem 0 0;
-  font-size: 1.9rem;
-  font-weight: 900;
+  font-size: 1.35rem;
+  font-weight: 800;
   text-transform: capitalize;
-  color: #111111;
+  color: #1f2a25;
   letter-spacing: 0.02em;
-  text-shadow: 0 1px 0 rgba(255, 246, 233, 0.45);
-  font-family: "Ink Free", "Segoe UI", "Trebuchet MS", sans-serif;
-}
-
-.luxury-cost-circle {
-  flex: 0 0 auto;
-  width: 128px;
-  height: 128px;
-  border-radius: 999px;
-  border: 3px solid #f4a259;
-  background: rgba(0, 0, 0, 0.82);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 12px 24px -16px rgba(0, 0, 0, 0.65);
-}
-
-.luxury-cost-value {
-  font-size: 1.02rem;
-  font-weight: 900;
-  color: #fff6e9;
-  text-shadow: none;
-  font-family: "Ink Free", "Segoe UI", "Trebuchet MS", sans-serif;
-  text-align: center;
-  line-height: 1.15;
-}
-
-.luxury-cost-label {
-  font-size: 0.74rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #ffd8ad;
-  font-weight: 900;
-  text-shadow: none;
 }
 
 .day-meals-grid {
@@ -158,54 +185,48 @@
 }
 
 .meal-block {
-  border: 1px solid #f4a259;
+  border: 1px solid rgba(30, 89, 72, 0.18);
   border-radius: 14px;
-  background: rgba(240, 240, 240, 0.94);
-  padding: 0.6rem;
+  background: #fcfdfd;
+  padding: 0.75rem;
 }
 
 .meal-label {
   margin: 0 0 0.35rem;
-  font-size: 1.2rem;
+  font-size: 0.74rem;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  font-weight: 900;
-  color: #e1720a;
-  text-shadow: 0 1px 0 rgba(255, 246, 233, 0.45);
-  font-family: "Ink Free", "Segoe UI", "Trebuchet MS", sans-serif;
+  font-weight: 800;
+  color: #6b7772;
 }
 
 .meal-input {
   width: 100%;
   margin-bottom: 0.4rem;
   border-radius: 10px;
-  border: 2px solid #1e5948;
-  background: rgba(236, 236, 236, 0.96);
-  color: #111111;
-  padding: 0.58rem 0.72rem;
-  font-size: 1.04rem;
-  font-weight: 800;
-  text-shadow: 0 1px 0 rgba(255, 246, 233, 0.4);
-  font-family: "Ink Free", "Segoe UI", "Trebuchet MS", sans-serif;
+  border: 1px solid rgba(30, 89, 72, 0.28);
+  background: #ffffff;
+  color: #1f2a25;
+  padding: 0.54rem 0.68rem;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .meal-input:focus {
-  outline: 2px solid #f4a259;
-  border-color: #f4a259;
+  outline: 2px solid rgba(30, 89, 72, 0.18);
+  border-color: #256f5b;
 }
 
 .meal-input::placeholder {
-  color: rgba(17, 17, 17, 0.6);
+  color: rgba(31, 42, 37, 0.48);
 }
 
 .meal-cost {
-  margin: 0.2rem 0 0;
-  font-size: 1.16rem;
-  color: #111111;
-  font-weight: 900;
+  margin: 0.2rem 0 0.45rem;
+  font-size: 0.82rem;
+  color: #256f5b;
+  font-weight: 700;
   letter-spacing: 0.01em;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-  font-family: "Ink Free", "Segoe UI", "Trebuchet MS", sans-serif;
 }
 
 .meal-fav-btn {
@@ -217,7 +238,17 @@
 }
 
 .week-date-input {
-  border-color: #0b3e6f;
-  background: linear-gradient(135deg, rgba(226, 236, 245, 0.95), rgba(244, 162, 89, 0.16));
-  box-shadow: inset 0 0 0 1px rgba(11, 62, 111, 0.15);
+  border-color: rgba(30, 89, 72, 0.28);
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(30, 89, 72, 0.06);
+}
+
+@media (max-width: 760px) {
+  .planner-topbar {
+    flex-direction: column;
+  }
+
+  .planner-date-wrap {
+    min-width: 100%;
+  }
 }

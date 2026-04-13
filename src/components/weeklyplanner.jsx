@@ -51,29 +51,34 @@ function WeeklyPlanner({
     () => mealUi.filter((meal) => (activeMeals?.[meal.key]?.name || '').trim()).length,
     [activeMeals],
   )
+  const selectedDayTotal = useMemo(
+    () =>
+      mealUi.reduce(
+        (sum, meal) => sum + Number(getMealCostForDay?.(resolvedActiveDay, meal.key) || 0),
+        0,
+      ),
+    [resolvedActiveDay, getMealCostForDay],
+  )
 
   return (
     <section className="weekly-planner-page animate-fade-up">
-      <h2
-        className="text-3xl font-black text-[#0d2f24]"
-        style={{ fontFamily: '"Ink Free", "Segoe UI", "Trebuchet MS", sans-serif' }}
-      >
-        Weekly Planner Page
-      </h2>
-      <p
-        className="mt-1 text-base font-black text-[#123c2d]"
-        style={{ fontFamily: '"Ink Free", "Segoe UI", "Trebuchet MS", sans-serif' }}
-      >
-        Main interaction page: choose exact calendar dates, then build Breakfast, Lunch, and Supper for that date.
-      </p>
-      <div className="mt-3 max-w-xs">
-        <label className="block text-xs font-black uppercase tracking-wider text-[#123c2d]">Week start date</label>
-        <input
-          className="meal-input week-date-input mt-1"
-          onChange={(event) => onWeekStartDateChange?.(event.target.value)}
-          type="date"
-          value={weekStartDate || ''}
-        />
+      <div className="planner-topbar">
+        <div>
+          <p className="planner-kicker">Savvyspoon Planner</p>
+          <h2 className="planner-title">Weekly meal planning</h2>
+          <p className="planner-subtitle">
+            Select a day, assign meals, and track ingredient-driven meal cost in real time.
+          </p>
+        </div>
+        <div className="planner-date-wrap">
+          <label className="planner-date-label">Week start date</label>
+          <input
+            className="meal-input week-date-input"
+            onChange={(event) => onWeekStartDateChange?.(event.target.value)}
+            type="date"
+            value={weekStartDate || ''}
+          />
+        </div>
       </div>
 
       <div className="weekly-planner-grid">
@@ -88,7 +93,7 @@ function WeeklyPlanner({
               type="button"
             >
               <p className="day-tab-title">{formatDayLabel(day)}</p>
-              <p className="day-tab-sub">View and edit meals</p>
+              <p className="day-tab-sub">Schedule and costing</p>
               <p className="day-tab-total">{dayPlannedCount} meals planned</p>
             </button>
           )
@@ -101,9 +106,15 @@ function WeeklyPlanner({
             <p className="day-detail-kicker">Selected day</p>
             <h3 className="day-detail-title">{formatDayLabel(resolvedActiveDay)}</h3>
           </div>
-          <div className="luxury-cost-circle">
-            <span className="luxury-cost-value">{plannedMealCount}</span>
-            <span className="luxury-cost-label">Meals Planned</span>
+          <div className="planner-metrics">
+            <div className="planner-metric-chip">
+              <span className="planner-metric-value">{plannedMealCount}</span>
+              <span className="planner-metric-label">Meals planned</span>
+            </div>
+            <div className="planner-metric-chip">
+              <span className="planner-metric-value">KES {selectedDayTotal.toLocaleString('en-KE')}</span>
+              <span className="planner-metric-label">Daily total</span>
+            </div>
           </div>
         </div>
 
