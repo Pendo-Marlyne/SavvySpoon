@@ -1,6 +1,6 @@
 # SavvySpoon
 
-SavvySpoon is a portfolio-ready React app for **weekly meal planning, grocery generation, and budget tracking** in Kenyan shillings (KES).
+SavvySpoon is a  React app for **weekly meal planning, grocery generation, and budget tracking** in Kenyan shillings (KES).
 
 It is built to feel polished for end users while remaining easy for developers to understand and extend.
 
@@ -207,7 +207,3 @@ npm run lint
 
 ---
 
-## License
-
-This project is currently unlicensed for public reuse by default.
-Add a `LICENSE` file (MIT, Apache-2.0, etc.) if you want open-source distribution.
