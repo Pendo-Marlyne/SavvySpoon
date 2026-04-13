@@ -150,7 +150,37 @@ function Grocery({ groceryList, weekDates = [], formatKes, onDeleteIngredient, o
                 </button>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-5">
+                <label className="rounded-xl border border-[#1e5948]/65 bg-black/55 px-3 py-2">
+                  <span className="mb-1 block text-[11px] font-black uppercase tracking-wider text-[#f4a259]">Day</span>
+                  <select
+                    className="w-full rounded-lg border border-[#1e5948]/65 bg-black/65 px-2 py-1.5 text-sm font-black text-[#fff6e9] outline-none focus:border-[#f4a259]"
+                    onChange={(event) => onUpdateIngredient?.(item.id, 'day', event.target.value)}
+                    value={item.day || ''}
+                  >
+                    {weekDates.map((day) => (
+                      <option key={day} value={day}>
+                        {day}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="rounded-xl border border-[#1e5948]/65 bg-black/55 px-3 py-2">
+                  <span className="mb-1 block text-[11px] font-black uppercase tracking-wider text-[#f4a259]">Meal type</span>
+                  <select
+                    className="w-full rounded-lg border border-[#1e5948]/65 bg-black/65 px-2 py-1.5 text-sm font-black text-[#fff6e9] outline-none focus:border-[#f4a259]"
+                    onChange={(event) => onUpdateIngredient?.(item.id, 'mealType', event.target.value)}
+                    value={item.mealType || 'breakfast'}
+                  >
+                    {mealTypeOptions.map((mealType) => (
+                      <option key={mealType} value={mealType}>
+                        {mealType}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
                 <label className="rounded-xl border border-[#1e5948]/65 bg-black/55 px-3 py-2">
                   <span className="mb-1 flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-[#f4a259]">
                     <PackagePlus size={12} />

@@ -44,6 +44,26 @@ function App() {
 
   const weekRows = Object.entries(weeklyPlanner)
   const groceryList = useMemo(() => {
+    const findLegacyOverride = (mealName, ingredientName) => {
+      const legacyId = `${mealName.toLowerCase()}::${ingredientName.toLowerCase()}`
+      return ingredientOverrides[legacyId] || {}
+    }
+
+    const resolveMealClassification = (item) => {
+      if (item?.day && item?.mealType) return { day: item.day, mealType: item.mealType }
+      const itemMealName = (item?.mealName || '').trim().toLowerCase()
+      if (!itemMealName) return { day: '', mealType: '' }
+      for (const [day, meals] of Object.entries(weeklyPlanner)) {
+        for (const mealType of mealTypes) {
+          const slotMeal = getMealName(meals?.[mealType]).trim().toLowerCase()
+          if (slotMeal && slotMeal === itemMealName) {
+            return { day, mealType }
+          }
+        }
+      }
+      return { day: '', mealType: '' }
+    }
+
     const mealEntries = Object.entries(weeklyPlanner).flatMap(([day, meals]) =>
       mealTypes
         .map((type) => ({
@@ -78,12 +98,15 @@ function App() {
 
     const generatedItems = Object.values(groupedByMealIngredient)
       .map((item) => {
-        const override = ingredientOverrides[item.id] || {}
+        const override = {
+          ...findLegacyOverride(item.mealName, item.ingredientName),
+          ...(ingredientOverrides[item.id] || {}),
+        }
         if (override.deleted) return null
         return {
           id: item.id,
-          day: item.day,
-          mealType: item.mealType,
+          day: override.day || item.day,
+          mealType: override.mealType || item.mealType,
           mealName: item.mealName,
           ingredientName: item.ingredientName,
           count: item.count,
@@ -101,12 +124,13 @@ function App() {
       .filter(Boolean)
     const customItems = (customIngredients || [])
       .map((item) => {
+        const classification = resolveMealClassification(item)
         const override = ingredientOverrides[item.id] || {}
         if (override.deleted) return null
         return {
           id: item.id,
-          day: item.day || '',
-          mealType: item.mealType || '',
+          day: override.day || classification.day,
+          mealType: override.mealType || classification.mealType,
           mealName: item.mealName || 'Custom',
           ingredientName: item.ingredientName || '',
           count: 1,
@@ -167,8 +191,8 @@ function App() {
       const previous = current[id] || {}
       const parsedNumber = Number(value || 0)
       const nextForId =
-        field === 'unit'
-          ? { ...previous, unit: value, deleted: false }
+        field === 'unit' || field === 'day' || field === 'mealType'
+          ? { ...previous, [field]: value, deleted: false }
           : {
               ...previous,
               [field]: Number.isNaN(parsedNumber) ? 0 : parsedNumber,
