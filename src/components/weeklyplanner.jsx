@@ -17,6 +17,7 @@ const formatDayLabel = (dateKey) => {
 function WeeklyPlanner({
   weeklyPlanner,
   setWeeklyPlanner,
+  getMealCostForDay,
   savedMeals = [],
   onSaveMealToLibrary,
   weekDates = [],
@@ -117,6 +118,7 @@ function WeeklyPlanner({
                 type="text"
                 value={activeMeals?.[meal.key]?.name || ''}
               />
+              <p className="meal-cost">Meal cost: KES {Number(getMealCostForDay?.(resolvedActiveDay, meal.key) || 0).toLocaleString('en-KE')}</p>
               <select
                 className="meal-input"
                 onChange={(event) => updateMealField(resolvedActiveDay, meal.key, 'name', event.target.value)}

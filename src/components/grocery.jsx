@@ -3,12 +3,15 @@ import { useState } from 'react'
 
 const mealImages = ['/meal.webp', '/food.webp', '/homemade.webp', '/spicy.jpg']
 const unitOptions = ['pcs', 'kg', 'loaves', 'ltrs', 'egg']
+const mealTypeOptions = ['breakfast', 'lunch', 'dinner']
 
-function Grocery({ groceryList, formatKes, onDeleteIngredient, onUpdateIngredient, onAddIngredient }) {
+function Grocery({ groceryList, weekDates = [], formatKes, onDeleteIngredient, onUpdateIngredient, onAddIngredient }) {
   const groceryTotal = groceryList.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0), 0)
 
   const [newItem, setNewItem] = useState({
     ingredientName: '',
+    day: weekDates[0] || '',
+    mealType: 'breakfast',
     mealName: '',
     quantity: 1,
     unit: 'pcs',
@@ -20,6 +23,8 @@ function Grocery({ groceryList, formatKes, onDeleteIngredient, onUpdateIngredien
     onAddIngredient?.(newItem)
     setNewItem({
       ingredientName: '',
+      day: weekDates[0] || '',
+      mealType: 'breakfast',
       mealName: '',
       quantity: 1,
       unit: 'pcs',
@@ -47,7 +52,7 @@ function Grocery({ groceryList, formatKes, onDeleteIngredient, onUpdateIngredien
       <p className="mt-4 text-center text-sm font-bold text-[#3D2A22]">
         Edit ingredient quantities, choose units (pcs, kg, loaves, ltrs, egg), set prices, and delete meal-specific rows.
       </p>
-      <div className="mt-4 grid gap-3 rounded-2xl border border-[#f4a259]/55 bg-black/78 p-4 md:grid-cols-5">
+      <div className="mt-4 grid gap-3 rounded-2xl border border-[#f4a259]/55 bg-black/78 p-4 md:grid-cols-7">
         <input
           className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#f4a259]"
           onChange={(event) => setNewItem((current) => ({ ...current, ingredientName: event.target.value }))}
@@ -62,6 +67,28 @@ function Grocery({ groceryList, formatKes, onDeleteIngredient, onUpdateIngredien
           type="text"
           value={newItem.mealName}
         />
+        <select
+          className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#f4a259]"
+          onChange={(event) => setNewItem((current) => ({ ...current, day: event.target.value }))}
+          value={newItem.day}
+        >
+          {weekDates.map((day) => (
+            <option key={day} value={day}>
+              {day}
+            </option>
+          ))}
+        </select>
+        <select
+          className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#f4a259]"
+          onChange={(event) => setNewItem((current) => ({ ...current, mealType: event.target.value }))}
+          value={newItem.mealType}
+        >
+          {mealTypeOptions.map((mealType) => (
+            <option key={mealType} value={mealType}>
+              {mealType}
+            </option>
+          ))}
+        </select>
         <input
           className="rounded-lg border border-[#f4a259]/60 bg-[#fff6e9]/90 px-3 py-2 text-sm font-black text-[#3D2A22] outline-none focus:border-[#f4a259]"
           min="0"
@@ -109,6 +136,9 @@ function Grocery({ groceryList, formatKes, onDeleteIngredient, onUpdateIngredien
                   <div className="min-w-0">
                     <p className="truncate text-xl font-black tracking-tight text-[#fff6e9]">{item.ingredientName}</p>
                     <p className="truncate text-sm font-extrabold uppercase tracking-wide text-[#f4a259]">{item.mealName}</p>
+                    <p className="truncate text-[11px] font-bold uppercase tracking-wide text-[#ffd8ad]">
+                      {item.day || '-'} • {item.mealType || 'unassigned'}
+                    </p>
                   </div>
                 </div>
                 <button

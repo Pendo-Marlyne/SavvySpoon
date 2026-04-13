@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Header from './components/Header'
-import Auth from './components/Auth'
-import Homepage from './components/Homepage'
+import Auth from './pages/Auth'
+import Homepage from './pages/Homepage'
 import Footer from './components/Footer'
 import Profile from './components/profile'
 import WeeklyPlanner from './components/weeklyplanner'
-import Grocery from './components/grocery'
-import Budget from './components/budget'
+import Grocery from './pages/Grocery'
+import Budget from './pages/Budget'
 import {
   createEmptyPlanner,
   createPlannerForDates,
@@ -16,7 +16,6 @@ import {
   ingredientMap,
   readStoredValue,
   normalizePlanner,
-  getMealCost,
   getMealName,
   formatKes,
 } from './lib/planner'
@@ -41,31 +40,35 @@ function App() {
   }, [currentUser])
 
   const weekDates = useMemo(() => generateWeekDates(weekStartDate), [weekStartDate])
+  const getMealSlotKey = (day, mealType) => `${day}::${mealType}`
 
   const weekRows = Object.entries(weeklyPlanner)
-  const dayTotals = useMemo(
-    () =>
-      weekRows.map(([day, meals]) => ({
-        day,
-        total: mealTypes.reduce((sum, type) => sum + getMealCost(meals[type]), 0),
-      })),
-    [weekRows],
-  )
   const groceryList = useMemo(() => {
-    const mealEntries = Object.values(weeklyPlanner).flatMap((meals) =>
+    const mealEntries = Object.entries(weeklyPlanner).flatMap(([day, meals]) =>
       mealTypes
-        .map((type) => getMealName(meals?.[type]).trim())
-        .filter(Boolean),
+        .map((type) => ({
+          day,
+          mealType: type,
+          mealName: getMealName(meals?.[type]).trim(),
+        }))
+        .filter((entry) => Boolean(entry.mealName)),
     )
 
-    const groupedByMealIngredient = mealEntries.reduce((acc, mealName) => {
-      const words = mealName.toLowerCase().split(/[\s&-]+/)
+    const groupedByMealIngredient = mealEntries.reduce((acc, mealEntry) => {
+      const words = mealEntry.mealName.toLowerCase().split(/[\s&-]+/)
       const ingredients = [...new Set(words.map((word) => ingredientMap[word]).filter(Boolean))]
 
       ingredients.forEach((ingredientName) => {
-        const id = `${mealName.toLowerCase()}::${ingredientName.toLowerCase()}`
+        const id = `${mealEntry.day}::${mealEntry.mealType}::${mealEntry.mealName.toLowerCase()}::${ingredientName.toLowerCase()}`
         if (!acc[id]) {
-          acc[id] = { id, mealName, ingredientName, count: 0 }
+          acc[id] = {
+            id,
+            day: mealEntry.day,
+            mealType: mealEntry.mealType,
+            mealName: mealEntry.mealName,
+            ingredientName,
+            count: 0,
+          }
         }
         acc[id].count += 1
       })
@@ -79,6 +82,8 @@ function App() {
         if (override.deleted) return null
         return {
           id: item.id,
+          day: item.day,
+          mealType: item.mealType,
           mealName: item.mealName,
           ingredientName: item.ingredientName,
           count: item.count,
@@ -100,6 +105,8 @@ function App() {
         if (override.deleted) return null
         return {
           id: item.id,
+          day: item.day || '',
+          mealType: item.mealType || '',
           mealName: item.mealName || 'Custom',
           ingredientName: item.ingredientName || '',
           count: 1,
@@ -118,6 +125,32 @@ function App() {
 
     return [...generatedItems, ...customItems].sort((a, b) => a.mealName.localeCompare(b.mealName))
   }, [weeklyPlanner, ingredientOverrides, customIngredients])
+
+  const mealSlotCosts = useMemo(
+    () =>
+      groceryList.reduce((acc, item) => {
+        if (!item.day || !item.mealType) return acc
+        const key = getMealSlotKey(item.day, item.mealType)
+        const amount = Number(item.price || 0) * Number(item.quantity || 0)
+        acc[key] = (acc[key] || 0) + amount
+        return acc
+      }, {}),
+    [groceryList],
+  )
+
+  const getMealCostForDay = useCallback(
+    (day, mealType) => Number(mealSlotCosts[getMealSlotKey(day, mealType)] || 0),
+    [mealSlotCosts],
+  )
+
+  const dayTotals = useMemo(
+    () =>
+      weekDates.map((day) => ({
+        day,
+        total: mealTypes.reduce((sum, type) => sum + getMealCostForDay(day, type), 0),
+      })),
+    [weekDates, getMealCostForDay],
+  )
 
   const weeklyTotal = useMemo(
     () =>
@@ -160,6 +193,8 @@ function App() {
     const id = `custom::${Date.now()}::${ingredientName.toLowerCase()}`
     const item = {
       id,
+      day: payload?.day || '',
+      mealType: payload?.mealType || '',
       mealName,
       ingredientName,
       unit: payload?.unit || 'pcs',
@@ -383,6 +418,7 @@ function App() {
             <WeeklyPlanner
               weeklyPlanner={weeklyPlanner}
               setWeeklyPlanner={setWeeklyPlanner}
+              getMealCostForDay={getMealCostForDay}
               savedMeals={savedMeals}
               onSaveMealToLibrary={saveMealToLibrary}
               weekDates={weekDates}
@@ -414,6 +450,7 @@ function App() {
             />
             <Grocery
               groceryList={groceryList}
+              weekDates={weekDates}
               formatKes={formatKes}
               onAddIngredient={addIngredientRow}
               onDeleteIngredient={deleteIngredientRow}
@@ -475,8 +512,8 @@ function App() {
               isUnderBudget={isUnderBudget}
               weekRows={weekRows}
               groceryList={groceryList}
+              getMealCostForDay={getMealCostForDay}
               formatKes={formatKes}
-              getMealCost={getMealCost}
             />
           </div>
         </main>

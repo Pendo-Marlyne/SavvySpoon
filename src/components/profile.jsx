@@ -1,7 +1,7 @@
 import { CalendarDays, CircleDollarSign, CookingPot, ListChecks, ShoppingCart, UserCircle2 } from 'lucide-react'
 import DashboardCard from './DashboardCard'
 
-function Profile({ userProfile, weeklyTotal, budget, isUnderBudget, weekRows, groceryList, formatKes, getMealCost }) {
+function Profile({ userProfile, weeklyTotal, budget, isUnderBudget, weekRows, groceryList, formatKes, getMealCostForDay }) {
   return (
     <div className="space-y-6 animate-fade-up">
       <section
@@ -77,14 +77,17 @@ function Profile({ userProfile, weeklyTotal, budget, isUnderBudget, weekRows, gr
               </tr>
             </thead>
             <tbody>
-              {weekRows.map(([day, meals]) => {
-                const dailyTotal = getMealCost(meals.breakfast) + getMealCost(meals.lunch) + getMealCost(meals.dinner)
+              {weekRows.map(([day]) => {
+                const breakfastCost = getMealCostForDay?.(day, 'breakfast') || 0
+                const lunchCost = getMealCostForDay?.(day, 'lunch') || 0
+                const dinnerCost = getMealCostForDay?.(day, 'dinner') || 0
+                const dailyTotal = breakfastCost + lunchCost + dinnerCost
                 return (
                   <tr className="rounded-2xl bg-black/35" key={day}>
                     <td className="rounded-l-xl px-3 py-3 text-base font-black capitalize text-[#fff6e9]">{day}</td>
-                    <td className="px-3 py-3 text-base font-black text-[#fff6e9]">{formatKes(getMealCost(meals.breakfast))}</td>
-                    <td className="px-3 py-3 text-base font-black text-[#fff6e9]">{formatKes(getMealCost(meals.lunch))}</td>
-                    <td className="px-3 py-3 text-base font-black text-[#fff6e9]">{formatKes(getMealCost(meals.dinner))}</td>
+                    <td className="px-3 py-3 text-base font-black text-[#fff6e9]">{formatKes(breakfastCost)}</td>
+                    <td className="px-3 py-3 text-base font-black text-[#fff6e9]">{formatKes(lunchCost)}</td>
+                    <td className="px-3 py-3 text-base font-black text-[#fff6e9]">{formatKes(dinnerCost)}</td>
                     <td className="rounded-r-xl px-3 py-3 text-base font-black text-[#4ecb94]">{formatKes(dailyTotal)}</td>
                   </tr>
                 )
