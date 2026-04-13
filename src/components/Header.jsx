@@ -2,6 +2,7 @@ import {
   Banknote,
   LayoutDashboard,
   ListChecks,
+  LogOut,
   ShoppingCart,
   House,
   UtensilsCrossed,
@@ -17,6 +18,7 @@ function Header({
   budget = 12000,
   currentPage,
   onNavigate,
+  onLogout,
   sticky = false,
   showSpend = true,
 }) {
@@ -78,6 +80,14 @@ function Header({
               </button>
             )
           })}
+          <button
+            className="inline-flex items-center gap-1.5 rounded-full border border-red-300/60 bg-red-500/85 px-2.5 py-1.5 text-xs font-extrabold text-white transition-all duration-200 hover:bg-red-600"
+            onClick={() => onLogout?.()}
+            type="button"
+          >
+            <LogOut size={14} />
+            Logout
+          </button>
           </div>
         </nav>
 

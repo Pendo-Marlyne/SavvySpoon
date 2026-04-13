@@ -1,7 +1,7 @@
 import { ArrowRight, Flame, Library, ListChecks, Sparkles, WalletCards } from 'lucide-react'
 import Header from './Header'
 
-function Homepage({ onNavigate, onGoProfile, onGoPlanner, role = 'guest', onCreateAccount }) {
+function Homepage({ onNavigate, onGoProfile, onGoPlanner, role = 'guest', onCreateAccount, onLogout }) {
   const exampleSpend = 1380
 
   return (
@@ -16,6 +16,7 @@ function Homepage({ onNavigate, onGoProfile, onGoPlanner, role = 'guest', onCrea
         <Header
           currentPage="home"
           onNavigate={onNavigate}
+          onLogout={onLogout}
           sticky={false}
           showSpend={false}
         />

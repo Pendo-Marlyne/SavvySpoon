@@ -280,6 +280,21 @@ function App() {
     setCurrentUser(null)
   }
 
+  const logoutToAuth = () => {
+    setAuthInitialMode('signin')
+    setIsAuthenticated(false)
+    setPage('auth')
+    setRole('guest')
+    setCurrentUser(null)
+    setWeekStartDate(getIsoDate())
+    setWeeklyPlanner(createEmptyPlanner())
+    setBudget(0)
+    setIngredientOverrides({})
+    setCustomIngredients([])
+    setSavedMeals([])
+    setFavoriteMealIds([])
+  }
+
   useEffect(() => {
     if (!isAuthenticated || role !== 'account') return
     const plannerStorageKey = userKey(`weeklyPlan.${weekStartDate}`)
@@ -343,6 +358,7 @@ function App() {
           onGoProfile={() => navigate('profile')}
           onGoPlanner={() => navigate('planner')}
           onNavigate={navigate}
+          onLogout={logoutToAuth}
           role={role}
           onCreateAccount={openCreateAccount}
         />
@@ -356,7 +372,14 @@ function App() {
       <>
         <main className="min-h-screen bg-brand-cream bg-cover bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={plannerBg}>
           <div className="mx-auto max-w-6xl space-y-6">
-            <Header budget={budget} currentPage="planner" onNavigate={navigate} showSpend totalSpent={weeklyTotal} />
+            <Header
+              budget={budget}
+              currentPage="planner"
+              onNavigate={navigate}
+              onLogout={logoutToAuth}
+              showSpend
+              totalSpent={weeklyTotal}
+            />
             <WeeklyPlanner
               weeklyPlanner={weeklyPlanner}
               setWeeklyPlanner={setWeeklyPlanner}
@@ -381,7 +404,14 @@ function App() {
       <>
         <main className="min-h-screen bg-brand-cream bg-cover bg-fixed bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={appBg}>
           <div className="mx-auto max-w-6xl space-y-6">
-            <Header budget={budget} currentPage="grocery" onNavigate={navigate} showSpend totalSpent={weeklyTotal} />
+            <Header
+              budget={budget}
+              currentPage="grocery"
+              onNavigate={navigate}
+              onLogout={logoutToAuth}
+              showSpend
+              totalSpent={weeklyTotal}
+            />
             <Grocery
               groceryList={groceryList}
               formatKes={formatKes}
@@ -401,7 +431,14 @@ function App() {
       <>
         <main className="min-h-screen bg-cover bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={budgetBg}>
           <div className="space-y-6">
-            <Header budget={budget} currentPage="budget" onNavigate={navigate} showSpend totalSpent={weeklyTotal} />
+            <Header
+              budget={budget}
+              currentPage="budget"
+              onNavigate={navigate}
+              onLogout={logoutToAuth}
+              showSpend
+              totalSpent={weeklyTotal}
+            />
             <Budget
               budget={budget}
               weeklyTotal={weeklyTotal}
@@ -423,7 +460,14 @@ function App() {
       <>
         <main className="min-h-screen bg-brand-cream bg-cover bg-fixed bg-center px-4 py-8 text-[#3D2A22] md:px-8" style={appBg}>
           <div className="mx-auto max-w-6xl space-y-6">
-            <Header budget={budget} currentPage="profile" onNavigate={navigate} showSpend totalSpent={weeklyTotal} />
+            <Header
+              budget={budget}
+              currentPage="profile"
+              onNavigate={navigate}
+              onLogout={logoutToAuth}
+              showSpend
+              totalSpent={weeklyTotal}
+            />
             <Profile
               userProfile={currentUser}
               weeklyTotal={weeklyTotal}
